@@ -28,7 +28,7 @@ class ImageAssets {
   static const String messageIcon = '$iconsPath/message.svg';
   static const String myOffersIcon = '$iconsPath/my_offers.svg';
   static const String privacyPolicyIcon = '$iconsPath/privacy_policy.svg';
-  static const String provileIcon = '$iconsPath/profile.svg';
+  static const String profileIcon = '$iconsPath/profile.svg';
   static const String rateAppIcon = '$iconsPath/rate_app.svg';
   static const String shareAppIcon = '$iconsPath/share_app.svg';
   static const String supportIcon = '$iconsPath/support.svg';

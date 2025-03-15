@@ -40,26 +40,19 @@ class CustomSocialAuthWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              icon: Image.asset(
-                ImageAssets.apple,
-                width: 60.w,
-              ),
-              onPressed: () {},
+            Image.asset(
+              ImageAssets.google,
+              width: 60.w,
             ),
-            IconButton(
-              icon: Image.asset(
-                ImageAssets.google,
-                width: 60.w,
-              ),
-              onPressed: () {},
+            20.w.horizontalSpace,
+            Image.asset(
+              ImageAssets.apple,
+              width: 60.w,
             ),
-            IconButton(
-              icon: Image.asset(
-                ImageAssets.facebook,
-                width: 60.w,
-              ),
-              onPressed: () {},
+            20.w.horizontalSpace,
+            Image.asset(
+              ImageAssets.facebook,
+              width: 60.w,
             ),
           ],
         ),

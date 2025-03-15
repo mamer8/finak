@@ -1,4 +1,3 @@
-
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/Auth/cubit/cubit.dart';
 import 'package:finak/features/Auth/cubit/state.dart';
@@ -6,9 +5,14 @@ import 'package:finak/features/Auth/cubit/state.dart';
 import 'widgets/custom_pin_code.dart';
 import 'widgets/social_auth_widget.dart';
 
-class OTPScreen extends StatelessWidget {
+class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
 
+  @override
+  State<OTPScreen> createState() => _OTPScreenState();
+}
+
+class _OTPScreenState extends State<OTPScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -28,64 +32,39 @@ class OTPScreen extends StatelessWidget {
                     Text("you_enter".tr(),
                         style: getRegularStyle(
                             fontSize: 16.sp, color: AppColors.primaryGrey)),
-                    50.h.verticalSpace,
-                    CustomPinCodeWidget(
-                      pinController: cubit.otpController,
-                      onChanged: (pin) {
-                        // log('current PIN: $pin');
+                    100.h.verticalSpace,
+                    Center(
+                      child: CustomPinCodeWidget(
+                        pinController: cubit.otpController,
+                        // hasError: cubit.otpController.text.length < 4,
+                        onChanged: (pin) {
+                          // log('current PIN: $pin');
+                          cubit.otpController.text = pin;
 
-                        // setState(() {});
-                      },
-                      onCompleted: (pin) {
-                        // log('Completed PIN: $pin');
-                      },
-                    ),
-                    10.h.verticalSpace,
-                    Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: InkWell(
-                        onTap: () {
-                          // Navigator.pushNamed(context, AppRoutes.forgotPassword);
+                          setState(() {});
                         },
-                        child: Text(
-                          "forgot_password".tr(),
-                          style: getRegularStyle(
-                              fontSize: 16.sp, color: AppColors.primary),
-                        ),
+                        onCompleted: (pin) {
+                          // log('Completed PIN: $pin');
+                        },
                       ),
                     ),
-                    20.h.verticalSpace,
+                    100.h.verticalSpace,
                     CustomButton(
-                      title: "login",
+                      title: "next",
+                      isDisabled: cubit.otpController.text.length < 4,
                       onPressed: () {
+                        Navigator.pushNamed(context, Routes.newPasswordRoute);
                         if (cubit.formKeyOtp.currentState!.validate()) {
                           // cubit.login(context);
                         }
                       },
                     ),
-                    const CustomSocialAuthWidget(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("dont_have_account".tr(),
-                            style: getRegularStyle(
-                                fontSize: 18.sp, color: AppColors.primaryGrey)),
-                        InkWell(
-                          onTap: () {
-                            // Navigator.pushNamed(context, AppRoutes.register);
-                          },
-                          child: Text("sign_up".tr(),
-                              style: getRegularStyle(
-                                  fontSize: 18.sp, color: AppColors.primary)),
-                        ),
-                      ],
-                    ),
+                    20.h.verticalSpace,
                   ],
                 ),
               ),
             ),
           ),
-          backgroundColor: AppColors.white,
         );
       },
     );

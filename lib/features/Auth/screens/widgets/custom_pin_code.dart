@@ -8,12 +8,12 @@ class CustomPinCodeWidget extends StatefulWidget {
   final bool hasError; // To show error border
 
   const CustomPinCodeWidget({
-    Key? key,
+    super.key,
     required this.pinController,
     required this.onCompleted,
     this.onChanged,
     this.hasError = false, // Default to no error
-  }) : super(key: key);
+  });
 
   @override
   State<CustomPinCodeWidget> createState() => _CustomPinCodeWidgetState();
@@ -26,36 +26,14 @@ class _CustomPinCodeWidgetState extends State<CustomPinCodeWidget> {
     final defaultPinTheme = PinTheme(
       width: 60.w,
       height: 60.w,
-      textStyle:  getBoldStyle(),
+      textStyle: getBoldStyle(),
       decoration: BoxDecoration(
-        color: AppColors.white, // Background color
-        borderRadius: BorderRadius.circular(5.r), // Rounded corners
+        color: AppColors.textFiledBG,
+        shape: BoxShape.circle,
         border: Border.all(
-          color: widget.hasError
-              ? AppColors.red
-              : AppColors.white, // Border color
-          width: widget.hasError ? 1 : 0, // Border width
+          color: widget.hasError ? AppColors.red : AppColors.textFiledBG,
+          width: widget.hasError ? 1 : 0,
         ),
-      ),
-    );
-
-    // Define the focused pin theme
-    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(
-        color: widget.hasError
-            ? AppColors.red
-            : AppColors.white, // Active border color
-        width: 1,
-      ),
-    );
-
-    // Define the submitted pin theme
-    final submittedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(
-        color: widget.hasError
-            ? AppColors.red
-            : AppColors.white, // Selected border color
-        width: 1,
       ),
     );
 
@@ -64,52 +42,44 @@ class _CustomPinCodeWidgetState extends State<CustomPinCodeWidget> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.0.w),
         child: Pinput(
-          length: 4, // Length of the PIN
-          preFilledWidget: Text(
-            '0',
-            style: TextStyle(
-              color: AppColors.gray,
-              fontSize: 18.sp,
+          length: 4,
+          controller: widget.pinController,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          // focusNode: myFocusNode,
+          defaultPinTheme: defaultPinTheme,
+          focusedPinTheme: defaultPinTheme.copyDecorationWith(
+            border: Border.all(
+              color: widget.hasError ? AppColors.red : AppColors.primary,
+              width: 1.5,
             ),
           ),
-          controller: widget.pinController,
-          defaultPinTheme: defaultPinTheme,
-          focusedPinTheme: focusedPinTheme,
-          submittedPinTheme: submittedPinTheme,
-          showCursor: true, // Show cursor
+          submittedPinTheme: defaultPinTheme.copyDecorationWith(
+            border: Border.all(
+              color: widget.hasError ? AppColors.red : AppColors.primary,
+              width: 1.5,
+            ),
+          ),
+          showCursor: true,
           cursor: Container(
             margin: const EdgeInsets.only(bottom: 8),
             width: 2,
             height: 20,
-            color: AppColors.black, // Cursor color
+            color: AppColors.black,
           ),
-
-          onChanged: widget.onChanged, // Optional onChanged callback
-          onCompleted: widget.onCompleted, // Callback when PIN is completed
-          validator: (value) {
-            if (widget.hasError) {
-              return 'Invalid PIN'; // Error message
-            }
-            return null;
-          },
-
-          errorText: 'Invalid PIN', // Error text
+          onChanged: widget.onChanged,
+          onCompleted: widget.onCompleted,
+          validator: (value) => widget.hasError ? 'Invalid PIN'.tr() : null,
+          errorText: 'Invalid PIN'.tr(),
           errorTextStyle: TextStyle(
-            color: AppColors.red, // Error text color
+            color: AppColors.red,
             fontSize: 14.sp,
           ),
           errorPinTheme: defaultPinTheme.copyDecorationWith(
             border: Border.all(
-              color: AppColors.red, // Red border on error
-              width: 1,
+              color: AppColors.red,
+              width: 1.5,
             ),
           ),
-          // hint: '0000', // Hint text
-          // hintStyle: TextStyle(
-          //   fontSize: 18.sp,
-          //   fontWeight: FontWeight.w400,
-          //   color: AppColors.hintGreyColor, // Grey hint text
-          // ),
         ),
       ),
     );

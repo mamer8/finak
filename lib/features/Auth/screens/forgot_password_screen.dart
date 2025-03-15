@@ -26,7 +26,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                     Text("will_send".tr(),
                         style: getRegularStyle(
                             fontSize: 16.sp, color: AppColors.primaryGrey)),
-                    50.h.verticalSpace,
+                    100.h.verticalSpace,
                     CustomTextField(
                       title: "phone",
                       labelText: "enter_phone".tr(),

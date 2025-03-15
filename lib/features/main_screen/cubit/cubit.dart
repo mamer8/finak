@@ -10,10 +10,13 @@ class MainCubit extends Cubit<MainState> {
   MainRepo api;
   int currentIndex = 0;
   List<Widget> navigationBarViews = [
-    SplashScreen(),
-    SplashScreen(),
-    SplashScreen(),
- 
+    Center(
+      child: Text('Home'),
+    ),
+    Center(
+      child: Text('Profile'),
+    ),
+    Center(),
   ];
   void getHomePage() {
     currentIndex = 0;

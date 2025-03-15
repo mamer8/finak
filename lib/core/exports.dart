@@ -4,6 +4,7 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:flutter/services.dart';
 export 'package:easy_localization/easy_localization.dart' hide TextDirection;
+export 'package:finak/core/widgets/show_loading_indicator.dart';
 
 // Utils
 export 'package:finak/core/utils/assets_manager.dart';

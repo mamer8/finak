@@ -74,6 +74,8 @@ class LoginScreen extends StatelessWidget {
                     CustomButton(
                       title: "login",
                       onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.mainRoute, (route) => false);
                         if (cubit.formKeyLogin.currentState!.validate()) {
                           // cubit.login(context);
                         }
