@@ -17,22 +17,24 @@ class ImageAssets {
   static const String apple = '$imagePath/apple.png';
 
   // icons
-  static const String addOfferIcon = '$iconsPath/add_offer.svg';
+  static const String addOfferIcon = '$iconsPath/add_offer.png';
   static const String appleIcon = '$iconsPath/apple.svg';
-  static const String deleteIcon = '$iconsPath/delete_profile.svg';
+  static const String deleteIcon = '$iconsPath/delete_profile.png';
   static const String facebookIcon = '$iconsPath/facebook.svg';
-  static const String favoriteIcon = '$iconsPath/favorite.svg';
+  static const String favoriteIcon = '$iconsPath/favorite.png';
   static const String googleIcon = '$iconsPath/google.svg';
-  static const String languageIcon = '$iconsPath/language.svg';
-  static const String logoutIcon = '$iconsPath/logout.svg';
+  static const String languageIcon = '$iconsPath/language.png';
+  static const String logoutIcon = '$iconsPath/logout.png';
   static const String messageIcon = '$iconsPath/message.svg';
-  static const String myOffersIcon = '$iconsPath/my_offers.svg';
-  static const String privacyPolicyIcon = '$iconsPath/privacy_policy.svg';
-  static const String profileIcon = '$iconsPath/profile.svg';
-  static const String rateAppIcon = '$iconsPath/rate_app.svg';
-  static const String shareAppIcon = '$iconsPath/share_app.svg';
-  static const String supportIcon = '$iconsPath/support.svg';
-  static const String whatsaapIcon = '$iconsPath/whatsapp.svg';
+  static const String myOffersIcon = '$iconsPath/my_offers.png';
+  static const String privacyPolicyIcon = '$iconsPath/privacy_policy.png';
+  static const String profileIcon = '$iconsPath/profile.png';
+  static const String rateAppIcon = '$iconsPath/rate_app.png';
+  static const String shareAppIcon = '$iconsPath/share_app.png';
+  static const String supportIcon = '$iconsPath/support.png';
+  static const String locationIcon = '$iconsPath/location.png';
+  static const String filterIcon = '$iconsPath/filter.png';
+
 
   //Lottie
 

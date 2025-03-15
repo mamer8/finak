@@ -75,14 +75,18 @@ class CustomMenu extends StatelessWidget {
                   assetName: ImageAssets.shareAppIcon,
                   title: 'share_app'.tr(),
                 ),
+                CustmMenuRow(
+                  assetName: ImageAssets.deleteIcon,
+                  title: 'delete_profile'.tr(),
+                ),
+                CustmMenuRow(
+                  title: 'logout'.tr(),
+                  assetName: ImageAssets.logoutIcon,
+                  onTap: () {},
+                ),
               ],
             ))),
             10.h.verticalSpace,
-            CustmMenuRow(
-              title: 'logout'.tr(),
-              assetName: ImageAssets.logoutIcon,
-              onTap: () {},
-            ),
           ],
         ),
       );

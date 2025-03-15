@@ -1,3 +1,4 @@
+import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +49,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (_) => injector.serviceLocator<MenuCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<HomeCubit>(),
           ),
         ],
         child: GetMaterialApp(

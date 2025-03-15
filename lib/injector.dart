@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:finak/features/home/cubit/cubit.dart';
+import 'package:finak/features/home/data/repo.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/menu/data/menu_repo.dart';
 import 'package:flutter/foundation.dart';
@@ -42,12 +44,18 @@ Future<void> setup() async {
       serviceLocator(),
     ),
   );
+  serviceLocator.registerFactory(
+    () => HomeCubit(
+      serviceLocator(),
+    ),
+  );
 //!----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
 //!-------------------------Declare Repo---------------------------
   serviceLocator.registerLazySingleton(() => LoginRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => MainRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => MenuRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => HomeRepo(serviceLocator()));
 
 //!----------------------------------------------------------------
 

@@ -1,7 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:finak/core/exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
   final String? labelText;

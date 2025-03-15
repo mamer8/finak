@@ -15,16 +15,18 @@ class CustmMenuRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10.h),
+      padding: EdgeInsets.only(bottom: 22.h),
       child: GestureDetector(
         onTap: onTap,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset(
+            Image.asset(
               assetName,
-              width: 30.w,
+              width: 25.w,
+              height: 25.w,
             ),
-            10.w.horizontalSpace,
+            15.w.horizontalSpace,
             Flexible(
               child: Text(
                 title,

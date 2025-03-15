@@ -1,3 +1,4 @@
+import 'package:finak/features/home/screens/home_screen.dart';
 import 'package:finak/features/splash/screens/splash_screen.dart';
 
 import '../../../core/exports.dart';
@@ -10,9 +11,7 @@ class MainCubit extends Cubit<MainState> {
   MainRepo api;
   int currentIndex = 0;
   List<Widget> navigationBarViews = [
-    Center(
-      child: Text('Home'),
-    ),
+    HomeScreen(),
     Center(
       child: Text('Profile'),
     ),
