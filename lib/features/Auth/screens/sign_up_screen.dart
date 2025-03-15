@@ -1,0 +1,134 @@
+import 'package:finak/core/exports.dart';
+
+import 'package:finak/features/Auth/cubit/cubit.dart';
+import 'package:finak/features/Auth/cubit/state.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
+
+import 'widgets/social_auth_widget.dart';
+
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        var cubit = context.read<LoginCubit>();
+        return Scaffold(
+          appBar: customAppBar(context, title: 'register'.tr()),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: cubit.formKeySignUp,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    10.h.verticalSpace,
+                    Text("welcome".tr(),
+                        style: getBoldStyle(
+                            fontSize: 20.sp, color: AppColors.primary)),
+                    10.h.verticalSpace,
+                    Text("start_journey".tr(),
+                        style: getRegularStyle(
+                            fontSize: 16.sp, color: AppColors.primaryGrey)),
+                    50.h.verticalSpace,
+                    CustomTextField(
+                      title: "full_name",
+                      labelText: "enter_name".tr(),
+                      controller: cubit.nameControllerSignUp,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "enter_name".tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                      title: "email",
+                      labelText: "enter_email".tr(),
+                      controller: cubit.phoneControllerSignUp,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value!.isEmpty || !value.isEmail) {
+                          return "enter_email".tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                      title: "phone",
+                      labelText: "enter_phone".tr(),
+                      controller: cubit.phoneControllerSignUp,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "enter_phone".tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                      title: "password",
+                      labelText: "enter_password".tr(),
+                      controller: cubit.passwordControllerSignUp,
+                      isPassword: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "enter_password".tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextField(
+                      title: "confirm_password",
+                      labelText: "enter_password".tr(),
+                      controller: cubit.confirmPasswordController,
+                      isPassword: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "enter_password".tr();
+                        }
+                        return null;
+                      },
+                    ),
+                    20.h.verticalSpace,
+                    CustomButton(
+                      title: "sign_up",
+                      onPressed: () {
+                        if (cubit.formKeySignUp.currentState!.validate()) {
+                          // cubit.login(context);
+                        }
+                      },
+                    ),
+                    const CustomSocialAuthWidget(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("already_account".tr(),
+                            style: getRegularStyle(
+                                fontSize: 18.sp, color: AppColors.primaryGrey)),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(
+                              context,
+                            );
+                          },
+                          child: Text("login".tr(),
+                              style: getRegularStyle(
+                                  fontSize: 18.sp, color: AppColors.primary)),
+                        ),
+                      ],
+                    ),
+                    30.h.verticalSpace,
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
