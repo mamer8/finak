@@ -19,17 +19,21 @@ void main() async {
     statusBarColor: Colors.white, // status bar color
     statusBarIconBrightness: Brightness.dark, // status bar icons' color
   ));
-  runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('ar', ''), Locale('en', '')],
-      path: 'assets/lang',
-      saveLocale: true,
-      startLocale: const Locale('en', ''),
-      fallbackLocale: const Locale('en', ''),
-      
-      child: const MyAppWithScreenUtil(),
-    ),
-  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
+      EasyLocalization(
+        supportedLocales: const [Locale('ar', ''), Locale('en', '')],
+        path: 'assets/lang',
+        saveLocale: true,
+        startLocale: const Locale('en', ''),
+        fallbackLocale: const Locale('en', ''),
+        child: const MyAppWithScreenUtil(),
+      ),
+    );
+  });
 }
 
 class MyAppWithScreenUtil extends StatelessWidget {

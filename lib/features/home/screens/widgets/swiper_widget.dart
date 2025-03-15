@@ -2,19 +2,20 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/network_image.dart';
 
-class SwiperWithAutoplay extends StatefulWidget {
+class CustomSwiper extends StatefulWidget {
   final double? height;
   final List<String> images;
-  const SwiperWithAutoplay({
+  const CustomSwiper({
     super.key,
     this.height,
     required this.images,
   });
 //
   @override
-  _SwiperWithAutoplayState createState() => _SwiperWithAutoplayState();}
+  _CustomSwiperState createState() => _CustomSwiperState();
+}
 
-class _SwiperWithAutoplayState extends State<SwiperWithAutoplay> {
+class _CustomSwiperState extends State<CustomSwiper> {
   final SwiperController _controller = SwiperController();
   int _currentIndex = 0;
 

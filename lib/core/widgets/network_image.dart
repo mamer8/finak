@@ -1,21 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finak/core/exports.dart';
 
-
 // Amer
 class CustomNetworkImage extends StatelessWidget {
-  const CustomNetworkImage({
-    super.key,
-    required this.image,
-    this.isUser = false,
-    this.isDetails = false,
-    this.height,
-    this.width,
-    this.fit,
-    this.withLogo = false,
-    this.borderRadius,
-    this.isPersonalInfo=false
-  });
+  const CustomNetworkImage(
+      {super.key,
+      required this.image,
+      this.isUser = false,
+      this.isDetails = false,
+      this.height,
+      this.width,
+      this.fit,
+      this.withLogo = false,
+      this.borderRadius,
+      this.isService = false,
+      this.isPersonalInfo = false});
   final String image;
   final bool isUser;
   final bool isDetails;
@@ -25,11 +24,16 @@ class CustomNetworkImage extends StatelessWidget {
   final BoxFit? fit;
   final bool withLogo;
   final double? borderRadius;
+ final bool isService;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius ?? 0),
+      borderRadius: isService ? BorderRadius.only(
+          topLeft: Radius.circular(10.r),
+          topRight: Radius.circular(10.r),
+        
+      ) : BorderRadius.circular(borderRadius ?? 0),
       child: CachedNetworkImage(
           imageUrl: image,
           fit: fit ?? BoxFit.cover,
@@ -49,13 +53,20 @@ class CustomNetworkImage extends StatelessWidget {
                 ),
           errorWidget: (context, url, error) => Padding(
                 padding: const EdgeInsets.all(8.0),
-                child:isPersonalInfo?Icon(
-                  Icons.person,color: AppColors.primary,size: 40.h,): Image.asset(
-                  isUser ? ImageAssets.profileDefault : ImageAssets.logoImage,
-                  height: height,
-                  width: width,
-                  fit: BoxFit.cover,
-                ),
+                child: isPersonalInfo
+                    ? Icon(
+                        Icons.person,
+                        color: AppColors.primary,
+                        size: 40.h,
+                      )
+                    : Image.asset(
+                        isUser
+                            ? ImageAssets.profileDefault
+                            : ImageAssets.logoImage,
+                        height: height,
+                        width: width,
+                        fit: BoxFit.cover,
+                      ),
               )),
     );
   }

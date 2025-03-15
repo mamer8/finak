@@ -53,6 +53,7 @@ dependencies:
   overlay_loading_progress: ^1.0.2
   pinput: ^5.0.1
   card_swiper: ^3.0.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

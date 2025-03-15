@@ -10,6 +10,7 @@ class AppColors {
   static Color secondPrimary = HexColor('#39B44A');
   static Color red = HexColor('#E34A42');
   static Color grey2 = HexColor('#747474');
+  static Color grey3 = HexColor('#DEDEDE');
   static Color textFiledBG = HexColor('#F2F2F2');
   
   static Color black = Colors.black;
