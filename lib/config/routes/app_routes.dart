@@ -3,6 +3,7 @@ import 'package:finak/features/Auth/screens/new_password_screen.dart';
 import 'package:finak/features/Auth/screens/otp_screen.dart';
 import 'package:finak/features/Auth/screens/sign_up_screen.dart';
 import 'package:finak/features/main_screen/screens/main_screen.dart';
+import 'package:finak/features/services/screens/services_details_screen.dart';
 import 'package:finak/features/services/screens/services_screen.dart';
 import 'package:finak/features/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class Routes {
   static const String newPasswordRoute = '/new_password';
   ///////////// Services /////////////
   static const String servicesRoute = '/services';
+  static const String servicesDetailsRoute = '/services_details';
 }
 
 class AppRoutes {
@@ -63,6 +65,10 @@ class AppRoutes {
       case Routes.servicesRoute:
         return MaterialPageRoute(
           builder: (context) => const ServicesScreen(),
+        );
+      case Routes.servicesDetailsRoute:
+        return MaterialPageRoute(
+          builder: (context) => const ServicesDetailsScreen(),
         );
 
       // case Routes.detailsRoute:

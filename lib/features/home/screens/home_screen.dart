@@ -27,6 +27,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 CustomNetworkImage(
                     image: "https://www.example.com/image.jpg",
+                      isUser: true,
                     width: 50.w,
                     height: 50.w,
                     borderRadius: 50.w),

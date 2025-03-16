@@ -19,6 +19,7 @@ class ImageAssets {
   // icons
   static const String addOfferIcon = '$iconsPath/add_offer.png';
   static const String appleIcon = '$iconsPath/apple.svg';
+  static const String callIcon = '$iconsPath/call.svg';
   static const String deleteIcon = '$iconsPath/delete_profile.png';
   static const String facebookIcon = '$iconsPath/facebook.svg';
   static const String favoriteIcon = '$iconsPath/favorite.png';
@@ -34,7 +35,6 @@ class ImageAssets {
   static const String supportIcon = '$iconsPath/support.png';
   static const String locationIcon = '$iconsPath/location.png';
   static const String filterIcon = '$iconsPath/filter.png';
-
 
   //Lottie
 

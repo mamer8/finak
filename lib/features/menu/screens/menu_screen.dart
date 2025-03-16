@@ -20,6 +20,7 @@ class CustomMenu extends StatelessWidget {
             20.h.verticalSpace,
             CustomNetworkImage(
                 image: "https://www.example.com/image.jpg",
+                isUser: true,
                 width: 100.w,
                 height: 100.w,
                 borderRadius: 50.w),
