@@ -2,6 +2,7 @@ import 'package:finak/features/Auth/screens/forgot_password_screen.dart';
 import 'package:finak/features/Auth/screens/new_password_screen.dart';
 import 'package:finak/features/Auth/screens/otp_screen.dart';
 import 'package:finak/features/Auth/screens/sign_up_screen.dart';
+import 'package:finak/features/add_offer/screens/add_offer_screen.dart';
 import 'package:finak/features/main_screen/screens/main_screen.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
 import 'package:finak/features/services/screens/services_screen.dart';
@@ -24,6 +25,8 @@ class Routes {
   ///////////// Services /////////////
   static const String servicesRoute = '/services';
   static const String servicesDetailsRoute = '/services_details';
+//////////// Add Offer /////////////
+  static const String addOfferRoute = '/add_offer';
 }
 
 class AppRoutes {
@@ -69,6 +72,11 @@ class AppRoutes {
       case Routes.servicesDetailsRoute:
         return MaterialPageRoute(
           builder: (context) => const ServicesDetailsScreen(),
+        );
+    ////////////// Offers /////////////
+      case Routes.addOfferRoute:
+        return MaterialPageRoute(
+          builder: (context) => const AddOfferScreen(),
         );
 
       // case Routes.detailsRoute:

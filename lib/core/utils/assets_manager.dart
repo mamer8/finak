@@ -15,6 +15,7 @@ class ImageAssets {
   static const String facebook = '$imagePath/facebook.png';
   static const String google = '$imagePath/google.png';
   static const String apple = '$imagePath/apple.png';
+  static const String uploadIcon = '$imagePath/upload_image.png';
 
   // icons
   static const String addOfferIcon = '$iconsPath/add_offer.png';

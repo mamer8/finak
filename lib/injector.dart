@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:finak/features/add_offer/cubit/cubit.dart';
+import 'package:finak/features/add_offer/data/repo.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/home/data/repo.dart';
+import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/menu/data/menu_repo.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
@@ -57,6 +60,18 @@ Future<void> setup() async {
       serviceLocator(),
     ),
   );
+
+  serviceLocator.registerFactory(
+    () => AddOfferCubit(
+      serviceLocator(),
+    ),
+  );
+  serviceLocator.registerFactory(
+    () => LocationCubit(
+  
+    ),
+  );
+  
 //!----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
 //!-------------------------Declare Repo---------------------------
@@ -66,6 +81,7 @@ Future<void> setup() async {
   serviceLocator.registerLazySingleton(() => HomeRepo(serviceLocator()));
 
   serviceLocator.registerLazySingleton(() => ServicesRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => AddOfferRepo(serviceLocator()));
 
 //!----------------------------------------------------------------
 

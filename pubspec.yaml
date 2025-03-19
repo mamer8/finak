@@ -54,6 +54,11 @@ dependencies:
   pinput: ^5.0.1
   card_swiper: ^3.0.1
   auto_size_text: ^3.0.0
+  geolocator: ^12.0.0
+  geocoding:
+  location: ^6.0.2
+  google_maps_flutter:
+ 
 
 dev_dependencies:
   flutter_test:

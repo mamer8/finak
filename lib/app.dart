@@ -1,4 +1,6 @@
+import 'package:finak/features/add_offer/cubit/cubit.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
+import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +56,15 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
             create: (_) => injector.serviceLocator<HomeCubit>(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (_) => injector.serviceLocator<ServicesCubit>(),
           ),
-
+          BlocProvider(
+            create: (_) => injector.serviceLocator<AddOfferCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<LocationCubit>(),
+          ),
         ],
         child: GetMaterialApp(
           supportedLocales: context.supportedLocales,
@@ -65,7 +72,7 @@ class _MyAppState extends State<MyApp> {
           theme: appTheme(),
           themeMode: ThemeMode.light,
           darkTheme: ThemeData.light(),
-          
+
           // standard dark theme
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,

@@ -11,7 +11,7 @@ class CustomMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MenuCubit, MenuState>(builder: (state, context) {
+    return BlocBuilder<MenuCubit, MenuState>(builder: (context,state ) {
       return Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -47,6 +47,9 @@ class CustomMenu extends StatelessWidget {
                 CustmMenuRow(
                   assetName: ImageAssets.addOfferIcon,
                   title: 'add_offer'.tr(),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.addOfferRoute);
+                  },
                 ),
                 CustmMenuRow(
                   assetName: ImageAssets.myOffersIcon,

@@ -31,7 +31,7 @@ class CustomSocialAuthWidget extends StatelessWidget {
                 child: Divider(
                   color: AppColors.primaryGrey,
                   thickness: 1,
-                  endIndent: 10,
+                  indent: 10,
                 ),
               ),
             ],

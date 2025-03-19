@@ -77,7 +77,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         SizedBox(
           height: widget.isMessage ? 150.h : null,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 6.w),
             child: TextFormField(
                 enabled: widget.enabled,
                 controller: widget.controller,
@@ -87,7 +87,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 onTapOutside: (event) {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
-              
                 focusNode: myFocusNode,
                 style: getBoldStyle(),
                 onChanged: widget.onChanged,
