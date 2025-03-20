@@ -1,15 +1,21 @@
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/services/screens/services_details_screen.dart';
 
 class CustomServiceWidget extends StatelessWidget {
   const CustomServiceWidget({
+    this.isOffers = false,
     super.key,
   });
+  final bool isOffers;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-      Navigator.pushNamed(context, Routes.servicesDetailsRoute);
+        Navigator.pushNamed(context, Routes.servicesDetailsRoute,
+            arguments: ServiceDetailsArgs(
+              isOffers: isOffers,
+            ));
       },
       child: Row(
         children: [
@@ -23,19 +29,20 @@ class CustomServiceWidget extends StatelessWidget {
                 // isService: true,
                 borderRadius: 10.w,
               ),
-              PositionedDirectional(
-                top: 10.h,
-                start: 10.w,
-                child: CircleAvatar(
-                  backgroundColor: AppColors.white,
-                  radius: 15.r,
-                  child: Icon(
-                    Icons.favorite_rounded,
-                    color: AppColors.secondGrey,
-                    size: 20.w,
+              if (!isOffers)
+                PositionedDirectional(
+                  top: 10.h,
+                  start: 10.w,
+                  child: CircleAvatar(
+                    backgroundColor: AppColors.white,
+                    radius: 15.r,
+                    child: Icon(
+                      Icons.favorite_rounded,
+                      color: AppColors.secondGrey,
+                      size: 20.w,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           Flexible(

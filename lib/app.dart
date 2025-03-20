@@ -1,7 +1,10 @@
 import 'package:finak/features/add_offer/cubit/cubit.dart';
+import 'package:finak/features/favorite/cubit/cubit.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
+import 'package:finak/features/my_offers/cubit/cubit.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +67,15 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (_) => injector.serviceLocator<LocationCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<MyOffersCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<FavoritesCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<ProfileCubit>(),
           ),
         ],
         child: GetMaterialApp(

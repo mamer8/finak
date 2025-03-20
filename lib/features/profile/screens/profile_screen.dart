@@ -1,0 +1,163 @@
+import 'package:finak/core/exports.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
+
+import '../cubit/cubit.dart';
+import '../cubit/state.dart';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
+      var cubit = context.read<ProfileCubit>();
+
+      return Scaffold(
+        appBar: customAppBar(context, title: 'profile'.tr()),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: cubit.formKeyProfile,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  10.h.verticalSpace,
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      cubit.profileImage == null
+                          ? CustomNetworkImage(
+                              image: "https://www.example.com/image.jpg",
+                              isUser: true,
+                              width: 100.w,
+                              height: 100.w,
+                              borderRadius: 500.r)
+                          : Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                ClipRRect(
+                                    borderRadius: BorderRadius.circular(500.r),
+                                    child: Image.file(
+                                      cubit.profileImage!,
+                                      width: 100.w,
+                                      height: 100.w,
+                                      fit: BoxFit.cover,
+                                    )),
+                                Positioned(
+                                    left: -2,
+                                    top: -2,
+                                    child: InkWell(
+                                      onTap: () {
+                                        cubit.removeImage();
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(50.r),
+                                          ),
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                CupertinoIcons.xmark,
+                                                color: AppColors.white,
+                                                size: 20.w,
+                                              ))),
+                                    )),
+                              ],
+                            ),
+                      Positioned(
+                        right: -2,
+                        bottom: -2,
+                        child: InkWell(
+                          onTap: () {
+                            cubit.showImageSourceDialog(context);
+                          },
+                          child: Container(
+                              // height: 30.h,
+                              // width: 30.w,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(50.r),
+                              ),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    CupertinoIcons.camera,
+                                    color: AppColors.white,
+                                    size: 20.w,
+                                  ))),
+                        ),
+                      ),
+                    ],
+                  ),
+                  50.h.verticalSpace,
+                  CustomTextField(
+                    title: "full_name",
+                    labelText: "enter_name".tr(),
+                    controller: cubit.nameController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "enter_name".tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextField(
+                    title: "email",
+                    labelText: "enter_email".tr(),
+                    controller: cubit.phoneController,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty || !value.isEmail) {
+                        return "enter_email".tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextField(
+                    title: "phone",
+                    labelText: "enter_phone".tr(),
+                    controller: cubit.phoneController,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "enter_phone".tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  100.h.verticalSpace,
+                  CustomButton(
+                    title: "update",
+                    onPressed: () {
+                      if (cubit.formKeyProfile.currentState!.validate()) {
+                        // cubit.login(context);
+                      }
+                    },
+                  ),
+                  20.h.verticalSpace,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.changePasswordRoute);
+                    },
+                    child: Text("change_password".tr(),
+                        style: getRegularStyle(
+                            fontSize: 18.sp, color: AppColors.primary)),
+                  ),
+                  30.h.verticalSpace,
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}

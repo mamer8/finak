@@ -9,12 +9,14 @@ class CustomSearchTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final TextEditingController? controller;
+  final bool isFiler;
   const CustomSearchTextField({
     super.key,
     this.onTap,
     this.onChanged,
     this.onSubmitted,
     this.controller,
+    this.isFiler = true,
   });
 
   @override
@@ -47,13 +49,15 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [textField(), 10.w.horizontalSpace, CustomFilterWidget()],
+        children: [
+          textField(),
+          if (widget.isFiler) 10.w.horizontalSpace,
+          if (widget.isFiler) CustomFilterWidget()
+        ],
       ),
     );
   }
 
- 
- 
   Expanded textField() {
     return Expanded(
       child:

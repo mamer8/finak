@@ -3,7 +3,11 @@ import 'package:finak/features/Auth/screens/new_password_screen.dart';
 import 'package:finak/features/Auth/screens/otp_screen.dart';
 import 'package:finak/features/Auth/screens/sign_up_screen.dart';
 import 'package:finak/features/add_offer/screens/add_offer_screen.dart';
+import 'package:finak/features/favorite/screens/favorite_screen.dart';
 import 'package:finak/features/main_screen/screens/main_screen.dart';
+import 'package:finak/features/my_offers/screens/my_offers_screen.dart';
+import 'package:finak/features/profile/screens/profile_screen.dart';
+import 'package:finak/features/profile/screens/change_password_screen.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
 import 'package:finak/features/services/screens/services_screen.dart';
 import 'package:finak/features/splash/screens/splash_screen.dart';
@@ -25,8 +29,14 @@ class Routes {
   ///////////// Services /////////////
   static const String servicesRoute = '/services';
   static const String servicesDetailsRoute = '/services_details';
-//////////// Add Offer /////////////
+//////////// offers /////////////
   static const String addOfferRoute = '/add_offer';
+  static const String myOffersRoute = '/my_offers';
+  ////////////// Profile /////////////
+  static const String profileRoute = '/profile';
+  static const String changePasswordRoute = '/change_password';
+  //////////// favorites /////////////
+  static const String favoritesRoute = '/favorites';
 }
 
 class AppRoutes {
@@ -70,13 +80,36 @@ class AppRoutes {
           builder: (context) => const ServicesScreen(),
         );
       case Routes.servicesDetailsRoute:
+        final args = settings.arguments as ServiceDetailsArgs;
         return MaterialPageRoute(
-          builder: (context) => const ServicesDetailsScreen(),
+          builder: (context) => ServicesDetailsScreen(
+            args: args,
+          ),
         );
-    ////////////// Offers /////////////
+      ////////////// Offers /////////////
       case Routes.addOfferRoute:
         return MaterialPageRoute(
           builder: (context) => const AddOfferScreen(),
+        );
+      case Routes.myOffersRoute:
+        return MaterialPageRoute(
+          builder: (context) => const MyOffersScreen(),
+        );
+      //////////// Profile /////////////
+      case Routes.profileRoute:
+        return MaterialPageRoute(
+          builder: (context) => const ProfileScreen(),
+        );
+      case Routes.changePasswordRoute:
+        return MaterialPageRoute(
+          builder: (context) =>
+              const UpdatePasswordScreen.ChangePasswordScreen(),
+        );
+
+      //////////// favorites /////////////
+      case Routes.favoritesRoute:
+        return MaterialPageRoute(
+          builder: (context) => const FavoriteScreen(),
         );
 
       // case Routes.detailsRoute:

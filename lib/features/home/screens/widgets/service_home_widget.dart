@@ -1,4 +1,5 @@
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/services/screens/services_details_screen.dart';
 
 class CustomServiceHomeWidget extends StatelessWidget {
   const CustomServiceHomeWidget({
@@ -9,7 +10,7 @@ class CustomServiceHomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Routes.servicesDetailsRoute);
+        Navigator.pushNamed(context, Routes.servicesDetailsRoute , arguments: ServiceDetailsArgs());
       },
       child: Column(
         children: [

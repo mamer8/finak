@@ -11,7 +11,7 @@ class CustomMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MenuCubit, MenuState>(builder: (context,state ) {
+    return BlocBuilder<MenuCubit, MenuState>(builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -54,14 +54,23 @@ class CustomMenu extends StatelessWidget {
                 CustmMenuRow(
                   assetName: ImageAssets.myOffersIcon,
                   title: 'my_offers'.tr(),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.myOffersRoute);
+                  },
                 ),
                 CustmMenuRow(
                   assetName: ImageAssets.profileIcon,
                   title: 'profile'.tr(),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.profileRoute);
+                  },
                 ),
                 CustmMenuRow(
                   assetName: ImageAssets.favoriteIcon,
                   title: 'favorite'.tr(),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.favoritesRoute);
+                  },
                 ),
                 CustmMenuRow(
                   assetName: ImageAssets.privacyPolicyIcon,

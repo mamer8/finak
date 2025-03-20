@@ -67,13 +67,14 @@
     "add": "Add",
     "enter_your_message": "Enter your message",
     "notification": "Notification",
-  
     "uploadImages": "Upload Images",
     "serviceImages": "Service Images",
     "select_image": "Select Image",
     "gallery": "Gallery",
     "camera": "Camera",
     "select_location": "Select Location",
+    "current_password": "Current Password",
+    
     "": "",
     "-": "-"
 }

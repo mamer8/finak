@@ -1,11 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:finak/features/add_offer/cubit/cubit.dart';
 import 'package:finak/features/add_offer/data/repo.dart';
+import 'package:finak/features/favorite/cubit/cubit.dart';
+import 'package:finak/features/favorite/cubit/state.dart';
+import 'package:finak/features/favorite/data/repo.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/home/data/repo.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/menu/data/menu_repo.dart';
+import 'package:finak/features/my_offers/cubit/cubit.dart';
+import 'package:finak/features/my_offers/data/repo.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
+import 'package:finak/features/profile/data/repo.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/data/repo.dart';
 import 'package:flutter/foundation.dart';
@@ -67,11 +74,24 @@ Future<void> setup() async {
     ),
   );
   serviceLocator.registerFactory(
-    () => LocationCubit(
-  
+    () => LocationCubit(),
+  );
+  serviceLocator.registerFactory(
+    () => FavoritesCubit(
+      serviceLocator(),
     ),
   );
-  
+  serviceLocator.registerFactory(
+    () => MyOffersCubit(
+      serviceLocator(),
+    ),
+  );
+  serviceLocator.registerFactory(
+    () => ProfileCubit(
+      serviceLocator(),
+    ),
+  );
+
 //!----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
 //!-------------------------Declare Repo---------------------------
@@ -82,6 +102,9 @@ Future<void> setup() async {
 
   serviceLocator.registerLazySingleton(() => ServicesRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => AddOfferRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => MyOffersRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => FavoritesRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => ProfileRepo(serviceLocator()));
 
 //!----------------------------------------------------------------
 

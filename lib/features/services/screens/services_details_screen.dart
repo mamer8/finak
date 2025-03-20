@@ -4,14 +4,17 @@ import 'package:flutter_svg/svg.dart';
 
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
-import 'widgets/service_widget.dart';
 import 'widgets/swiper_widget.dart';
-
+class ServiceDetailsArgs {
+  final bool isOffers;
+  ServiceDetailsArgs({ this.isOffers = false});
+}
 class ServicesDetailsScreen extends StatelessWidget {
   const ServicesDetailsScreen({
     super.key,
+    required this.args,
   });
-
+final ServiceDetailsArgs args;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ServicesCubit, ServicesState>(builder: (context, state) {
