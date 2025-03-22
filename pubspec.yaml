@@ -80,6 +80,14 @@ dev_dependencies:
 
 
   flutter_lints: ^3.0.0
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  background_color: "#ffffff"
+  image_path: "assets/images/logo.png"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  adaptive_icon_background: "#ffffff"
 
 
 flutter:
