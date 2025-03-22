@@ -6,16 +6,32 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../cubit/location_cubit.dart';
 import '../cubit/location_state.dart';
 
-class FullScreenMap extends StatelessWidget {
-  const FullScreenMap({
+class SearcMapScreen extends StatefulWidget {
+  const SearcMapScreen({
     super.key,
   });
+
+  @override
+  State<SearcMapScreen> createState() => _SearcMapScreenState();
+}
+
+class _SearcMapScreenState extends State<SearcMapScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context
+            .read<LocationCubit>()
+            .checkAndRequestLocationPermission(context);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     LocationCubit cubit = context.read<LocationCubit>();
     return Scaffold(
-      appBar: customAppBar(context, title: "select_location".tr()),
       body: BlocBuilder<LocationCubit, LocationState>(
         builder: (context, state) {
           return cubit.selectedLocation == null
@@ -32,7 +48,7 @@ class FullScreenMap extends StatelessWidget {
                     zoom: 12,
                   ),
                   onMapCreated: (GoogleMapController controller) {
-                    cubit.mapController = controller;
+                    cubit.searchMapController = controller;
                   },
                   markers: cubit.positionMarkers,
                   onTap: (LatLng latLng) => cubit.updateSelectedCameraPosition(

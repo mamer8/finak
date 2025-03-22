@@ -56,6 +56,8 @@
     "farthest_to_closest": "Farthest To The Closest",
     "clear": "Clear",
     "apply": "Apply",
+    "close": "Close",
+    "open": "Opened",
     "closed": "Closed",
     "update": "Update",
     "change_password": "Change Password",
@@ -75,6 +77,15 @@
     "select_location": "Select Location",
     "current_password": "Current Password",
     
+    "on_boarding1": "Professional performance, easy access. Your services are now faster and more convenient!",
+    "on_boarding2": "Everything you need, all in one place! Discover our services designed to make your life easier with just a tap.",
+    "on_boarding3": "From maintenance to delivery, from consultations to instant assistance—every service at your fingertips!",
+    "start_now": "Start Now",
+    "notifications": "Notifications",
+    "location_required": "Location Permission Required",
+    "location_describtion": "Please enable location permission to access this feature",
+    "open_settings": "Open Settings",
+    "cancel": "Cancel",
     "": "",
     "-": "-"
 }

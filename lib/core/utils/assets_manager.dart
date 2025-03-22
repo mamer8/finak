@@ -10,8 +10,8 @@ class ImageAssets {
   static const String profileDefault = '$imagePath/user_default.png';
   static const String pin = '$imagePath/pin.png';
   static const String topbusinessImage = '$imagePath/topbusiness.png';
-  static const String introBackgroundImage = '$imagePath/on1.png';
-  static const String introBackgroundImage2 = '$imagePath/on2.png';
+  static const String introBackgroundImage = '$imagePath/on_boarding1.png';
+  static const String introBackgroundImage2 = '$imagePath/on_boarding1.png';
   static const String facebook = '$imagePath/facebook.png';
   static const String google = '$imagePath/google.png';
   static const String apple = '$imagePath/apple.png';

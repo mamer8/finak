@@ -1,3 +1,4 @@
+import 'package:finak/core/exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ import '../../../core/utils/get_size.dart';
 import '../cubit/onboarding_cubit.dart';
 import 'onboarding1.dart';
 import 'onboarding2.dart';
+import 'onboarding3.dart';
 
 class OnBoardinScreen extends StatefulWidget {
   const OnBoardinScreen({super.key});
@@ -41,6 +43,7 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                       },
                       children: const [
                         OnBoarding1(),
+                        OnBoarding2(),
                         OnBoarding3(),
                       ],
                     ),
@@ -62,40 +65,18 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                       ),
                     ),
                   ),
-                  cubit.currentPage == 0
+                  cubit.currentPage != 2
                       ? Column(
                           children: [
-                            MaterialButton(
-                                minWidth: getWidthSize(context) / 1.2,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        getWidthSize(context) / 8)),
-                                color: AppColors.primary,
-                                onPressed: () {
-                                  cubit.pageController.animateToPage(1,
-                                      duration:
-                                          const Duration(milliseconds: 1000),
-                                      curve: Curves.easeInOut);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: getWidthSize(context) / 44,
-                                      horizontal: getWidthSize(context) / 44),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: getWidthSize(context) / 100,
-                                      horizontal: getWidthSize(context) / 32),
-                                  decoration: BoxDecoration(
-                                      // color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(
-                                          getWidthSize(context) / 44)),
-                                  child: Text(
-                                    trans.tr('next'),
-                                    style: TextStyle(
-                                        fontFamily: 'Tajawal',
-                                        color: AppColors.white,
-                                        fontSize: getWidthSize(context) / 22),
-                                  ),
-                                )),
+                            CustomButton(
+                              title: "next",
+                              onPressed: () {
+                                cubit.pageController.animateToPage(
+                                    cubit.currentPage + 1,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut);
+                              },
+                            ),
                             InkWell(
                                 onTap: () async {
                                   Navigator.pushReplacementNamed(
@@ -117,58 +98,40 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                                           getWidthSize(context) / 44)),
                                   child: Text(
                                     trans.tr('skip'),
-                                    style: TextStyle(
-                                        fontFamily: 'Tajawal',
-                                        color: AppColors.primary,
-                                        fontSize: getWidthSize(context) / 22),
+                                    style: getRegularStyle(fontSize: 22.sp),
                                   ),
                                 )),
                           ],
                         )
                       : Column(
                           children: [
-                            MaterialButton(
-                                minWidth: getWidthSize(context) / 1.2,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        getWidthSize(context) / 8)),
-                                color: AppColors.primary,
-                                onPressed: () async {
-                                  Navigator.pushReplacementNamed(
-                                      context, Routes.loginRoute);
-                                  SharedPreferences pref =
-                                      await SharedPreferences.getInstance();
-                                  pref.setBool('HomeState', true);
+                            CustomButton(
+                              title: "start_now",
+                              onPressed: () async {
+                                Navigator.pushReplacementNamed(
+                                    context, Routes.loginRoute);
+                                SharedPreferences pref =
+                                    await SharedPreferences.getInstance();
 
-                                  pref.setBool('onBoarding', true);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: getWidthSize(context) / 44,
-                                      horizontal: getWidthSize(context) / 44),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: getWidthSize(context) / 100,
-                                      horizontal: getWidthSize(context) / 32),
-                                  decoration: BoxDecoration(
-                                      // color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(
-                                          getWidthSize(context) / 44)),
-                                  child: Text(
-                                    trans.tr('start_now'),
-                                    style: TextStyle(
-                                        fontFamily: 'Tajawal',
-                                        color: AppColors.white,
-                                        fontSize: getWidthSize(context) / 22),
-                                  ),
-                                )),
+                                pref.setBool('onBoarding', true);
+                              },
+                            ),
                             Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: getWidthSize(context) / 44,
-                                    horizontal: getWidthSize(context) / 44),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: getWidthSize(context) / 100,
-                                    horizontal: getWidthSize(context) / 32),
-                                child: Text('')),
+                              margin: EdgeInsets.symmetric(
+                                  vertical: getWidthSize(context) / 44,
+                                  horizontal: getWidthSize(context) / 44),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: getWidthSize(context) / 100,
+                                  horizontal: getWidthSize(context) / 32),
+                              decoration: BoxDecoration(
+                                  // color: AppColors.primary,
+                                  borderRadius: BorderRadius.circular(
+                                      getWidthSize(context) / 44)),
+                              child: Text(
+                                trans.tr(''),
+                                style: getRegularStyle(fontSize: 24.sp),
+                              ),
+                            ),
                           ],
                         ),
                   Container(

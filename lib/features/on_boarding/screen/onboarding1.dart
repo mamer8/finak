@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:finak/core/exports.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/utils/assets_manager.dart';
-
-import '../../../core/utils/get_size.dart';
 import '../cubit/onboarding_cubit.dart';
 
 class OnBoarding1 extends StatelessWidget {
@@ -17,23 +12,28 @@ class OnBoarding1 extends StatelessWidget {
       builder: (context, state) {
         OnboardingCubit cubit = context.read<OnboardingCubit>();
         return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            actions: [],
-          ),
           body: Column(
             children: [
-              SizedBox(
-                height: getWidthSize(context) / 22,
-              ),
+          
               Flexible(
                 fit: FlexFit.tight,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(getWidthSize(context) / 22),
-                    child: Image.asset(
-                      ImageAssets.introBackgroundImage,
-                      // width: getSize(context) / 1.1,
+                child: ClipPath(
+                  clipper: CustomShape(),
+                  child: Container(
+                    height: getHeightSize(context) * 0.5,
+                    width: getWidthSize(context),
+                    color: AppColors.grey5,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          bottom: -getHeightSize(context) * 0.2,
+                          child: Image.asset(
+                            ImageAssets.introBackgroundImage,
+                            width: getWidthSize(context) * 0.8,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -42,33 +42,37 @@ class OnBoarding1 extends StatelessWidget {
 
               // SizedBox(height: getSize(context) / 12),
               Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getWidthSize(context) / 44),
-                child: Text(
-                  'نجاحك في البيع يبدأ هنا',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Tajawal',
-                      fontWeight: FontWeight.bold,
-                      fontSize: getWidthSize(context) / 18),
-                ),
-              ),
-              Container(
                 padding: EdgeInsets.all(getWidthSize(context) / 44),
                 child: Text(
-                  'أطلق إمكانياتك كمندوب مبيعات، وتابع فرصك وصفقاتك بكل سهولة.',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Tajawal',
-                      fontSize: getWidthSize(context) / 22),
+                  "on_boarding1".tr(),
+                  textAlign: TextAlign.center,
+                  style: getMediumStyle(color: AppColors.grey4),
                 ),
               ),
-
-              // SizedBox(height: getSize(context) / 12)
             ],
           ),
         );
       },
     );
+  }
+}
+
+class CustomShape extends CustomClipper<Path> {
+  @override
+  getClip(Size size) {
+    double height = size.height;
+    double width = size.width;
+    var path = Path();
+    path.lineTo(0, height - 50);
+    path.quadraticBezierTo(width / 2, height, width, height - 50);
+    path.lineTo(width, 0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return true;
   }
 }

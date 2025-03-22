@@ -6,16 +6,11 @@ part 'onboarding_state.dart';
 class OnboardingCubit extends Cubit<OnboardingState> {
   OnboardingCubit() : super(OnboardingInitial());
   PageController pageController = PageController(initialPage: 0);
-  int numPages = 2;
-  double currentPage = 0;
-
-  changePages() {
-    currentPage = pageController.page!;
-    emit(ChangingPagesState());
-  }
+  int numPages = 3;
+  int currentPage = 0;
 
   onPageChanged(int page) {
-    currentPage = page.toDouble();
+    currentPage = page;
     emit(ChangingPagesState());
   }
 }

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:finak/features/Auth/cubit/cubit.dart';
 
 import '../../../../core/exports.dart';
 
@@ -40,9 +41,14 @@ class CustomSocialAuthWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              ImageAssets.google,
-              width: 60.w,
+            GestureDetector(
+              onTap: () {
+                context.read<LoginCubit>().signInWithGoogle();
+              },
+              child: Image.asset(
+                ImageAssets.google,
+                width: 60.w,
+              ),
             ),
             20.w.horizontalSpace,
             Image.asset(
@@ -50,9 +56,14 @@ class CustomSocialAuthWidget extends StatelessWidget {
               width: 60.w,
             ),
             20.w.horizontalSpace,
-            Image.asset(
-              ImageAssets.facebook,
-              width: 60.w,
+            GestureDetector(
+              onTap: () {
+                context.read<LoginCubit>().signInWithFacebook();
+              },
+              child: Image.asset(
+                ImageAssets.facebook,
+                width: 60.w,
+              ),
             ),
           ],
         ),

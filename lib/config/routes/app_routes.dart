@@ -6,6 +6,8 @@ import 'package:finak/features/add_offer/screens/add_offer_screen.dart';
 import 'package:finak/features/favorite/screens/favorite_screen.dart';
 import 'package:finak/features/main_screen/screens/main_screen.dart';
 import 'package:finak/features/my_offers/screens/my_offers_screen.dart';
+import 'package:finak/features/notifications/screens/notifications_screen.dart';
+import 'package:finak/features/on_boarding/screen/onboarding_screen.dart';
 import 'package:finak/features/profile/screens/profile_screen.dart';
 import 'package:finak/features/profile/screens/change_password_screen.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
@@ -18,6 +20,7 @@ import '../../features/Auth/screens/login_screen.dart';
 
 class Routes {
   static const String initialRoute = '/';
+  static const String onBoardingRoute = '/on_boarding';
   static const String mainRoute = '/main';
   ///////////// Auth /////////////
   static const String loginRoute = '/login';
@@ -37,6 +40,8 @@ class Routes {
   static const String changePasswordRoute = '/change_password';
   //////////// favorites /////////////
   static const String favoritesRoute = '/favorites';
+  //////////// notifications /////////////
+  static const String notificationsRoute = '/notifications';
 }
 
 class AppRoutes {
@@ -47,6 +52,10 @@ class AppRoutes {
       case Routes.initialRoute:
         return MaterialPageRoute(
           builder: (context) => const SplashScreen(),
+        );
+      case Routes.onBoardingRoute:
+        return MaterialPageRoute(
+          builder: (context) => OnBoardinScreen(),
         );
       case Routes.mainRoute:
         return MaterialPageRoute(
@@ -110,6 +119,11 @@ class AppRoutes {
       case Routes.favoritesRoute:
         return MaterialPageRoute(
           builder: (context) => const FavoriteScreen(),
+        );
+      //////////// notifications /////////////
+      case Routes.notificationsRoute:
+        return MaterialPageRoute(
+          builder: (context) => const NotificationsScreen(),
         );
 
       // case Routes.detailsRoute:

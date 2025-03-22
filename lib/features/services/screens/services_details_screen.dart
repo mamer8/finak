@@ -5,16 +5,18 @@ import 'package:flutter_svg/svg.dart';
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
 import 'widgets/swiper_widget.dart';
+
 class ServiceDetailsArgs {
   final bool isOffers;
-  ServiceDetailsArgs({ this.isOffers = false});
+  ServiceDetailsArgs({this.isOffers = false});
 }
+
 class ServicesDetailsScreen extends StatelessWidget {
   const ServicesDetailsScreen({
     super.key,
     required this.args,
   });
-final ServiceDetailsArgs args;
+  final ServiceDetailsArgs args;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ServicesCubit, ServicesState>(builder: (context, state) {
@@ -96,93 +98,117 @@ final ServiceDetailsArgs args;
                       style: getRegularStyle(fontSize: 14.sp),
                     ),
                     20.h.verticalSpace,
-                    Divider(
-                      color: AppColors.gray,
-                    ),
-                    20.h.verticalSpace,
-                    Row(
-                      children: [
-                        CustomNetworkImage(
-                            image: "https://www.example.com/image.jpg",
-                            isUser: true,
-                            width: 70.w,
-                            height: 70.w,
-                            borderRadius: 50.w),
-                        10.w.horizontalSpace,
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'John DoeDoe',
-                                style: getBoldStyle(fontSize: 16.sp),
-                              ),
-                              5.h.verticalSpace,
-                              Row(
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.time,
-                                    color: AppColors.primaryGrey,
-                                    size: 20.w,
-                                  ),
-                                  5.w.horizontalSpace,
-                                  Text(
-                                    'posted 1 day ago',
-                                    style: getRegularStyle(
-                                      fontSize: 14.sp,
+                    if (args.isOffers) ...[
+                      RichText(
+                          text: TextSpan(children: <TextSpan>[
+                        TextSpan(
+                            text: "status".tr(),
+                            style: getBoldStyle(color: AppColors.primary)),
+                        TextSpan(
+                            text: ": ",
+                            style: getBoldStyle(
+                                fontSize: 14.sp, color: AppColors.primary)),
+                        TextSpan(
+                            text: "open".tr(),
+                            style: getRegularStyle(
+                                fontSize: 14.sp,
+                                color: AppColors.secondPrimary))
+                      ])),
+                      30.h.verticalSpace,
+                      CustomButton(
+                        title: "close".tr(),
+                        onPressed: () {},
+                      ),
+                    ] else ...[
+                      Divider(
+                        color: AppColors.gray,
+                      ),
+                      20.h.verticalSpace,
+                      Row(
+                        children: [
+                          CustomNetworkImage(
+                              image: "https://www.example.com/image.jpg",
+                              isUser: true,
+                              width: 70.w,
+                              height: 70.w,
+                              borderRadius: 50.w),
+                          10.w.horizontalSpace,
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'John DoeDoe',
+                                  style: getBoldStyle(fontSize: 16.sp),
+                                ),
+                                5.h.verticalSpace,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.time,
                                       color: AppColors.primaryGrey,
+                                      size: 20.w,
                                     ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        10.w.horizontalSpace,
-                        Row(children: [
-                          SvgPicture.asset(
-                            ImageAssets.callIcon,
-                            width: 40.w,
+                                    5.w.horizontalSpace,
+                                    Text(
+                                      'posted 1 day ago',
+                                      style: getRegularStyle(
+                                        fontSize: 14.sp,
+                                        color: AppColors.primaryGrey,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                           10.w.horizontalSpace,
-                          SvgPicture.asset(
-                            ImageAssets.messageIcon,
-                            width: 40.w,
-                          ),
-                        ]),
-                      ],
-                    ),
-                    20.h.verticalSpace,
-                    RichText(
-                        text: TextSpan(children: <TextSpan>[
-                      TextSpan(
-                          text: "email".tr(),
-                          style: getBoldStyle(color: AppColors.primary)),
-                      TextSpan(
-                          text: ": ",
-                          style: getBoldStyle(
-                              fontSize: 14.sp, color: AppColors.primary)),
-                      TextSpan(
-                          text: "email@example",
-                          style: getRegularStyle(
-                              fontSize: 14.sp, color: AppColors.primary))
-                    ])),
-                    10.h.verticalSpace,
-                    RichText(
-                        text: TextSpan(children: <TextSpan>[
-                      TextSpan(
-                          text: "status".tr(),
-                          style: getBoldStyle(color: AppColors.primary)),
-                      TextSpan(
-                          text: ": ",
-                          style: getBoldStyle(
-                              fontSize: 14.sp, color: AppColors.primary)),
-                      TextSpan(
-                          text: "open",
-                          style: getRegularStyle(
-                              fontSize: 14.sp, color: AppColors.secondPrimary))
-                    ])),
-                    kToolbarHeight .verticalSpace
+                          Row(children: [
+                            SvgPicture.asset(
+                              ImageAssets.callIcon,
+                              width: 40.w,
+                            ),
+                            10.w.horizontalSpace,
+                            SvgPicture.asset(
+                              ImageAssets.messageIcon,
+                              width: 40.w,
+                            ),
+                          ]),
+                        ],
+                      ),
+                      20.h.verticalSpace,
+                      RichText(
+                          text: TextSpan(children: <TextSpan>[
+                        TextSpan(
+                            text: "email".tr(),
+                            style: getBoldStyle(color: AppColors.primary)),
+                        TextSpan(
+                            text: ": ",
+                            style: getBoldStyle(
+                                fontSize: 14.sp, color: AppColors.primary)),
+                        TextSpan(
+                            text: "email@example",
+                            style: getRegularStyle(
+                                fontSize: 14.sp, color: AppColors.primary))
+                      ])),
+                      10.h.verticalSpace,
+                      RichText(
+                          text: TextSpan(children: <TextSpan>[
+                        TextSpan(
+                            text: "status".tr(),
+                            style: getBoldStyle(color: AppColors.primary)),
+                        TextSpan(
+                            text: ": ",
+                            style: getBoldStyle(
+                                fontSize: 14.sp, color: AppColors.primary)),
+                        TextSpan(
+                            text: "open".tr(),
+                            style: getRegularStyle(
+                                fontSize: 14.sp,
+                                color: AppColors.secondPrimary))
+                      ])),
+                    ],
+                    kToolbarHeight.verticalSpace
                   ],
                 ),
               ),

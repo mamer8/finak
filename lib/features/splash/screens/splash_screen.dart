@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:finak/core/utils/assets_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,32 +30,34 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _getStoreUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // if (prefs.getString('onBoarding') != null) {
-    if (prefs.getString('user') != null) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, Routes.mainRoute, (route) => false);
+    if (prefs.getBool('onBoarding') != null) {
+      if (prefs.getString('user') != null) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.mainRoute, (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.loginRoute,
+          (route) => false,
+        );
+      }
     } else {
-      Navigator.pushNamedAndRemoveUntil(
+      Navigator.pushReplacementNamed(
         context,
-        Routes.loginRoute,
-        (route) => false,
+        Routes.onBoardingRoute,
+
+        ///onBprading
       );
     }
-    // } else {
-    //   Navigator.pushReplacementNamed(
-    //     context,
-    //     Routes.initialRoute,
-
-    //     ///onBprading
-    //   );
-    // }
   }
 
   @override
   void initState() {
     super.initState();
     // context.read<SplashCubit>().getAdsOfApp();
-
+context
+            .read<LocationCubit>()
+            .checkAndRequestLocationPermission(context);
     _startDelay();
   }
 

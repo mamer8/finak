@@ -83,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
               ],
               color: AppColors.primary,
               buttonBackgroundColor: AppColors.primary,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.transparent,
               animationCurve: Curves.easeInOut,
               animationDuration: Duration(milliseconds: 600),
               onTap: (index) {

@@ -1,4 +1,5 @@
 import 'package:finak/features/home/screens/home_screen.dart';
+import 'package:finak/features/location/screens/search_screen.dart';
 import 'package:finak/features/splash/screens/splash_screen.dart';
 
 import '../../../core/exports.dart';
@@ -12,9 +13,7 @@ class MainCubit extends Cubit<MainState> {
   int currentIndex = 0;
   List<Widget> navigationBarViews = [
     HomeScreen(),
-    Center(
-      child: Text('Profile'),
-    ),
+    SearcMapScreen(),
     Center(),
   ];
   void getHomePage() {

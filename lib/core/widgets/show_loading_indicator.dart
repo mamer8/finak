@@ -72,15 +72,22 @@ class _CustomLoadingIndicatorState extends State<CustomLoadingIndicator>
                         strokeWidth: 3, // Slightly increased thickness
                       ),
                     ),
-              // Rotating logo in the center
-              RotationTransition(
-                turns: _controller,
-                child: Image.asset(
+
+
+                     Image.asset(
                   ImageAssets.logoImage,
                   height: 50.h,
                   width: 50.h,
-                ),
-              ),
+                )
+              // // Rotating logo in the center            
+              // RotationTransition(
+              //   turns: _controller,
+              //   child: Image.asset(
+              //     ImageAssets.logoImage,
+              //     height: 50.h,
+              //     width: 50.h,
+              //   ),
+              // ),
             ],
           )
         : Platform.isIOS

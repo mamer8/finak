@@ -79,7 +79,7 @@ class _PositionMapState extends State<PositionMap> {
                               zoom: 10,
                             ),
                             onMapCreated: (GoogleMapController controller) {
-                              cubit.positionMapControllerPositioned =
+                              cubit.positionMapController =
                                   controller;
                             },
                             markers: cubit.positionMarkers,

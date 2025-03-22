@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/network_image.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/menu/cubit/state.dart';
 import 'package:finak/features/menu/screens/widgets/custom_menu_row.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomMenu extends StatelessWidget {
   const CustomMenu({
@@ -83,10 +88,39 @@ class CustomMenu extends StatelessWidget {
                 CustmMenuRow(
                   assetName: ImageAssets.rateAppIcon,
                   title: 'rate_app'.tr(),
+                  onTap: () async {
+                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                    String url = '';
+                    String packageName = packageInfo.packageName;
+
+                    if (Platform.isAndroid) {
+                      url =
+                          "https://play.google.com/store/apps/details?id=$packageName";
+                    } else if (Platform.isIOS) {
+                      url = 'https://apps.apple.com/us/app/$packageName';
+                    }
+                    if (!await launchUrl(Uri.parse(url),
+                        mode: LaunchMode.externalApplication)) {
+                      throw Exception('Could not launch $url');
+                    }
+                    //!
+                  },
                 ),
                 CustmMenuRow(
                   assetName: ImageAssets.shareAppIcon,
                   title: 'share_app'.tr(),
+                  onTap: () async {
+                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                    String url = '';
+                    String packageName = packageInfo.packageName;
+                    if (Platform.isAndroid) {
+                      url =
+                          "https://play.google.com/store/apps/details?id=$packageName";
+                    } else if (Platform.isIOS) {
+                      url = 'https://apps.apple.com/us/app/$packageName';
+                    }
+                    await Share.share(url);
+                  },
                 ),
                 CustmMenuRow(
                   assetName: ImageAssets.deleteIcon,
@@ -95,7 +129,10 @@ class CustomMenu extends StatelessWidget {
                 CustmMenuRow(
                   title: 'logout'.tr(),
                   assetName: ImageAssets.logoutIcon,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, Routes.loginRoute, (route) => false);
+                  },
                 ),
               ],
             ))),

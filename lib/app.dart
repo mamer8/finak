@@ -4,6 +4,8 @@ import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/my_offers/cubit/cubit.dart';
+import 'package:finak/features/notifications/cubit/cubit.dart';
+import 'package:finak/features/on_boarding/cubit/onboarding_cubit.dart';
 import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,9 @@ class _MyAppState extends State<MyApp> {
             create: (_) => injector.serviceLocator<SplashCubit>(),
           ),
           BlocProvider(
+            create: (_) => injector.serviceLocator<OnboardingCubit>(),
+          ),
+          BlocProvider(
             create: (_) => injector.serviceLocator<LoginCubit>(),
           ),
           BlocProvider(
@@ -76,6 +81,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (_) => injector.serviceLocator<ProfileCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<NotificationsCubit>(),
           ),
         ],
         child: GetMaterialApp(

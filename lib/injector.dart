@@ -11,6 +11,9 @@ import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/menu/data/menu_repo.dart';
 import 'package:finak/features/my_offers/cubit/cubit.dart';
 import 'package:finak/features/my_offers/data/repo.dart';
+import 'package:finak/features/notifications/cubit/cubit.dart';
+import 'package:finak/features/notifications/data/repo.dart';
+import 'package:finak/features/on_boarding/cubit/onboarding_cubit.dart';
 import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/profile/data/repo.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
@@ -39,6 +42,10 @@ Future<void> setup() async {
 
   serviceLocator.registerFactory(
     () => SplashCubit(),
+  );
+
+  serviceLocator.registerFactory(
+    () => OnboardingCubit(),
   );
 
   serviceLocator.registerFactory(
@@ -91,6 +98,11 @@ Future<void> setup() async {
       serviceLocator(),
     ),
   );
+  serviceLocator.registerFactory(
+    () => NotificationsCubit(
+      serviceLocator(),
+    ),
+  );
 
 //!----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
@@ -105,6 +117,8 @@ Future<void> setup() async {
   serviceLocator.registerLazySingleton(() => MyOffersRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => FavoritesRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => ProfileRepo(serviceLocator()));
+  serviceLocator
+      .registerLazySingleton(() => NotificationsRepo(serviceLocator()));
 
 //!----------------------------------------------------------------
 

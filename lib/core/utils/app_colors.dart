@@ -11,6 +11,11 @@ class AppColors {
   static Color red = HexColor('#E34A42');
   static Color grey2 = HexColor('#747474');
   static Color grey3 = HexColor('#DEDEDE');
+  static Color grey4 = HexColor('#525252');
+  static Color grey5 = HexColor('#EFEFEE');
+  static Color grey6 = HexColor('#373737');
+  static Color notificationBorder = HexColor('#A9BCC0');
+  static Color notificationBG = HexColor('#F5F5F5');
   static Color textFiledBG = HexColor('#F2F2F2');
   
   static Color black = Colors.black;
