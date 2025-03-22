@@ -2,8 +2,9 @@ import 'package:finak/core/exports.dart';
 
 import '../cubit/onboarding_cubit.dart';
 
-class OnBoarding1 extends StatelessWidget {
-  const OnBoarding1({super.key});
+class OnBoardingWidget extends StatelessWidget {
+  const OnBoardingWidget({super.key, required this.title});
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -14,23 +15,23 @@ class OnBoarding1 extends StatelessWidget {
         return Scaffold(
           body: Column(
             children: [
-          
               Flexible(
                 fit: FlexFit.tight,
                 child: ClipPath(
                   clipper: CustomShape(),
                   child: Container(
-                    height: getHeightSize(context) * 0.5,
+                    height: getHeightSize(context) * 0.65,
                     width: getWidthSize(context),
                     color: AppColors.grey5,
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                          bottom: -getHeightSize(context) * 0.2,
+                          bottom: -getHeightSize(context) * 0.18,
                           child: Image.asset(
                             ImageAssets.introBackgroundImage,
-                            width: getWidthSize(context) * 0.8,
+                            // width: getWidthSize(context) * 0.8,
+                            height: getHeightSize(context) * 0.7,
                           ),
                         ),
                       ],
@@ -38,13 +39,14 @@ class OnBoarding1 extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: getWidthSize(context) / 12),
-
-              // SizedBox(height: getSize(context) / 12),
               Container(
-                padding: EdgeInsets.all(getWidthSize(context) / 44),
-                child: Text(
-                  "on_boarding1".tr(),
+                height: getHeightSize(context) * 0.1,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                ),
+                child: AutoSizeText(
+                  title.tr(),
+                  maxLines: 5,
                   textAlign: TextAlign.center,
                   style: getMediumStyle(color: AppColors.grey4),
                 ),

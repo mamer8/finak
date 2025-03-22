@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/network_image.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class CustomDetailsSwiper extends StatefulWidget {
   final List<String> images;
@@ -49,10 +52,20 @@ class _CustomDetailsSwiperState extends State<CustomDetailsSwiper> {
             },
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
-                onTap: () {},
-                child: Image.network(
-                  widget.images[index],
-                  fit: BoxFit.cover,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenImageViewer(
+                        images: widget.images,
+                        initialIndex: index,
+                      ),
+                    ),
+                  );
+                },
+                child: CustomNetworkImage(
+                  image: widget.images[index],
+                  // borderRadius: 10,
                 ),
               );
             },
@@ -126,17 +139,13 @@ class _CustomDetailsSwiperState extends State<CustomDetailsSwiper> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 5),
                           child: Opacity(
-                            opacity: _currentIndex == index ? 1 : 0.5,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: Image.network(
-                                widget.images[index],
-                                // width: 50, // Adjust width as needed
-                                // height: 50, // Adjust height as needed
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
+                              opacity: _currentIndex == index ? 1 : 0.5,
+                              child: CustomNetworkImage(
+                                image: widget.images[index],
+                                width: 70,
+                                height: 50,
+                                borderRadius: 10,
+                              )),
                         ),
                       );
                     }),
@@ -164,49 +173,49 @@ class _CustomDetailsSwiperState extends State<CustomDetailsSwiper> {
 //                   ),
 //                 )
 
-// class FullScreenImageViewer extends StatelessWidget {
-//   final int initialIndex;
-//   final List<String> images;
+class FullScreenImageViewer extends StatelessWidget {
+  final int initialIndex;
+  final List<String> images;
 
-//   const FullScreenImageViewer({
-//     super.key,
-//     required this.initialIndex,
-//     required this.images,
-//   });
+  const FullScreenImageViewer({
+    super.key,
+    required this.initialIndex,
+    required this.images,
+  });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       appBar: AppBar(
-//         backgroundColor: Colors.black,
-//         leading: IconButton(
-//           icon: const Icon(Icons.arrow_back, color: Colors.white),
-//           onPressed: () => Navigator.pop(context),
-//         ),
-//       ),
-//       body: PhotoViewGallery.builder(
-//         itemCount: images.length,
-//         pageController: PageController(initialPage: initialIndex),
-//         builder: (BuildContext context, int index) {
-//           return PhotoViewGalleryPageOptions(
-//             imageProvider: CachedNetworkImageProvider(images[index]),
-//             heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
-//           );
-//         },
-//         scrollPhysics: const BouncingScrollPhysics(),
-//         backgroundDecoration: const BoxDecoration(color: Colors.black),
-//         loadingBuilder: (context, progress) {
-//           return Center(
-//             child: CircularProgressIndicator(
-//               value: progress == null || progress.expectedTotalBytes == null
-//                   ? null
-//                   : progress.cumulativeBytesLoaded /
-//                       progress.expectedTotalBytes!,
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: PhotoViewGallery.builder(
+        itemCount: images.length,
+        pageController: PageController(initialPage: initialIndex),
+        builder: (BuildContext context, int index) {
+          return PhotoViewGalleryPageOptions(
+            imageProvider: CachedNetworkImageProvider(images[index]),
+            heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
+          );
+        },
+        scrollPhysics: const BouncingScrollPhysics(),
+        backgroundDecoration: const BoxDecoration(color: Colors.black),
+        loadingBuilder: (context, progress) {
+          return Center(
+            child: CircularProgressIndicator(
+              value: progress == null || progress.expectedTotalBytes == null
+                  ? null
+                  : progress.cumulativeBytesLoaded /
+                      progress.expectedTotalBytes!,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

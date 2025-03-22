@@ -20,15 +20,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  /// picker 
-  
+  /// picker
+
   File? profileImage;
-    removeImage() {
+  removeImage() {
     profileImage = null;
 
     emit(FileRemovedSuccessfully());
   }
-
 
   Future pickImage(BuildContext context, bool isGallery) async {
     final picker = ImagePicker();
@@ -44,7 +43,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     Navigator.pop(context);
   }
- void showImageSourceDialog(
+
+  void showImageSourceDialog(
     BuildContext context,
   ) async {
     showDialog(
@@ -82,4 +82,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
+  bool hidePhone = false;
+  void changeHidePhone(bool value) {
+    hidePhone = value;
+    emit(HidePhoneChangedSuccessfully());
+  }
 }

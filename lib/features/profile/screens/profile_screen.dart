@@ -133,6 +133,21 @@ class ProfileScreen extends StatelessWidget {
                       return null;
                     },
                   ),
+                  20.h.verticalSpace,
+                  Row(children: [
+                    Expanded(
+                      child: Text("hide_phone".tr(),
+                          style: getBoldStyle(
+                            fontSize: 18.sp,
+                          )),
+                    ),
+                    CupertinoSwitch(
+                        value: cubit.hidePhone,
+                        activeColor: AppColors.primary,
+                        onChanged: (value) {
+                          cubit.changeHidePhone(value);
+                        }),
+                  ]),
                   100.h.verticalSpace,
                   CustomButton(
                     title: "update",

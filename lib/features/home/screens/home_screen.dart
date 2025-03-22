@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 CustomNetworkImage(
                     image: "https://www.example.com/image.jpg",
-                      isUser: true,
+                    isUser: true,
                     width: 50.w,
                     height: 50.w,
                     borderRadius: 50.w),
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                     },
                     itemBuilder: (context, index) {
                       return CustomCategoryContainer(
-                        isSelected: true,
+                        
                       );
                     },
                   ),
@@ -135,6 +135,8 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
+              20.h.verticalSpace,
+              kToolbarHeight.verticalSpace,
             ],
           ))),
         ],

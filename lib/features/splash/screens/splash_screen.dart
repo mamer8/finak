@@ -29,6 +29,12 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _getStoreUser() async {
+    Navigator.pushReplacementNamed(
+      context,
+      Routes.onBoardingRoute,
+
+      ///onBprading
+    );
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('onBoarding') != null) {
       if (prefs.getString('user') != null) {
@@ -55,9 +61,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     // context.read<SplashCubit>().getAdsOfApp();
-context
-            .read<LocationCubit>()
-            .checkAndRequestLocationPermission(context);
+    context.read<LocationCubit>().checkAndRequestLocationPermission(context);
     _startDelay();
   }
 

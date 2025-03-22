@@ -29,10 +29,10 @@ class _MainScreenState extends State<MainScreen> {
             key: _scaffoldKey,
             resizeToAvoidBottomInset: true,
             extendBody: true,
-            drawer: Drawer(
-              child: CustomMenu(),
-              backgroundColor: AppColors.white,
-            ),
+            // drawer: Drawer(
+            //   child: CustomMenu(),
+            //   backgroundColor: AppColors.white,
+            // ),
             body: WillPopScope(
               onWillPop: () async {
                 if (cubit.currentIndex != 0) {
@@ -87,11 +87,11 @@ class _MainScreenState extends State<MainScreen> {
               animationCurve: Curves.easeInOut,
               animationDuration: Duration(milliseconds: 600),
               onTap: (index) {
-                if (index == 2) {
-                  _scaffoldKey.currentState?.openDrawer();
-                } else {
-                  cubit.changeNavigationBar(index);
-                }
+                // if (index == 2) {
+                //   _scaffoldKey.currentState?.openDrawer();
+                // } else {
+                cubit.changeNavigationBar(index);
+                // }
               },
               letIndexChange: (index) => true,
             ),

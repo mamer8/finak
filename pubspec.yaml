@@ -69,6 +69,7 @@ dependencies:
   firebase_storage: ^11.6.5
   flutter_facebook_auth: ^7.1.1
   google_sign_in: 
+  photo_view: ^0.15.0
 
  
 
@@ -84,10 +85,10 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  background_color: "#ffffff"
+  # background_color: "#ffffff"
   image_path: "assets/images/logo.png"
   adaptive_icon_foreground: "assets/images/logo.png"
-  adaptive_icon_background: "#ffffff"
+  # adaptive_icon_background: "#ffffff"
 
 
 flutter:

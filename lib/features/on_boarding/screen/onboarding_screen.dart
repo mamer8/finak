@@ -34,7 +34,8 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
               backgroundColor: Colors.white,
               body: Column(
                 children: [
-                  Flexible(
+                  SizedBox(
+                    height: getHeightSize(context) * 0.75,
                     child: PageView(
                       controller: cubit.pageController,
                       reverse: true,
@@ -42,16 +43,22 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                         cubit.onPageChanged(page);
                       },
                       children: const [
-                        OnBoarding1(),
-                        OnBoarding2(),
-                        OnBoarding3(),
+                        OnBoardingWidget(
+                          title: "on_boarding1",
+                        ),
+                        OnBoardingWidget(
+                          title: "on_boarding2",
+                        ),
+                        OnBoardingWidget(
+                          title: "on_boarding3",
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(height: getWidthSize(context) / 12),
+                  // SizedBox(height: getHeightSize(context) * 0.05),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical: getWidthSize(context) / 16),
+                        vertical: getHeightSize(context) * 0.02),
                     child: SmoothPageIndicator(
                       controller: cubit.pageController,
                       count: cubit.numPages,
@@ -87,11 +94,8 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                                 },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(
-                                      vertical: getWidthSize(context) / 44,
+                                      vertical: getHeightSize(context) / 44,
                                       horizontal: getWidthSize(context) / 44),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: getWidthSize(context) / 100,
-                                      horizontal: getWidthSize(context) / 32),
                                   decoration: BoxDecoration(
                                       // color: AppColors.primary,
                                       borderRadius: BorderRadius.circular(
@@ -118,11 +122,8 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(
-                                  vertical: getWidthSize(context) / 44,
+                                  vertical: getHeightSize(context) / 44,
                                   horizontal: getWidthSize(context) / 44),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: getWidthSize(context) / 100,
-                                  horizontal: getWidthSize(context) / 32),
                               decoration: BoxDecoration(
                                   // color: AppColors.primary,
                                   borderRadius: BorderRadius.circular(
@@ -134,12 +135,12 @@ class _OnBoardinScreenState extends State<OnBoardinScreen> {
                             ),
                           ],
                         ),
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    color: Colors.white,
-                    child: Image.asset(ImageAssets.topbusinessImage,
-                        width: getWidthSize(context) / 3),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(5),
+                  //   color: Colors.white,
+                  //   child: Image.asset(ImageAssets.topbusinessImage,
+                  //       width: getWidthSize(context) / 3),
+                  // ),
                 ],
               ),
             );
