@@ -261,12 +261,13 @@ class LoginCubit extends Cubit<LoginState> {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-        // webAuthenticationOptions: WebAuthenticationOptions(
-        //   clientId: "com.topbusiness.finak", // Replace with your Apple Service ID
-        //   redirectUri: Uri.parse(
-        //     "https://your-firebase-project.firebaseapp.com/__/auth/handler",
-        //   ),
-        // ),
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId:
+              "com.topbusiness.finak", // Replace with your Apple Service ID
+          redirectUri: Uri.parse(
+            "https://finak-8a4c9.firebaseapp.com/__/auth/handler",
+          ),
+        ),
       );
 
       log("Apple user signed in: ${credential.email ?? 'No email provided'}");

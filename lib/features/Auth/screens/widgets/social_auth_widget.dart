@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:finak/features/Auth/cubit/cubit.dart';
 
@@ -50,16 +52,17 @@ class CustomSocialAuthWidget extends StatelessWidget {
                 width: 60.w,
               ),
             ),
-            20.w.horizontalSpace,
-            GestureDetector(
-              onTap: () {
-                context.read<LoginCubit>().signInWithApple();
-              },
-              child: Image.asset(
-                ImageAssets.apple,
-                width: 60.w,
+            if (Platform.isIOS) 20.w.horizontalSpace,
+            if (Platform.isIOS)
+              GestureDetector(
+                onTap: () {
+                  context.read<LoginCubit>().signInWithApple();
+                },
+                child: Image.asset(
+                  ImageAssets.apple,
+                  width: 60.w,
+                ),
               ),
-            ),
             20.w.horizontalSpace,
             GestureDetector(
               onTap: () {
