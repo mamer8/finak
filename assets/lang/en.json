@@ -87,6 +87,9 @@
     "open_settings": "Open Settings",
     "cancel": "Cancel",
     "hide_phone": "Hide Phone Number",
+    "exit_app": "Exit Application",
+    "exit_app_desc": "Are you sure you want to exit the application?",
+    "out": "Exit",
     "": "",
     "-": "-"
 }

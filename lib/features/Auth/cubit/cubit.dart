@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:finak/core/exports.dart';
+import 'package:finak/core/utils/appwidget.dart';
+import 'package:finak/core/utils/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../data/login_repo.dart';
 import 'state.dart';
@@ -30,6 +33,101 @@ class LoginCubit extends Cubit<LoginState> {
   GlobalKey<FormState> formKeyNewPassword = GlobalKey<FormState>();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
+
+  final FirebaseAuth _mAuth = FirebaseAuth.instance;
+  String? verificationId;
+  String? smsCode;
+  int? resendToken;
+
+  String countryCode = '+20';
+  String phone = "+201027639683";
+  Future<void> sendOTP(BuildContext context, {bool isRegister = true}) async {
+    AppWidget.createProgressDialog(context);
+    emit(SendCodeLoading());
+
+    try {
+      await _mAuth.verifyPhoneNumber(
+        phoneNumber: isRegister
+            ? "$countryCode${phoneControllerSignUp.text}"
+            : "$countryCode${phoneControllerForgotPassword.text}",
+        verificationCompleted: (PhoneAuthCredential credential) {
+          smsCode = credential.smsCode;
+          if (smsCode != null) {
+            emit(OnSmsCodeSent(smsCode!));
+          }
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          Navigator.pop(context);
+
+          emit(CheckCodeInvalidCode());
+          errorGetBar("Error: ${e.message}");
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          this.verificationId = verificationId;
+          this.resendToken = resendToken;
+          emit(OnSmsCodeSent(''));
+          log("Verification ID: $verificationId");
+
+          // Navigate **only if OTP is successfully sent**
+          Navigator.pop(context);
+          Navigator.pushNamed(context, Routes.otpRoute, arguments: isRegister);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          this.verificationId = verificationId;
+          log("Auto-retrieval timeout. Verification ID: $verificationId");
+        },
+      );
+    } catch (error) {
+      Navigator.pop(context);
+      errorGetBar(error.toString());
+      emit(CheckCodeInvalidCode());
+    }
+  }
+
+  Future<void> verifyOtp(BuildContext context, {bool isRegister = true}) async {
+    AppWidget.createProgressDialog(context); // Show loading
+
+    try {
+      // Create credentials
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId!,
+        smsCode: otpController.text,
+      );
+
+      // Sign in with credentials
+      UserCredential userCredential =
+          await _mAuth.signInWithCredential(credential);
+
+      debugPrint("UserCredential: ${userCredential.toString()}");
+
+      // Ensure user exists
+      if (userCredential.user == null) {
+        throw Exception("User credential is null");
+      }
+
+      // Dismiss progress dialog
+      Navigator.pop(context);
+      emit(CheckCodeSuccessfully());
+      debugPrint("OTP verification successful");
+
+      // Navigate to respective screen
+      if (isRegister) {
+        Navigator.pushNamed(context, Routes.mainRoute);
+      } else {
+        Navigator.pushNamed(context, Routes.newPasswordRoute);
+      }
+    } catch (error) {
+      // Dismiss progress dialog
+      Navigator.pop(context);
+
+      // Log error and show UI message
+      log("Error: $error");
+      errorGetBar(error.toString());
+
+      // Emit failure state
+      emit(CheckCodeErrorfully());
+    }
+  }
 
   /// Social Login
 
@@ -141,6 +239,53 @@ class LoginCubit extends Cubit<LoginState> {
     } catch (e) {
       log("Facebook sign-in error: $e");
       rethrow;
+    }
+  }
+
+//  Future<UserCredential> signInWithApple() async {
+//   final appleProvider = AppleAuthProvider();
+//   // if (kIsWeb) {
+//     // await FirebaseAuth.instance.signInWithPopup(appleProvider);
+//   // } else {
+//     await FirebaseAuth.instance.signInWithProvider(appleProvider);
+//   // }
+//   return await FirebaseAuth.instance.signInWithProvider(appleProvider);
+// }
+
+  Future<UserCredential?> signInWithApple() async {
+    try {
+      log("Starting Apple Sign-In process");
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        // webAuthenticationOptions: WebAuthenticationOptions(
+        //   clientId: "com.topbusiness.finak", // Replace with your Apple Service ID
+        //   redirectUri: Uri.parse(
+        //     "https://your-firebase-project.firebaseapp.com/__/auth/handler",
+        //   ),
+        // ),
+      );
+
+      log("Apple user signed in: ${credential.email ?? 'No email provided'}");
+
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode,
+      );
+
+      log("Attempting Firebase authentication");
+
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      log("Firebase sign-in successful: ${authResult.user?.uid}");
+      return authResult;
+    } catch (e, stackTrace) {
+      log("Apple sign-in error: $e");
+      log("Stack trace: $stackTrace");
+      return null;
     }
   }
 }

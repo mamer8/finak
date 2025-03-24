@@ -76,8 +76,9 @@ class AppRoutes {
           builder: (context) => const ForgotPasswordScreen(),
         );
       case Routes.otpRoute:
+        final isRegister = settings.arguments as bool;
         return MaterialPageRoute(
-          builder: (context) => const OTPScreen(),
+          builder: (context) =>  OTPScreen(isRegister:  isRegister,),
         );
       case Routes.newPasswordRoute:
         return MaterialPageRoute(

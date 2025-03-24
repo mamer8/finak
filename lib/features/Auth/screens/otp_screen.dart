@@ -6,8 +6,8 @@ import 'widgets/custom_pin_code.dart';
 import 'widgets/social_auth_widget.dart';
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key});
-
+  const OTPScreen({super.key, required this.isRegister});
+  final bool isRegister;
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
@@ -36,7 +36,6 @@ class _OTPScreenState extends State<OTPScreen> {
                     Center(
                       child: CustomPinCodeWidget(
                         pinController: cubit.otpController,
-                        // hasError: cubit.otpController.text.length < 4,
                         onChanged: (pin) {
                           // log('current PIN: $pin');
                           cubit.otpController.text = pin;
@@ -51,11 +50,12 @@ class _OTPScreenState extends State<OTPScreen> {
                     100.h.verticalSpace,
                     CustomButton(
                       title: "next",
-                      isDisabled: cubit.otpController.text.length < 4,
+                      isDisabled: cubit.otpController.text.length < 6,
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes.newPasswordRoute);
+                        // Navigator.pushNamed(context, Routes.newPasswordRoute);
                         if (cubit.formKeyOtp.currentState!.validate()) {
-                          // cubit.login(context);
+                          cubit.verifyOtp(context,
+                              isRegister: widget.isRegister);
                         }
                       },
                     ),

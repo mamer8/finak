@@ -42,7 +42,7 @@ class _CustomPinCodeWidgetState extends State<CustomPinCodeWidget> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.0.w),
         child: Pinput(
-          length: 4,
+          length: 6,
           controller: widget.pinController,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           // focusNode: myFocusNode,

@@ -18,6 +18,7 @@ class CustomTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final String? title;
   final List<TextInputFormatter>? inputFormatters;
+  final bool isOptional;
   //FocusNode myFocusNode = FocusNode();
   const CustomTextField({
     super.key,
@@ -37,6 +38,7 @@ class CustomTextField extends StatefulWidget {
     this.enabled = true,
     this.title,
     this.inputFormatters,
+    this.isOptional = false,
   });
 
   @override
@@ -71,8 +73,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         if (widget.title != null)
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8.h),
-            child:
-                Text(widget.title!.tr(), style: getBoldStyle(fontSize: 18.sp)),
+            child: Text(
+                widget.isOptional
+                    ? widget.title!.tr()
+                    : '${widget.title!.tr()} *',
+                style: getBoldStyle(fontSize: 18.sp)),
           ),
         SizedBox(
           height: widget.isMessage ? 150.h : null,
@@ -90,7 +95,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 focusNode: myFocusNode,
                 style: getBoldStyle(),
                 onChanged: widget.onChanged,
-                validator: widget.validator,
+                validator: widget.isOptional ? null : widget.validator,
                 keyboardType: widget.keyboardType,
                 maxLines: widget.isMessage ? 5 : 1,
                 minLines: widget.isMessage ? 5 : 1,

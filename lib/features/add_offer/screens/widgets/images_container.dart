@@ -21,7 +21,7 @@ class ImagesWidegt extends StatelessWidget {
         decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.grey7)),
+            border: Border.all(color: AppColors.grey7, width: .5)),
         child: Column(children: [
           Container(
             width: double.maxFinite,
@@ -48,6 +48,7 @@ class ImagesWidegt extends StatelessWidget {
             child: DottedBorder(
               dashPattern: [6, 4, 6, 4],
               borderType: BorderType.RRect,
+              strokeWidth: .5,
               color: AppColors.grey6,
               radius: const Radius.circular(12),
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
@@ -58,7 +59,7 @@ class ImagesWidegt extends StatelessWidget {
                   children: [
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 3.w, vertical: 3.h),
+                          EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
                       child: GestureDetector(
                         onTap: () {
                           if (cubit.uploadedImages.length < 7) {

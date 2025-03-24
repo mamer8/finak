@@ -11,6 +11,9 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<String> textNotifier = ValueNotifier<String>('');
+
+    ValueNotifier<String> textNotifierConfirm = ValueNotifier<String>('');
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         var cubit = context.read<LoginCubit>();
@@ -47,7 +50,8 @@ class SignUpScreen extends StatelessWidget {
                     CustomTextField(
                       title: "email",
                       labelText: "enter_email".tr(),
-                      controller: cubit.phoneControllerSignUp,
+                      isOptional: true,
+                      controller: cubit.emailControllerSignUp,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value!.isEmpty || !value.isEmail) {
@@ -69,36 +73,56 @@ class SignUpScreen extends StatelessWidget {
                         return null;
                       },
                     ),
-                    CustomTextField(
-                      title: "password",
-                      labelText: "enter_password".tr(),
-                      controller: cubit.passwordControllerSignUp,
-                      isPassword: true,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "enter_password".tr();
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextField(
-                      title: "confirm_password",
-                      labelText: "enter_password".tr(),
-                      controller: cubit.confirmPasswordController,
-                      isPassword: true,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "enter_password".tr();
-                        }
-                        return null;
-                      },
-                    ),
+                    ValueListenableBuilder<String>(
+                        valueListenable: textNotifier,
+                        builder: (context, value, child) {
+                          return CustomTextField(
+                            title: "password",
+                            labelText: "enter_password".tr(),
+                            controller: cubit.passwordControllerSignUp,
+                            isPassword: true,
+                            onChanged: (v) {
+                              textNotifier.value = v;
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "enter_password".tr();
+                              } else if (textNotifier.value !=
+                                  textNotifierConfirm.value) {
+                                return "password_not_match".tr();
+                              }
+                              return null;
+                            },
+                          );
+                        }),
+                    ValueListenableBuilder<String>(
+                        valueListenable: textNotifierConfirm,
+                        builder: (context, value, child) {
+                          return CustomTextField(
+                            title: "confirm_password",
+                            labelText: "enter_password".tr(),
+                            controller: cubit.confirmPasswordController,
+                            isPassword: true,
+                            onChanged: (v) {
+                              textNotifierConfirm.value = v;
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "enter_password".tr();
+                              } else if (textNotifierConfirm.value !=
+                                  textNotifier.value) {
+                                return "password_not_match".tr();
+                              }
+                              return null;
+                            },
+                          );
+                        }),
                     20.h.verticalSpace,
                     CustomButton(
                       title: "sign_up",
                       onPressed: () {
                         if (cubit.formKeySignUp.currentState!.validate()) {
-                          // cubit.login(context);
+                          cubit.sendOTP(context, isRegister: true);
                         }
                       },
                     ),

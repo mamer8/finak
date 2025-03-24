@@ -111,6 +111,7 @@ class ProfileScreen extends StatelessWidget {
                   CustomTextField(
                     title: "email",
                     labelText: "enter_email".tr(),
+                     isOptional: true,
                     controller: cubit.phoneController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {

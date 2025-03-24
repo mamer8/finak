@@ -51,9 +51,14 @@ class CustomSocialAuthWidget extends StatelessWidget {
               ),
             ),
             20.w.horizontalSpace,
-            Image.asset(
-              ImageAssets.apple,
-              width: 60.w,
+            GestureDetector(
+              onTap: () {
+                context.read<LoginCubit>().signInWithApple();
+              },
+              child: Image.asset(
+                ImageAssets.apple,
+                width: 60.w,
+              ),
             ),
             20.w.horizontalSpace,
             GestureDetector(

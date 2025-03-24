@@ -17,8 +17,9 @@ import 'dart:io';
 import 'package:finak/core/exports.dart';
 
 class CustomLoadingIndicator extends StatefulWidget {
-  const CustomLoadingIndicator({super.key, this.withLogo = true});
+  const CustomLoadingIndicator({super.key, this.withLogo = true ,this.color });
   final bool withLogo;
+  final Color? color ;
 
   @override
   State<CustomLoadingIndicator> createState() => _CustomLoadingIndicatorState();
@@ -68,7 +69,7 @@ class _CustomLoadingIndicatorState extends State<CustomLoadingIndicator>
                       height: 55.h, // Increased size
                       width: 55.h, // Increased size
                       child: CircularProgressIndicator(
-                        color: AppColors.primary,
+                        color: widget.color?? AppColors.primary,
                         strokeWidth: 3, // Slightly increased thickness
                       ),
                     ),

@@ -35,18 +35,19 @@ class _MainScreenState extends State<MainScreen> {
             // ),
             body: WillPopScope(
               onWillPop: () async {
-                if (cubit.currentIndex != 0) {
-                  setState(() {
-                    cubit.currentIndex = 0;
-                  });
-                  return false; // عدم الخروج من التطبيق، فقط الرجوع إلى الصفحة الرئيسية.
-                } else {
-                  bool shouldExit = await _showExitDialog(context);
-                  if (shouldExit) {
-                    SystemNavigator.pop(); // الخروج من التطبيق بعد التأكيد.
-                  }
-                  return shouldExit;
+                // if (cubit.currentIndex != 0) {
+                //   setState(() {
+                //     cubit.currentIndex = 0;
+                //     cubit.getHomePage();
+                //   });
+                //   return false; // عدم الخروج من التطبيق، فقط الرجوع إلى الصفحة الرئيسية.
+                // } else {
+                bool shouldExit = await _showExitDialog(context);
+                if (shouldExit) {
+                  SystemNavigator.pop(); // الخروج من التطبيق بعد التأكيد.
                 }
+                return shouldExit;
+                // }
               },
               child: cubit.navigationBarViews[cubit.currentIndex],
             ),

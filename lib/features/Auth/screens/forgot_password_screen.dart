@@ -44,10 +44,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                     CustomButton(
                       title: "send",
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes.otpRoute);
                         if (cubit.formKeyForgotPassword.currentState!
                             .validate()) {
-                          // cubit.login(context);
+                          cubit.sendOTP(context, isRegister: false);
                         }
                       },
                     ),

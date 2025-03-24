@@ -1,30 +1,17 @@
-import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
+import 'package:finak/core/exports.dart';
 
 class AppWidget {
-  static createProgressDialog(BuildContext context, String msg) {
+  static createProgressDialog(BuildContext context, {String? msg}) {
     showDialog(
         barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.4),
         context: context,
         builder: (context) {
-          return AlertDialog(
-            backgroundColor: AppColors.white,
-            content: Row(
-              children: [
-                CircularProgressIndicator(
-                  color: AppColors.primary,
-                ),
-                const SizedBox(
-                  width: 16.0,
-                ),
-                Text(
-                  msg,
-                  style: TextStyle(color: AppColors.black, fontSize: 15.0),
-                )
-              ],
-            ),
-          );
+          return WillPopScope(
+              onWillPop: () async => false,
+              child: CustomLoadingIndicator(
+                color: AppColors.white,
+              ));
         });
   }
 }

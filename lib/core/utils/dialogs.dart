@@ -1,9 +1,6 @@
+import 'package:finak/core/exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:finak/core/utils/assets_manager.dart';
 import 'package:get/get.dart';
-import 'package:finak/core/utils/app_colors.dart';
-import 'package:overlay_loader_with_app_icon/overlay_loader_with_app_icon.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 /*----------------------------------------------------------------------------*/
@@ -13,7 +10,7 @@ errorGetBar(String message) {
   Get.showSnackbar(
     GetSnackBar(
       messageText: Text(
-        message!,
+        message,
         style: Get.textTheme.titleSmall!.copyWith(
           color: Colors.white,
           height: 1.3,
@@ -38,7 +35,7 @@ errorGetBar(String message) {
 successGetBar(String? message) {
   Get.showSnackbar(GetSnackBar(
     messageText: Text(
-      message ?? 'success'.tr,
+      message ?? "success",
       style: Get.textTheme.bodyMedium!.copyWith(
         color: Colors.white,
         height: 1.5,
@@ -118,21 +115,22 @@ messageGetBar(String message) {
 //!------------------------------  Loading Dialog we will use it  -------------/
 //!----------------------------------------------------------------------------/
 
-
 void startOverlay(BuildContext context) {
-    OverlayLoadingProgress.start(
-          context,
-          widget: Container(
-            width: MediaQuery.of(context).size.width / 4,
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width / 13),
-            child: const AspectRatio(
-              aspectRatio: 1,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
+  OverlayLoadingProgress.start(
+    context,
+    barrierDismissible: false,
+    widget: WillPopScope(
+      onWillPop: () async => false, // Prevents back button from dismissing
+      child: Container(
+        width: MediaQuery.of(context).size.width / 4,
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width / 13),
+        child: const AspectRatio(
+          aspectRatio: 1,
+          child: CustomLoadingIndicator(),
+        ),
+      ),
+    ),
+  );
 }
 
 void stopOverlay() {
