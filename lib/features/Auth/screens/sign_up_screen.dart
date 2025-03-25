@@ -11,6 +11,8 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();
+
     ValueNotifier<String> textNotifier = ValueNotifier<String>('');
 
     ValueNotifier<String> textNotifierConfirm = ValueNotifier<String>('');
@@ -23,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SingleChildScrollView(
               child: Form(
-                key: cubit.formKeySignUp,
+                key: formKeySignUp,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -60,17 +62,15 @@ class SignUpScreen extends StatelessWidget {
                         return null;
                       },
                     ),
-                    CustomTextField(
-                      title: "phone",
-                      labelText: "enter_phone".tr(),
+                  CustomPhoneFormField(
                       controller: cubit.phoneControllerSignUp,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "enter_phone".tr();
-                        }
-                        return null;
+                      initialCountryCode: cubit.countryCode,
+                      onCountryChanged: (v) {
+                        cubit.countryCode = '+${v.fullCountryCode}';
+                        print("Country changed to: ${v.name}");
+                      },
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
                       },
                     ),
                     ValueListenableBuilder<String>(
@@ -85,9 +85,12 @@ class SignUpScreen extends StatelessWidget {
                               textNotifier.value = v;
                             },
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value!.isEmpty ) {
                                 return "enter_password".tr();
-                              } else if (textNotifier.value !=
+                              } else if (value.length < 5) {
+                                return "password_length".tr();
+                              }
+                               else if (textNotifier.value !=
                                   textNotifierConfirm.value) {
                                 return "password_not_match".tr();
                               }
@@ -121,7 +124,7 @@ class SignUpScreen extends StatelessWidget {
                     CustomButton(
                       title: "sign_up",
                       onPressed: () {
-                        if (cubit.formKeySignUp.currentState!.validate()) {
+                        if (formKeySignUp.currentState!.validate()) {
                           cubit.sendOTP(context, isRegister: true);
                         }
                       },

@@ -6,7 +6,7 @@ class CustomNotificationWidget extends StatelessWidget {
     super.key,
     required this.count,
   });
-  final String count;
+  final int count;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -22,7 +22,7 @@ class CustomNotificationWidget extends StatelessWidget {
             color: AppColors.primary,
             size: 25.sp,
           ),
-          if (count != "0")
+          if (count != 0)
             PositionedDirectional(
               top: -5.h,
               start: -5.w,
@@ -37,12 +37,11 @@ class CustomNotificationWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Center(
                     child: Text(
-                      count,
+                      count.toString(),
                       style: getMediumStyle(
                         color: AppColors.white,
                         fontHeight: 1,
-                        fontSize:
-                            (int.tryParse(count) ?? 0) > 9 ? 10.sp : 13.sp,
+                        fontSize: count > 9 ? 10.sp : 13.sp,
                       ),
                     ),
                   ),

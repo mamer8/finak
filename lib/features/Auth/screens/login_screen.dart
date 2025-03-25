@@ -9,6 +9,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         var cubit = context.read<LoginCubit>();
@@ -17,7 +19,7 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SingleChildScrollView(
               child: Form(
-                key: cubit.formKeyLogin,
+                key: formKeyLogin,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -30,17 +32,15 @@ class LoginScreen extends StatelessWidget {
                         style: getRegularStyle(
                             fontSize: 16.sp, color: AppColors.primaryGrey)),
                     50.h.verticalSpace,
-                    CustomTextField(
-                      title: "phone",
-                      labelText: "enter_phone".tr(),
+                    CustomPhoneFormField(
                       controller: cubit.phoneControllerLogin,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "enter_phone".tr();
-                        }
-                        return null;
+                      initialCountryCode: cubit.countryCode,
+                      onCountryChanged: (v) {
+                        cubit.countryCode = '+${v.fullCountryCode}';
+                        print("Country changed to: ${v.name}");
+                      },
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
                       },
                     ),
                     CustomTextField(
@@ -51,6 +51,8 @@ class LoginScreen extends StatelessWidget {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "enter_password".tr();
+                        } else if (value.length < 5) {
+                          return "password_length".tr();
                         }
                         return null;
                       },
@@ -74,10 +76,8 @@ class LoginScreen extends StatelessWidget {
                     CustomButton(
                       title: "login",
                       onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.mainRoute, (route) => false);
-                        if (cubit.formKeyLogin.currentState!.validate()) {
-                          // cubit.login(context);
+                        if (formKeyLogin.currentState!.validate()) {
+                          cubit.login(context);
                         }
                       },
                     ),

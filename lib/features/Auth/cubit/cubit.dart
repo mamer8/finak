@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:finak/core/exports.dart';
+import 'package:finak/core/preferences/preferences.dart';
 import 'package:finak/core/utils/appwidget.dart';
 import 'package:finak/core/utils/dialogs.dart';
+import 'package:finak/features/Auth/data/models/login_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,10 +16,10 @@ import 'state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this.api) : super(LoginStateInitial());
   LoginRepo api;
-  GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+  // GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
   TextEditingController phoneControllerLogin = TextEditingController();
   TextEditingController passwordControllerLogin = TextEditingController();
-  GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();
+  // GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();
   TextEditingController phoneControllerSignUp = TextEditingController();
   TextEditingController passwordControllerSignUp = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -25,12 +27,12 @@ class LoginCubit extends Cubit<LoginState> {
   TextEditingController nameControllerSignUp = TextEditingController();
   TextEditingController emailControllerSignUp = TextEditingController();
 
-  GlobalKey<FormState> formKeyForgotPassword = GlobalKey<FormState>();
+  // GlobalKey<FormState> formKeyForgotPassword = GlobalKey<FormState>();
   TextEditingController phoneControllerForgotPassword = TextEditingController();
   GlobalKey<FormState> formKeyOtp = GlobalKey<FormState>();
   TextEditingController otpController = TextEditingController();
 
-  GlobalKey<FormState> formKeyNewPassword = GlobalKey<FormState>();
+  // GlobalKey<FormState> formKeyNewPassword = GlobalKey<FormState>();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
@@ -68,7 +70,6 @@ class LoginCubit extends Cubit<LoginState> {
           emit(OnSmsCodeSent(''));
           log("Verification ID: $verificationId");
 
-          // Navigate **only if OTP is successfully sent**
           Navigator.pop(context);
           Navigator.pushNamed(context, Routes.otpRoute, arguments: isRegister);
         },
@@ -105,26 +106,22 @@ class LoginCubit extends Cubit<LoginState> {
         throw Exception("User credential is null");
       }
 
-      // Dismiss progress dialog
       Navigator.pop(context);
       emit(CheckCodeSuccessfully());
       debugPrint("OTP verification successful");
 
-      // Navigate to respective screen
       if (isRegister) {
-        Navigator.pushNamed(context, Routes.mainRoute);
+        register(context);
       } else {
-        Navigator.pushNamed(context, Routes.newPasswordRoute);
+        Navigator.pushReplacementNamed(context, Routes.newPasswordRoute);
       }
     } catch (error) {
       // Dismiss progress dialog
       Navigator.pop(context);
 
-      // Log error and show UI message
       log("Error: $error");
       errorGetBar(error.toString());
 
-      // Emit failure state
       emit(CheckCodeErrorfully());
     }
   }
@@ -288,5 +285,126 @@ class LoginCubit extends Cubit<LoginState> {
       log("Stack trace: $stackTrace");
       return null;
     }
+  }
+
+  /////// API CALLS //////
+  LoginModel loginModel = LoginModel();
+  login(BuildContext context) async {
+    emit(LoadingLoginState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.login(
+      phone: "$countryCode${phoneControllerLogin.text}",
+      password: passwordControllerLogin.text,
+    );
+    response.fold((l) {
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureLoginState());
+    }, (r) async {
+      debugPrint("code: ${r.status.toString()}");
+      // successGetBar(r.data?.jwtToken);
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        loginModel = r;
+
+        emit(SuccessLoginState());
+        Navigator.pop(context);
+        successGetBar(r.msg);
+        phoneControllerLogin.clear();
+        passwordControllerLogin.clear();
+
+        await Preferences.instance.setUser(r);
+        prefs.setBool("ISLOGGED", true);
+
+        if (loginModel.data?.userType == 0) {
+          // 0 for user
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.mainRoute, (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.mainRoute, (route) => false);
+        }
+      }
+    });
+  }
+
+  register(BuildContext context) async {
+    emit(LoadingLoginState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.register(
+      phone: "$countryCode${phoneControllerSignUp.text}",
+      password: passwordControllerSignUp.text,
+      name: nameControllerSignUp.text,
+      email: emailControllerSignUp.text,
+      passwordConfirmation: confirmPasswordController.text,
+    );
+    response.fold((l) {
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureLoginState());
+    }, (r) async {
+      debugPrint("code: ${r.status.toString()}");
+      // successGetBar(r.data?.jwtToken);
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        loginModel = r;
+
+        emit(SuccessLoginState());
+        Navigator.pop(context);
+        successGetBar(r.msg);
+        phoneControllerSignUp.clear();
+        passwordControllerSignUp.clear();
+        confirmPasswordController.clear();
+        nameControllerSignUp.clear();
+        emailControllerSignUp.clear();
+
+        await Preferences.instance.setUser(r);
+        prefs.setBool("ISLOGGED", true);
+        if (loginModel.data?.userType == 0) {
+          // 0 for user
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.mainRoute, (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.mainRoute, (route) => false);
+        }
+      }
+    });
+  }
+
+  resetPassword(BuildContext context) async {
+    emit(LoadingLoginState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.resetPassword(
+      phone: "$countryCode${phoneControllerForgotPassword.text}",
+      password: newPasswordController.text,
+      passwordConfirmation: confirmNewPasswordController.text,
+    );
+    response.fold((l) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureLoginState());
+    }, (r) async {
+      debugPrint("code: ${r.status.toString()}");
+      Navigator.pop(context);
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        loginModel = r;
+        emit(SuccessLoginState());
+        successGetBar(r.msg);
+        phoneControllerForgotPassword.clear();
+        newPasswordController.clear();
+        confirmNewPasswordController.clear();
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.loginRoute, (route) => false);
+      }
+    });
   }
 }

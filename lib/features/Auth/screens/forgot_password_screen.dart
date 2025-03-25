@@ -9,6 +9,8 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      GlobalKey<FormState> formKeyForgotPassword = GlobalKey<FormState>();
+
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         var cubit = context.read<LoginCubit>();
@@ -18,7 +20,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SingleChildScrollView(
               child: Form(
-                key: cubit.formKeyForgotPassword,
+                key: formKeyForgotPassword,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -27,24 +29,23 @@ class ForgotPasswordScreen extends StatelessWidget {
                         style: getRegularStyle(
                             fontSize: 16.sp, color: AppColors.primaryGrey)),
                     100.h.verticalSpace,
-                    CustomTextField(
-                      title: "phone",
-                      labelText: "enter_phone".tr(),
+                 
+                      CustomPhoneFormField(
                       controller: cubit.phoneControllerForgotPassword,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "enter_phone".tr();
-                        }
-                        return null;
+                      initialCountryCode: cubit.countryCode,
+                      onCountryChanged: (v) {
+                        cubit.countryCode = '+${v.fullCountryCode}';
+                        print("Country changed to: ${v.name}");
+                      },
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
                       },
                     ),
                     50.h.verticalSpace,
                     CustomButton(
                       title: "send",
                       onPressed: () {
-                        if (cubit.formKeyForgotPassword.currentState!
+                        if (formKeyForgotPassword.currentState!
                             .validate()) {
                           cubit.sendOTP(context, isRegister: false);
                         }

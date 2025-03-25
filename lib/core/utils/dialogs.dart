@@ -1,6 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:finak/core/exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 /*----------------------------------------------------------------------------*/
@@ -73,6 +75,36 @@ messageGetBar(String message) {
     margin: const EdgeInsets.all(8.0),
     snackPosition: SnackPosition.TOP,
   ));
+}
+checkLoggingStatus(BuildContext context, {void Function()? onPressed}) async {
+  print("AppConst.isLogged: ${AppConst.isLogged}");
+  if (AppConst.isLogged) {
+    if (onPressed != null) {
+      onPressed();
+    }
+  } else {
+    await AwesomeDialog(
+      context: context,
+      customHeader: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset(
+          ImageAssets.logoImage,
+        ),
+      ),
+      animType: AnimType.topSlide,
+      showCloseIcon: true,
+      padding: EdgeInsets.all(10.w),
+      title: "dont_have_account".tr(),
+      titleTextStyle: getRegularStyle(fontSize: 16.sp),
+      btnOkText: "login".tr(),
+      btnOkOnPress: () {
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.loginRoute, (route) => false);
+      },
+      btnCancelOnPress: () {},
+      btnCancelText: "cancel".tr(),
+    ).show();
+  }
 }
 
 /*----------------------------------------------------------------------------*/

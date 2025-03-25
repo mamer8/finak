@@ -11,6 +11,8 @@ class UpdatePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formKeyChangePassword = GlobalKey<FormState>();
+
     return BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
       var cubit = context.read<ProfileCubit>();
 
@@ -20,7 +22,7 @@ class UpdatePasswordScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: SingleChildScrollView(
             child: Form(
-              key: cubit.formKeyChangePassword,
+              key: formKeyChangePassword,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -41,6 +43,8 @@ class UpdatePasswordScreen extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "enter_password".tr();
+                      } else if (value.length < 5) {
+                        return "password_length".tr();
                       }
                       return null;
                     },
@@ -53,6 +57,11 @@ class UpdatePasswordScreen extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "enter_password".tr();
+                      } else if (value.length < 5) {
+                        return "password_length".tr();
+                      } else if (cubit.newpasswordController.text !=
+                          cubit.confirmPasswordController.text) {
+                        return "password_not_match".tr();
                       }
                       return null;
                     },
@@ -65,6 +74,11 @@ class UpdatePasswordScreen extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "enter_password".tr();
+                      } else if (value.length < 5) {
+                        return "password_length".tr();
+                      } else if (cubit.newpasswordController.text !=
+                          cubit.confirmPasswordController.text) {
+                        return "password_not_match".tr();
                       }
                       return null;
                     },
@@ -73,9 +87,8 @@ class UpdatePasswordScreen extends StatelessWidget {
                   CustomButton(
                     title: "update",
                     onPressed: () {
-                      if (cubit.formKeyChangePassword.currentState!
-                          .validate()) {
-                        // cubit.login(context);
+                      if (formKeyChangePassword.currentState!.validate()) {
+                        cubit.updatePassword(context);
                       }
                     },
                   ),

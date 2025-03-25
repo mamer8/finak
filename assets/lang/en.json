@@ -90,6 +90,8 @@
     "exit_app": "Exit Application",
     "exit_app_desc": "Are you sure you want to exit the application?",
     "out": "Exit",
+    "password_length": "Password must be at least 5 characters",
+    "guest": "Guest",
     "": "",
     "-": "-"
 }

@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
               child: cubit.navigationBarViews[cubit.currentIndex],
             ),
             bottomNavigationBar: CurvedNavigationBar(
-              index: 0,
+              index: cubit.currentIndex,
               items: [
                 CurvedNavigationBarItem(
                     child: Icon(

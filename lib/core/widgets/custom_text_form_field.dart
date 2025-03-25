@@ -1,5 +1,8 @@
 import 'package:finak/core/exports.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl_phone_field/countries.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl_phone_field/phone_number.dart';
 
 class CustomTextField extends StatefulWidget {
   final String? labelText;
@@ -173,6 +176,143 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         borderSide:
                             BorderSide(color: AppColors.red, width: 1.5),
                         borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 10.r))))),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomPhoneFormField extends StatefulWidget {
+  const CustomPhoneFormField({
+    super.key,
+    this.onCountryChanged,
+    this.onChanged,
+    this.controller,
+    this.isReadOnly = false,
+    this.initialCountryCode,
+    this.color,
+    this.helperStyle,
+  });
+
+  final void Function(Country)? onCountryChanged;
+  final void Function(PhoneNumber)? onChanged;
+  final TextEditingController? controller;
+  final String? initialCountryCode;
+  final bool isReadOnly;
+  final Color? color;
+  final TextStyle? helperStyle;
+
+  @override
+  State<CustomPhoneFormField> createState() => _CustomPhoneFormFieldState();
+}
+
+class _CustomPhoneFormFieldState extends State<CustomPhoneFormField> {
+  late FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    myFocusNode = FocusNode();
+    myFocusNode.addListener(() {
+      setState(() {
+        // color = Colors.black;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          child:
+              Text('${"phone".tr()} *', style: getBoldStyle(fontSize: 18.sp)),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              // Do nothing when tapping on the field itself
+            },
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: IntlPhoneField(
+                controller: widget.controller,
+                showCountryFlag: true,
+                validator: (value) {
+                  if (value == null || value.toString().length < 11) {
+                    return 'enter your phone';
+                  }
+                  return null;
+                },
+                keyboardType: TextInputType.number,
+                disableLengthCheck: false,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                showDropdownIcon: false,
+                enabled: !widget.isReadOnly,
+                focusNode: myFocusNode,
+                decoration: InputDecoration(
+                    hintText: "enter_phone".tr(),
+                    hintStyle: getRegularStyle(
+                        color: AppColors.black, fontSize: 14.sp),
+                    fillColor: widget.isReadOnly
+                        ? AppColors.gray.withOpacity(0.5)
+                        : AppColors.textFiledBG,
+                    filled: true,
+                    helperStyle: widget.helperStyle,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.textFiledBG),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 2, vertical: 12.h),
+                  
+                    errorStyle: getRegularStyle(color: AppColors.red),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: AppColors.textFiledBG, width: 1.5),
+                        borderRadius: BorderRadius.all(Radius.circular(10.r))),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.gray, width: 1.5),
+                        borderRadius: BorderRadius.all(Radius.circular(10.r))),
+                    // focused border style
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primary, width: 1.5),
+                        borderRadius: BorderRadius.all(Radius.circular(10.r))),
+
+                    // error border style
+                    errorBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.red, width: 1.5),
+                        borderRadius: BorderRadius.all(Radius.circular(10.r))),
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.red, width: 1.5),
+                        borderRadius: BorderRadius.all(Radius.circular(10.r)))),
+                onCountryChanged: widget.onCountryChanged,
+                style: getBoldStyle(),
+                initialValue: widget.initialCountryCode ?? '+20',
+                flagsButtonPadding: const EdgeInsetsDirectional.only(start: 18),
+                onChanged: widget.onChanged,
+                dropdownTextStyle: getRegularStyle(
+                  fontSize: 16.sp,
+                ),
+              ),
+            ),
           ),
         ),
       ],

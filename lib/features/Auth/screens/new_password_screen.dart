@@ -10,6 +10,7 @@ class NewPasswordScreen extends StatefulWidget {
 }
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
+  GlobalKey<FormState> formKeyNewPassword = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -21,7 +22,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SingleChildScrollView(
               child: Form(
-                key: cubit.formKeyNewPassword,
+                key: formKeyNewPassword,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -42,8 +43,10 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "enter_password".tr();
+                        } else if (value.length < 5) {
+                          return "password_length".tr();
                         } else if (cubit.newPasswordController.text !=
-                            cubit.confirmPasswordController.text) {
+                            cubit.confirmNewPasswordController.text) {
                           return "password_not_match".tr();
                         }
                         return null;
@@ -52,17 +55,19 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     CustomTextField(
                       title: "confirm_password",
                       labelText: "enter_password".tr(),
-                      controller: cubit.confirmPasswordController,
+                      controller: cubit.confirmNewPasswordController,
                       isPassword: true,
                       onChanged: (v) {
-                        cubit.confirmPasswordController.text = v;
+                        cubit.confirmNewPasswordController.text = v;
                         setState(() {});
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "enter_password".tr();
+                        } else if (value.length < 5) {
+                          return "password_length".tr();
                         } else if (cubit.newPasswordController.text !=
-                            cubit.confirmPasswordController.text) {
+                            cubit.confirmNewPasswordController.text) {
                           return "password_not_match".tr();
                         }
                         return null;
@@ -72,10 +77,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     CustomButton(
                       title: "confirm",
                       onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.mainRoute, (route) => false);
-                        if (cubit.formKeyNewPassword.currentState!.validate()) {
-                          // cubit.login(context);
+                        if (formKeyNewPassword.currentState!.validate()) {
+                          cubit.resetPassword(context);
                         }
                       },
                     ),

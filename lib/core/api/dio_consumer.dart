@@ -3,13 +3,15 @@ import 'dart:io';
 
 import 'package:dio/io.dart'; // Updated import
 import 'package:dio/dio.dart';
+import 'package:finak/core/preferences/preferences.dart';
+import 'package:finak/features/Auth/data/models/login_model.dart';
+import 'package:finak/injector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../error/exceptions.dart';
 import 'app_interceptors.dart';
 import 'base_api_consumer.dart';
 import 'end_points.dart';
-import 'package:finak/injector.dart' as injector;
 
 import 'status_code.dart';
 
@@ -36,31 +38,47 @@ class DioConsumer implements BaseApiConsumer {
         return status != null && status < StatusCode.internalServerError;
       };
 
-    client.interceptors.add(injector.serviceLocator<AppInterceptors>());
+    client.interceptors.add(serviceLocator<AppInterceptors>());
     client.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-      maxWidth: 90,
-      enabled: kDebugMode,
-    ));
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
+        enabled: kDebugMode,
+        filter: (options, args) {
+          // don't print requests with uris containing '/posts'
+          if (options.path.contains('/posts')) {
+            return false;
+          }
+          // don't print responses with unit8 list data
+          return !args.isResponse || !args.hasUint8ListData;
+        }));
+    // if (kDebugMode) {
+    //   client.interceptors.add(serviceLocator<LogInterceptor>());
+    // }
   }
 
   @override
   Future<dynamic> get(String path,
       {Map<String, dynamic>? queryParameters, Options? options}) async {
+    LoginModel loginModel = await Preferences.instance.getUserModel();
+    String lang = await Preferences.instance.getSavedLang();
+    String? token = loginModel.data?.jwtToken;
     try {
-      final response = await client.get(
-        path,
-        queryParameters: queryParameters,
-        options: options,
-      );
+      final response = await client.get(path,
+          queryParameters: queryParameters,
+          options: Options(headers: {
+            if (token != null) 'Authorization': token,
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+            // "Accept-Language": lang
+          }));
       return _handleResponseAsJson(response);
     } on DioException catch (error) {
-      _handleDioException(error);
+      _handleDioError(error);
     }
   }
 
@@ -70,16 +88,22 @@ class DioConsumer implements BaseApiConsumer {
       bool formDataIsEnabled = false,
       Map<String, dynamic>? queryParameters,
       Options? options}) async {
+    LoginModel loginModel = await Preferences.instance.getUserModel();
+    String lang = await Preferences.instance.getSavedLang();
+    String? token = loginModel.data?.jwtToken;
     try {
-      final response = await client.post(
-        path,
-        data: formDataIsEnabled ? FormData.fromMap(body!) : body,
-        queryParameters: queryParameters,
-        options: options,
-      );
+      final response = await client.post(path,
+          data: formDataIsEnabled ? FormData.fromMap(body!) : body,
+          queryParameters: queryParameters,
+          options: Options(headers: {
+            if (token != null) 'Authorization': token,
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+            // "Accept-Language": lang
+          }));
       return _handleResponseAsJson(response);
-    } on DioException catch (error) {
-      _handleDioException(error);
+    } on DioError catch (error) {
+      _handleDioError(error);
     }
   }
 
@@ -88,16 +112,22 @@ class DioConsumer implements BaseApiConsumer {
       {Map<String, dynamic>? body,
       Map<String, dynamic>? queryParameters,
       Options? options}) async {
+    LoginModel loginModel = await Preferences.instance.getUserModel();
+    String lang = await Preferences.instance.getSavedLang();
+    String? token = loginModel.data?.jwtToken;
     try {
-      final response = await client.put(
-        path,
-        data: body,
-        queryParameters: queryParameters,
-        options: options,
-      );
+      final response = await client.put(path,
+          data: body,
+          queryParameters: queryParameters,
+          options: Options(headers: {
+            if (token != null) 'Authorization': token,
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+            // "Accept-Language": lang
+          }));
       return _handleResponseAsJson(response);
     } on DioException catch (error) {
-      _handleDioException(error);
+      _handleDioError(error);
     }
   }
 
@@ -107,16 +137,46 @@ class DioConsumer implements BaseApiConsumer {
       Map<String, dynamic>? body,
       Map<String, dynamic>? queryParameters,
       Options? options}) async {
+    LoginModel loginModel = await Preferences.instance.getUserModel();
+    String lang = await Preferences.instance.getSavedLang();
+    String? token = loginModel.data?.jwtToken;
     try {
-      final response = await client.delete(
-        path,
-        data: formDataIsEnabled ? FormData.fromMap(body!) : body,
-        queryParameters: queryParameters,
-        options: options,
-      );
+      final response = await client.delete(path,
+          data: formDataIsEnabled ? FormData.fromMap(body!) : body,
+          queryParameters: queryParameters,
+          options: Options(headers: {
+            if (token != null) 'Authorization': token,
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+            // "Accept-Language": lang
+          }));
       return _handleResponseAsJson(response);
+    } on DioError catch (error) {
+      _handleDioError(error);
+    }
+  }
+
+  Future<dynamic> newPost(String path,
+      {bool formDataIsEnabled = false,
+      Map<String, dynamic>? body,
+      Map<String, dynamic>? queryParameters,
+      Options? options}) async {
+    LoginModel loginModel = await Preferences.instance.getUserModel();
+    String lang = await Preferences.instance.getSavedLang();
+    String? token = loginModel.data?.jwtToken;
+    try {
+      final response = await client.post(path,
+          data: formDataIsEnabled ? FormData.fromMap(body!) : body,
+          queryParameters: queryParameters,
+          options: Options(headers: {
+            if (token != null) 'Authorization': token,
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+            // "Accept-Language": lang
+          }));
+      return response;
     } on DioException catch (error) {
-      _handleDioException(error);
+      _handleDioError(error);
     }
   }
 
@@ -129,13 +189,13 @@ class DioConsumer implements BaseApiConsumer {
     }
   }
 
-  void _handleDioException(DioException error) {
+  void _handleDioError(DioError error) {
     switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
+      case DioErrorType.connectionTimeout:
+      case DioErrorType.sendTimeout:
+      case DioErrorType.receiveTimeout:
         throw const FetchDataException();
-      case DioExceptionType.badResponse:
+      case DioErrorType.badResponse:
         switch (error.response?.statusCode) {
           case StatusCode.badRequest:
             throw const BadRequestException();
@@ -151,9 +211,9 @@ class DioConsumer implements BaseApiConsumer {
           default:
             throw const FetchDataException();
         }
-      case DioExceptionType.cancel:
+      case DioErrorType.cancel:
         throw const FetchDataException();
-      case DioExceptionType.unknown:
+      case DioErrorType.unknown:
       default:
         throw const NoInternetConnectionException();
     }

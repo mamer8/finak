@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:finak/core/exports.dart';
+import 'package:finak/core/preferences/preferences.dart';
+import 'package:finak/features/Auth/data/models/login_model.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:finak/core/utils/assets_manager.dart';
@@ -37,7 +39,8 @@ class _SplashScreenState extends State<SplashScreen>
     );
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('onBoarding') != null) {
-      if (prefs.getString('user') != null) {
+
+      if (AppConst.isLogged) {
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.mainRoute, (route) => false);
       } else {

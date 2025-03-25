@@ -2,7 +2,11 @@ import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/network_image.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/home/cubit/state.dart';
+import 'package:finak/features/location/cubit/location_cubit.dart';
+import 'package:finak/features/location/cubit/location_state.dart';
 import 'package:finak/features/menu/screens/widgets/custom_menu_row.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
+import 'package:finak/features/profile/cubit/state.dart';
 
 import 'widgets/category_widget.dart';
 import 'widgets/custom_notification_widget.dart';
@@ -10,10 +14,22 @@ import 'widgets/custom_search_text_field.dart';
 import 'widgets/service_home_widget.dart';
 import 'widgets/swiper_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
   });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // context.read<HomeCubit>().getHomeData();
+    context.read<ProfileCubit>().getProfile();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,47 +37,56 @@ class HomeScreen extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
-            child: Row(
-              children: [
-                CustomNetworkImage(
-                    image: "https://www.example.com/image.jpg",
-                    isUser: true,
-                    width: 50.w,
-                    height: 50.w,
-                    borderRadius: 50.w),
-                10.w.horizontalSpace,
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'John DoeDoe',
-                        style: getBoldStyle(fontSize: 18.sp),
-                      ),
-                      5.h.verticalSpace,
-                      Row(
-                        children: [
-                          Image.asset(
-                            ImageAssets.locationIcon,
-                            width: 15.w,
-                          ),
-                          5.w.horizontalSpace,
-                          Text(
-                            'New York, USA',
-                            style: getRegularStyle(fontSize: 14.sp),
-                          )
-                        ],
-                      )
-                    ],
+          BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
+            var profileCubit = context.read<ProfileCubit>();
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
+              child: Row(
+                children: [
+                  CustomNetworkImage(
+                      image: profileCubit.loginModel.data?.image ?? '',
+                      isUser: true,
+                      width: 50.w,
+                      height: 50.w,
+                      borderRadius: 50.w),
+                  10.w.horizontalSpace,
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppConst.isLogged
+                              ? profileCubit.loginModel.data?.name ?? ''
+                              : 'guest'.tr(),
+                          style: getBoldStyle(fontSize: 18.sp),
+                        ),
+                        5.h.verticalSpace,
+                        Row(
+                          children: [
+                            Image.asset(
+                              ImageAssets.locationIcon,
+                              width: 15.w,
+                            ),
+                            5.w.horizontalSpace,
+                            BlocBuilder<LocationCubit, LocationState>(
+                                builder: (context, state) {
+                              var locationCubit = context.read<LocationCubit>();
+                              return Text(
+                                locationCubit.address,
+                                style: getRegularStyle(fontSize: 14.sp),
+                              );
+                            })
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                10.w.horizontalSpace,
-                const CustomNotificationWidget(count: "12"),
-              ],
-            ),
-          ),
+                  10.w.horizontalSpace,
+                   CustomNotificationWidget(count: profileCubit.loginModel.data?.notificationCount??0),
+                ],
+              ),
+            );
+          }),
           Expanded(
               child: SingleChildScrollView(
                   child: Column(
@@ -88,9 +113,7 @@ class HomeScreen extends StatelessWidget {
                       return 10.w.horizontalSpace;
                     },
                     itemBuilder: (context, index) {
-                      return CustomCategoryContainer(
-                        
-                      );
+                      return CustomCategoryContainer();
                     },
                   ),
                 ),

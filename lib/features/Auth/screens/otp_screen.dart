@@ -14,7 +14,15 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   @override
+  void initState() {
+    context.read<LoginCubit>().otpController.text = '';
+    super.initState();
+  }
+ GlobalKey<FormState> formKeyOtp = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
+     
+
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         var cubit = context.read<LoginCubit>();
@@ -24,7 +32,7 @@ class _OTPScreenState extends State<OTPScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SingleChildScrollView(
               child: Form(
-                key: cubit.formKeyOtp,
+                key: formKeyOtp,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

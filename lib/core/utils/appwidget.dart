@@ -7,11 +7,24 @@ class AppWidget {
         barrierColor: Colors.black.withOpacity(0.4),
         context: context,
         builder: (context) {
-          return WillPopScope(
-              onWillPop: () async => false,
-              child: CustomLoadingIndicator(
-                color: AppColors.white,
-              ));
+          return CustomLoadingIndicator(
+            color: AppColors.white,
+          );
         });
   }
 }
+// class AppWidget {
+//   static createProgressDialog(BuildContext context, {String? msg}) {
+//     showDialog(
+//         barrierDismissible: false,
+//         barrierColor: Colors.black.withOpacity(0.4),
+//         context: context,
+//         builder: (context) {
+//           return WillPopScope(
+//               onWillPop: () async => false,
+//               child: CustomLoadingIndicator(
+//                 color: AppColors.white,
+//               ));
+//         });
+//   }
+// }

@@ -12,6 +12,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formKeyProfile = GlobalKey<FormState>();
+
     return BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
       var cubit = context.read<ProfileCubit>();
 
@@ -21,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: SingleChildScrollView(
             child: Form(
-              key: cubit.formKeyProfile,
+              key: formKeyProfile,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -31,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       cubit.profileImage == null
                           ? CustomNetworkImage(
-                              image: "https://www.example.com/image.jpg",
+                              image: cubit.loginModel.data?.image ?? "",
                               isUser: true,
                               width: 100.w,
                               height: 100.w,
@@ -101,6 +103,9 @@ class ProfileScreen extends StatelessWidget {
                     title: "full_name",
                     labelText: "enter_name".tr(),
                     controller: cubit.nameController,
+                    onChanged: (value) {
+                      cubit.changeProfile(true);
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "enter_name".tr();
@@ -111,9 +116,12 @@ class ProfileScreen extends StatelessWidget {
                   CustomTextField(
                     title: "email",
                     labelText: "enter_email".tr(),
-                     isOptional: true,
-                    controller: cubit.phoneController,
+                    isOptional: true,
+                    controller: cubit.emailController,
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      cubit.changeProfile(true);
+                    },
                     validator: (value) {
                       if (value!.isEmpty || !value.isEmail) {
                         return "enter_email".tr();
@@ -125,6 +133,7 @@ class ProfileScreen extends StatelessWidget {
                     title: "phone",
                     labelText: "enter_phone".tr(),
                     controller: cubit.phoneController,
+                    enabled: false,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
@@ -151,10 +160,11 @@ class ProfileScreen extends StatelessWidget {
                   ]),
                   100.h.verticalSpace,
                   CustomButton(
+                    isDisabled: !cubit.isProfileChanged,
                     title: "update",
                     onPressed: () {
-                      if (cubit.formKeyProfile.currentState!.validate()) {
-                        // cubit.login(context);
+                      if (formKeyProfile.currentState!.validate()) {
+                        cubit.updateUserData(context);
                       }
                     },
                   ),
