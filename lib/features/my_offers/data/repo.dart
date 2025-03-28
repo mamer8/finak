@@ -29,12 +29,4 @@ class MyOffersRepo {
   }
 
  
-  Future<Either<Failure, DefaultPostModel>> closOffer(String offerId) async {
-    try {
-      var response = await api.post(EndPoints.closeOfferUrl);
-      return Right(DefaultPostModel.fromJson(response));
-    } on ServerException {
-      return Left(ServerFailure());
-    }
-  }
 }

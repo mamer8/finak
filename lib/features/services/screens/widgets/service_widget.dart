@@ -17,6 +17,7 @@ class CustomServiceWidget extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, Routes.servicesDetailsRoute,
             arguments: ServiceDetailsArgs(
+                serviceModel: serviceModel,
                 // isOffers: isOffers,
                 ));
       },

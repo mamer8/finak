@@ -10,6 +10,7 @@ class CustomSearchTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
   final TextEditingController? controller;
   final bool isFiler;
+  final bool isHome;
   const CustomSearchTextField({
     super.key,
     this.onTap,
@@ -17,6 +18,7 @@ class CustomSearchTextField extends StatefulWidget {
     this.onSubmitted,
     this.controller,
     this.isFiler = true,
+    this.isHome = false,
   });
 
   @override
@@ -52,7 +54,10 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
         children: [
           textField(),
           if (widget.isFiler) 10.w.horizontalSpace,
-          if (widget.isFiler) CustomFilterWidget()
+          if (widget.isFiler)
+            CustomFilterWidget(
+              isHome: widget.isHome,
+            )
         ],
       ),
     );

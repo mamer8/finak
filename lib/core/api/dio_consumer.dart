@@ -76,7 +76,7 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      if (response.statusCode == StatusCode.ok) {
+      if (response.statusCode! < StatusCode.internalServerError) {
         final responseJson = jsonDecode(response.data);
         return responseJson;
       } else {
@@ -106,7 +106,7 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      if (response.statusCode == StatusCode.ok) {
+      if (response.statusCode! < StatusCode.internalServerError) {
         final responseJson = jsonDecode(response.data);
         return responseJson;
       } else {
@@ -135,7 +135,7 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      if (response.statusCode == StatusCode.ok) {
+      if (response.statusCode! < StatusCode.internalServerError) {
         final responseJson = jsonDecode(response.data);
         return responseJson;
       } else {

@@ -1,15 +1,15 @@
 
 import 'package:finak/core/exports.dart';
-import 'package:finak/features/Auth/data/models/default_model.dart';
+import 'package:finak/features/home/data/model/home_model.dart';
 
 class HomeRepo {
   BaseApiConsumer api;
   HomeRepo(this.api);
 
-  Future<Either<Failure, DefaultPostModel>> getHomeData() async {
+  Future<Either<Failure, GetHomeModel>> getHomeData() async {
     try {
       var response = await api.get(EndPoints.homeUrl);
-      return Right(DefaultPostModel.fromJson(response));
+      return Right(GetHomeModel.fromJson(response));
     } on ServerException {
       return Left(ServerFailure());
     }

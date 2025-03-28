@@ -1,16 +1,20 @@
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
 
 class CustomServiceHomeWidget extends StatelessWidget {
   const CustomServiceHomeWidget({
-    super.key,
+    super.key, this.serviceModel,
   });
-
+final ServiceModel? serviceModel;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Routes.servicesDetailsRoute , arguments: ServiceDetailsArgs());
+        Navigator.pushNamed(context, Routes.servicesDetailsRoute , arguments: ServiceDetailsArgs(
+            serviceModel: serviceModel,
+            // isOffers: isOffers,
+        ));
       },
       child: Column(
         children: [
@@ -19,8 +23,7 @@ class CustomServiceHomeWidget extends StatelessWidget {
               Stack(
                 children: [
                   CustomNetworkImage(
-                    image:
-                        "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=414x232",
+                    image: serviceModel?.logo ?? '',
                     width: getWidthSize(context) * 0.7,
                     height: getHeightSize(context) * 0.18,
                     isService: true,
@@ -38,7 +41,7 @@ class CustomServiceHomeWidget extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10.w, vertical: 5),
                         child: Text(
-                          "sale".tr(),
+                          serviceModel?.subServiceType ?? '',
                           style: getRegularStyle(
                             fontSize: 14.sp,
                             color: AppColors.white,
@@ -87,7 +90,7 @@ class CustomServiceHomeWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "Hotel Name",
+                        serviceModel?.title ?? '',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: getMediumStyle(fontSize: 16.sp, fontHeight: 1.2),
@@ -95,7 +98,8 @@ class CustomServiceHomeWidget extends StatelessWidget {
                       SizedBox(
                         width: getWidthSize(context) * 0.6,
                         child: AutoSizeText(
-                          "5000 \$",
+                        '${serviceModel?.price.toString() ?? "0"}'
+                        " \$",
                           maxLines: 1,
                           minFontSize: 10.sp,
                           // overflow: TextOverflow.ellipsis,
@@ -112,7 +116,7 @@ class CustomServiceHomeWidget extends StatelessWidget {
                           5.w.horizontalSpace,
                           Flexible(
                             child: AutoSizeText(
-                              'New York, USA',
+                               serviceModel?.locationName ?? "",
                               maxLines: 1,
                               minFontSize: 10.sp,
                               style: getRegularStyle(fontSize: 14.sp),

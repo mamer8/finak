@@ -1,16 +1,21 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/state.dart';
+import 'package:finak/features/services/screens/services_screen.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class CustomFilterWidget extends StatelessWidget {
-  const CustomFilterWidget({super.key});
+  const CustomFilterWidget({
+    super.key,
+    this.isHome = false,
+  });
+  final bool isHome;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showFilterBottomSheet(context, 'termsAndConditions'.tr());
+        showFilterBottomSheet(context, isHome: isHome);
       },
       child: Container(
           height: 50.h,
@@ -29,7 +34,7 @@ class CustomFilterWidget extends StatelessWidget {
   }
 }
 
-void showFilterBottomSheet(BuildContext context, String terms) {
+void showFilterBottomSheet(BuildContext context, {bool isHome = false}) {
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -39,14 +44,33 @@ void showFilterBottomSheet(BuildContext context, String terms) {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return MyFiltersWidget();
+        return MyFiltersWidget(
+          isHome: isHome,
+        );
       });
 }
 
-class MyFiltersWidget extends StatelessWidget {
+class MyFiltersWidget extends StatefulWidget {
   const MyFiltersWidget({
     super.key,
+    this.isHome = false,
   });
+  final bool isHome;
+
+  @override
+  State<MyFiltersWidget> createState() => _MyFiltersWidgetState();
+}
+
+class _MyFiltersWidgetState extends State<MyFiltersWidget> {
+  @override
+  void initState() {
+    if (context.read<ServicesCubit>().subServiceTypesModel.data == null &&
+        context.read<ServicesCubit>().selectedServiceType != null) {
+      context.read<ServicesCubit>().getSubServiceTypes(
+          context.read<ServicesCubit>().selectedServiceType!.id.toString());
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,27 +97,30 @@ class MyFiltersWidget extends StatelessWidget {
                       10.h.verticalSpace,
                       RangeSlider(
                         values: cubit.currentRange,
-                        min: 50000,
-                        max: 300000,
+                        min: 0,
+                        max: 1000,
                         // divisions: 10,
-                        activeColor: AppColors.primary,
+                        activeColor: cubit.isPriceRangeEnabled
+                            ? AppColors.primary
+                            : Colors.grey[300],
                         inactiveColor: Colors.grey[300],
                         onChanged: (RangeValues newValues) {
                           cubit.changeRange(newValues);
                         },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildPriceBox("Min", cubit.currentRange.start),
-                          const SizedBox(width: 10),
-                          const Text("-",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
-                          const SizedBox(width: 10),
-                          _buildPriceBox("Max", cubit.currentRange.end),
-                        ],
-                      ),
+                      if (cubit.isPriceRangeEnabled)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildPriceBox("Min", cubit.currentRange.start),
+                            const SizedBox(width: 10),
+                            const Text("-",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 10),
+                            _buildPriceBox("Max", cubit.currentRange.end),
+                          ],
+                        ),
                       20.h.verticalSpace,
                       Divider(
                         color: AppColors.gray,
@@ -104,22 +131,33 @@ class MyFiltersWidget extends StatelessWidget {
                             fontSize: 18.sp,
                           )),
                       10.h.verticalSpace,
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: cubit.serviceTypes
-                            .map(
-                              (e) => CustomTypesWidget(
-                                title: e,
-                                isSelected:
-                                    cubit.currentServiceType.contains(e),
-                                onTap: () {
-                                  cubit.changeServiceType(e);
-                                },
-                              ),
-                            )
-                            .toList(),
-                      ),
+                      if (state is GetServiceTypesLoadingState)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: LinearProgressIndicator(
+                            color: AppColors.primary,
+                            backgroundColor: AppColors.white,
+                          ),
+                        )
+                      else
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: (cubit.serviceTypesModel.data
+                                  ?.map(
+                                    (e) => CustomTypesWidget(
+                                      title: e.name ?? '',
+                                      isSelected:
+                                          cubit.selectedServiceType?.id == e.id,
+                                      onTap: () {
+                                        cubit.changeSelectedServiceType(e,
+                                            isFilter: true, context: context);
+                                      },
+                                    ),
+                                  )
+                                  .toList()) ??
+                              [],
+                        ),
                       20.h.verticalSpace,
                       Divider(
                         color: AppColors.gray,
@@ -130,21 +168,35 @@ class MyFiltersWidget extends StatelessWidget {
                             fontSize: 18.sp,
                           )),
                       10.h.verticalSpace,
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: cubit.categories
-                            .map(
-                              (e) => CustomTypesWidget(
-                                title: e,
-                                isSelected: cubit.currentCategory.contains(e),
-                                onTap: () {
-                                  cubit.changeCategory(e);
-                                },
-                              ),
-                            )
-                            .toList(),
-                      ),
+                      if (state is GetSubServiceTypesLoadingState)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: LinearProgressIndicator(
+                            color: AppColors.primary,
+                            backgroundColor: AppColors.white,
+                          ),
+                        )
+                      else
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: (cubit.subServiceTypesModel.data
+                                  ?.map(
+                                    (e) => CustomTypesWidget(
+                                      title: e.name ?? '',
+                                      isSelected:
+                                          cubit.selectedSubServiceType?.id ==
+                                              e.id,
+                                      onTap: () {
+                                        cubit.onTapToSelectSubServiceType(
+                                          e,
+                                        );
+                                      },
+                                    ),
+                                  )
+                                  .toList()) ??
+                              [],
+                        ),
                       20.h.verticalSpace,
                       Divider(
                         color: AppColors.gray,
@@ -162,7 +214,7 @@ class MyFiltersWidget extends StatelessWidget {
                             .map(
                               (e) => CustomTypesWidget(
                                 title: e,
-                                isSelected: cubit.currentDistance.contains(e),
+                                isSelected: cubit.currentDistance == e,
                                 onTap: () {
                                   cubit.changeDistance(e);
                                 },
@@ -179,7 +231,7 @@ class MyFiltersWidget extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     cubit.clearFilters();
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   child: Text(
                     'clear'.tr(),
@@ -198,6 +250,12 @@ class MyFiltersWidget extends StatelessWidget {
                     onPressed: () {
                       // cubit.filterServices();
                       Navigator.pop(context);
+                      if (widget.isHome) {
+                        Navigator.pushNamed(context, Routes.servicesRoute,
+                            arguments: ServicesScreenArgs());
+                      }
+
+                      cubit.getServices(context);
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),

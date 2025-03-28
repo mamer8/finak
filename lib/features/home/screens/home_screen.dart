@@ -1,5 +1,7 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/network_image.dart';
+import 'package:finak/core/widgets/no_data_widget.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/home/cubit/state.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
@@ -7,7 +9,9 @@ import 'package:finak/features/location/cubit/location_state.dart';
 import 'package:finak/features/menu/screens/widgets/custom_menu_row.dart';
 import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/profile/cubit/state.dart';
+import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/data/models/service_types_model.dart';
+import 'package:finak/features/services/screens/services_screen.dart';
 
 import 'widgets/category_widget.dart';
 import 'widgets/custom_notification_widget.dart';
@@ -27,13 +31,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    // context.read<HomeCubit>().getHomeData();
+    context.read<HomeCubit>().getHome();
     context.read<ProfileCubit>().getProfile();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,82 +96,136 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
           Expanded(
-              child: SingleChildScrollView(
-                  child: Column(
-            children: [
-              const CustomSearchTextField(),
-              20.h.verticalSpace,
-              const CustomSwiper(
-                images: [
-                  "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=414x232",
-                  "https://static-new.lhw.com/HotelImages/Final/LW0430/lw0430_177729896_720x450.jpg",
-                  // "https://www.example.com/image.jpg",
-                ],
-              ),
-              20.h.verticalSpace,
-              // categories
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: SizedBox(
-                  height: getHeightSize(context) * 0.05,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    separatorBuilder: (context, index) {
-                      return 10.w.horizontalSpace;
+              child: RefreshIndicator(
+            color: AppColors.primary,
+            onRefresh: () async {
+              cubit.getHome();
+            },
+            child: state is GetHomeErrorState
+                ? CustomNoDataWidget(
+                    message: 'error_happened'.tr(),
+                    onTap: () {
+                      cubit.getHome();
                     },
-                    itemBuilder: (context, index) {
-                      return CustomCategoryContainer(
-                        model: ServiceTypeModel(),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              20.h.verticalSpace,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "recommended".tr(),
-                      style: getBoldStyle(fontSize: 20.sp),
-                    ),
-                    10.w.horizontalSpace,
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.servicesRoute);
-                      },
-                      child: Text(
-                        "all".tr(),
-                        style: getRegularStyle(
-                            fontSize: 16.sp, color: AppColors.primary),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              20.h.verticalSpace,
-              // services
-              SizedBox(
-                height: getHeightSize(context) * 0.31,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsetsDirectional.only(
-                          start: 12.w, end: index == 4 ? 12.w : 0),
-                      child: CustomServiceHomeWidget(),
-                    );
-                  },
-                ),
-              ),
-              20.h.verticalSpace,
-              kToolbarHeight.verticalSpace,
-            ],
-          ))),
+                  )
+                : state is GetHomeLoadingState || cubit.homeModel.data == null
+                    ? const Center(child: CustomLoadingIndicator())
+                    : SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            CustomSearchTextField(
+                              isHome: true,
+                              controller: context
+                                  .read<ServicesCubit>()
+                                  .searchController,
+                              onChanged: (value) {
+                                EasyDebounce.debounce('saerch-offers-debouncer',
+                                    const Duration(seconds: 1), () async {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  Navigator.pushNamed(
+                                      context, Routes.servicesRoute,
+                                      arguments: ServicesScreenArgs());
+                                });
+                              },
+                            ),
+                            20.h.verticalSpace,
+                            CustomSwiper(
+                              images: cubit.homeModel.data?.slider
+                                      ?.map((e) => e.image ?? "")
+                                      .toList() ??
+                                  [],
+                            ),
+                            20.h.verticalSpace,
+                            // categories
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: SizedBox(
+                                height: getHeightSize(context) * 0.05,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: cubit.homeModel.data?.serviceTypes
+                                          ?.length ??
+                                      0,
+                                  separatorBuilder: (context, index) {
+                                    return 10.w.horizontalSpace;
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return CustomCategoryContainer(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, Routes.servicesRoute,
+                                            arguments: ServicesScreenArgs(
+                                                selected: cubit.homeModel.data
+                                                    ?.serviceTypes?[index]));
+                                      },
+                                      model: cubit.homeModel.data
+                                              ?.serviceTypes?[index] ??
+                                          ServiceTypeModel(),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            20.h.verticalSpace,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "recommended".tr(),
+                                    style: getBoldStyle(fontSize: 20.sp),
+                                  ),
+                                  10.w.horizontalSpace,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, Routes.servicesRoute,
+                                          arguments: ServicesScreenArgs());
+                                    },
+                                    child: Text(
+                                      "all".tr(),
+                                      style: getRegularStyle(
+                                          fontSize: 16.sp,
+                                          color: AppColors.primary),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            20.h.verticalSpace,
+                            // services
+                            SizedBox(
+                              height: getHeightSize(context) * 0.31,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    cubit.homeModel.data?.recommended?.length ??
+                                        0,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsetsDirectional.only(
+                                        start: 12.w,
+                                        end: index + 1 ==
+                                                cubit.homeModel.data
+                                                    ?.recommended?.length
+                                            ? 12.w
+                                            : 0),
+                                    child: CustomServiceHomeWidget(
+                                      serviceModel: cubit
+                                          .homeModel.data?.recommended?[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            20.h.verticalSpace,
+                            kToolbarHeight.verticalSpace,
+                          ],
+                        )),
+          )),
         ],
       );
     });

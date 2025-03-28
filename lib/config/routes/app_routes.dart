@@ -86,8 +86,11 @@ class AppRoutes {
         );
       ///////////// Services /////////////
       case Routes.servicesRoute:
+      ServicesScreenArgs args = settings.arguments as ServicesScreenArgs;
         return MaterialPageRoute(
-          builder: (context) => const ServicesScreen(),
+          builder: (context) =>  ServicesScreen(
+            args: args,
+          ),
         );
       case Routes.servicesDetailsRoute:
         final args = settings.arguments as ServiceDetailsArgs;
