@@ -7,3 +7,4 @@ class GetCurrentLocationAddressState extends LocationState {}
 class ErrorCurrentLocationAddressState extends LocationState {}
 class SetTransportationMarkersState extends LocationState {}
 class SetSelectedLocationState extends LocationState {}
+class ChangeValueState extends LocationState {}

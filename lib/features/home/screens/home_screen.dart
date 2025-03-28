@@ -7,6 +7,7 @@ import 'package:finak/features/location/cubit/location_state.dart';
 import 'package:finak/features/menu/screens/widgets/custom_menu_row.dart';
 import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/profile/cubit/state.dart';
+import 'package:finak/features/services/data/models/service_types_model.dart';
 
 import 'widgets/category_widget.dart';
 import 'widgets/custom_notification_widget.dart';
@@ -82,7 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   10.w.horizontalSpace,
-                   CustomNotificationWidget(count: profileCubit.loginModel.data?.notificationCount??0),
+                  CustomNotificationWidget(
+                      count:
+                          profileCubit.loginModel.data?.notificationCount ?? 0),
                 ],
               ),
             );
@@ -113,7 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       return 10.w.horizontalSpace;
                     },
                     itemBuilder: (context, index) {
-                      return CustomCategoryContainer();
+                      return CustomCategoryContainer(
+                        model: ServiceTypeModel(),
+                      );
                     },
                   ),
                 ),

@@ -157,7 +157,7 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   Future<void> _getAddressFromLatLng(double latitude, double longitude) async {
-    address = "Loading...";
+    // address = "Loading...";
     try {
       final List<Placemark> placemarks =
           await placemarkFromCoordinates(latitude, longitude);
@@ -206,4 +206,13 @@ class LocationCubit extends Cubit<LocationState> {
     _positionStream?.cancel();
     return super.close();
   }
+
+  TextEditingController searchController = TextEditingController();
+double currentValue = 50;
+changeValue(double value) {
+   
+    currentValue = value;
+    emit(ChangeValueState());
+  }
+
 }

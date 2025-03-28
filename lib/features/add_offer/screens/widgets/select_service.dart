@@ -1,5 +1,6 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/add_offer/cubit/cubit.dart';
+import 'package:finak/features/services/data/models/service_types_model.dart';
 
 import '../../cubit/state.dart';
 
@@ -21,22 +22,22 @@ class _SelectServiceWidgetState extends State<SelectServiceWidget> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.h),
-              child: Text("service_type".tr(),
+              child: Text('${"service_type".tr()} *',
                   style: getBoldStyle(fontSize: 18.sp)),
             ),
-            // if (state is GetAxesByAreaLoadingState)
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-            //   child: LinearProgressIndicator(
-            //     color: AppColors.primary,
-            //     backgroundColor: AppColors.white,
-            //   ),
-            // ),
-            // if (cubit.getAxesModel.data != null)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6.w),
-              child: ServicesDropDownWidget(),
-            )
+            if (state is GetServiceTypesLoadingState)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: LinearProgressIndicator(
+                  color: AppColors.primary,
+                  backgroundColor: AppColors.white,
+                ),
+              ),
+            if (cubit.serviceTypesModel.data != null)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 6.w),
+                child: ServicesDropDownWidget(),
+              )
           ],
         );
       },
@@ -66,7 +67,7 @@ class _ServicesDropDownWidgetState extends State<ServicesDropDownWidget> {
             // border: Border.all(color: Colors.white),
             color: AppColors.textFiledBG),
         child: DropdownButtonHideUnderline(
-          child: DropdownButton<ServicesModel>(
+          child: DropdownButton<ServiceTypeModel>(
             value: cubit.selectedService,
             hint: Text(
               'choose'.tr(),
@@ -78,14 +79,13 @@ class _ServicesDropDownWidgetState extends State<ServicesDropDownWidget> {
             ),
             isExpanded: true,
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1.h),
-            onChanged: (ServicesModel? newValue) {
+            onChanged: (ServiceTypeModel? newValue) {
               cubit.onTapToSelectService(newValue!);
             },
-            items:
-                // cubit.getAxesModel.data!
-                cubit.services.map<DropdownMenuItem<ServicesModel>>(
-                    (ServicesModel value) {
-              return DropdownMenuItem<ServicesModel>(
+            items: cubit.serviceTypesModel.data
+                ?.map<DropdownMenuItem<ServiceTypeModel>>(
+                    (ServiceTypeModel value) {
+              return DropdownMenuItem<ServiceTypeModel>(
                 value: value,
                 child: Text(
                   value.name ?? '',

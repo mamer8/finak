@@ -76,7 +76,12 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      return _handleResponseAsJson(response);
+      if (response.statusCode == StatusCode.ok) {
+        final responseJson = jsonDecode(response.data);
+        return responseJson;
+      } else {
+        throw const FetchDataException();
+      }
     } on DioException catch (error) {
       _handleDioError(error);
     }
@@ -101,7 +106,12 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      return _handleResponseAsJson(response);
+      if (response.statusCode == StatusCode.ok) {
+        final responseJson = jsonDecode(response.data);
+        return responseJson;
+      } else {
+        throw const FetchDataException();
+      }
     } on DioError catch (error) {
       _handleDioError(error);
     }
@@ -125,7 +135,12 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      return _handleResponseAsJson(response);
+      if (response.statusCode == StatusCode.ok) {
+        final responseJson = jsonDecode(response.data);
+        return responseJson;
+      } else {
+        throw const FetchDataException();
+      }
     } on DioException catch (error) {
       _handleDioError(error);
     }
@@ -150,7 +165,12 @@ class DioConsumer implements BaseApiConsumer {
             'Accept': '*/*',
             // "Accept-Language": lang
           }));
-      return _handleResponseAsJson(response);
+      if (response.statusCode == StatusCode.ok) {
+        final responseJson = jsonDecode(response.data);
+        return responseJson;
+      } else {
+        throw const FetchDataException();
+      }
     } on DioError catch (error) {
       _handleDioError(error);
     }

@@ -92,6 +92,25 @@
     "out": "Exit",
     "password_length": "Password must be at least 5 characters",
     "guest": "Guest",
+    "price": "Price",
+    "enter_price": "Enter Price",
+    "add_images": "Add Images",
+    "select_category": "Select Category",
+    "select_service": "Select Service",
+    
+    "search_range": "Search Range(km)",
+    "km": "km",
+    "no_offers": " There are no offers available",
+    "no_favorite": "There are no favorite services",
+    "no_notifications": "There are no notifications",
+    "no_services": "There are no services available",
+    "no_categories": "There are no categories available",
+    "no_data": "No Data Available",
+
+    "error_happened": "An error occurred, please try again later",
+    "error": "Error",
+    "success": "Success",
+   
     "": "",
     "-": "-"
 }

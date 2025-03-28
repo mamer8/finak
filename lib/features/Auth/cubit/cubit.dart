@@ -29,7 +29,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   // GlobalKey<FormState> formKeyForgotPassword = GlobalKey<FormState>();
   TextEditingController phoneControllerForgotPassword = TextEditingController();
-  GlobalKey<FormState> formKeyOtp = GlobalKey<FormState>();
+  
   TextEditingController otpController = TextEditingController();
 
   // GlobalKey<FormState> formKeyNewPassword = GlobalKey<FormState>();

@@ -1,6 +1,7 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/home/screens/widgets/category_widget.dart';
 import 'package:finak/features/home/screens/widgets/custom_search_text_field.dart';
+import 'package:finak/features/services/data/models/service_types_model.dart';
 
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
@@ -39,6 +40,7 @@ class ServicesScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return CustomCategoryContainer(
                       isSelected: index == 0,
+                      model: ServiceTypeModel(),
                     );
                   },
                 ),

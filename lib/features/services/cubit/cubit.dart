@@ -1,6 +1,8 @@
+import 'package:finak/features/services/data/models/service_types_model.dart';
 import 'package:finak/features/splash/screens/splash_screen.dart';
 
 import '../../../core/exports.dart';
+import '../data/models/sub_service_types_model.dart';
 import '../data/repo.dart';
 import 'state.dart';
 
@@ -65,4 +67,20 @@ class ServicesCubit extends Cubit<ServicesState> {
     currentDistance = 'closest_to_farthest'.tr();
     emit(ChangeServiceTypeState());
   }
+  /// Get Service Types //////
+  GetServiceTypesModel  serviceTypesModel = GetServiceTypesModel(); 
+  void getServiceTypes() async {
+    emit(GetServiceTypesLoadingState());
+    var response = await api.getServiceTypes();
+    response.fold(
+      (failure) {
+        emit(GetServiceTypesErrorState());
+      },
+      (r) {
+        serviceTypesModel = r;
+        emit(GetServiceTypesSuccessState());
+      },
+    );
+  }
+ 
 }

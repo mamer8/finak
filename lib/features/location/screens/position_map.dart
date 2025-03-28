@@ -39,8 +39,8 @@ class _PositionMapState extends State<PositionMap> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.h),
-              child:
-                  Text("location".tr(), style: getBoldStyle(fontSize: 18.sp)),
+              child: Text("${"location".tr()} *",
+                  style: getBoldStyle(fontSize: 18.sp)),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 6.w),
@@ -79,8 +79,7 @@ class _PositionMapState extends State<PositionMap> {
                               zoom: 10,
                             ),
                             onMapCreated: (GoogleMapController controller) {
-                              cubit.positionMapController =
-                                  controller;
+                              cubit.positionMapController = controller;
                             },
                             markers: cubit.positionMarkers,
                           )),

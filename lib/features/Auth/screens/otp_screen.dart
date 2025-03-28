@@ -18,11 +18,9 @@ class _OTPScreenState extends State<OTPScreen> {
     context.read<LoginCubit>().otpController.text = '';
     super.initState();
   }
- GlobalKey<FormState> formKeyOtp = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyOtp = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-     
-
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         var cubit = context.read<LoginCubit>();
@@ -61,7 +59,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       isDisabled: cubit.otpController.text.length < 6,
                       onPressed: () {
                         // Navigator.pushNamed(context, Routes.newPasswordRoute);
-                        if (cubit.formKeyOtp.currentState!.validate()) {
+                        if (formKeyOtp.currentState!.validate()) {
                           cubit.verifyOtp(context,
                               isRegister: widget.isRegister);
                         }

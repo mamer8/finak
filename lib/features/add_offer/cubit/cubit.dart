@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:finak/core/utils/appwidget.dart';
+import 'package:finak/features/location/cubit/location_cubit.dart';
+import 'package:finak/features/services/data/models/service_types_model.dart';
+import 'package:finak/features/services/data/models/sub_service_types_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/exports.dart';
@@ -110,40 +114,104 @@ class AddOfferCubit extends Cubit<AddOfferState> {
   }
 
   TextEditingController titleController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  ServicesModel? selectedService;
-  void onTapToSelectService(ServicesModel ser) {
+  ServiceTypeModel? selectedService;
+  void onTapToSelectService(ServiceTypeModel ser) {
     selectedService = ser;
     emit(SelectServiceState());
+    getSubServiceTypes(ser.id.toString());
   }
 
-  CategoryModel? selectedCategory;
-  void onTapToSelectCategory(CategoryModel cat) {
+  SubServiceTypeModel? selectedCategory;
+  void onTapToSelectCategory(SubServiceTypeModel cat) {
     selectedCategory = cat;
     emit(SelectServiceState());
   }
 
-  List<ServicesModel> services = [
-    ServicesModel(id: '1', name: 'Electricity'),
-    ServicesModel(id: '2', name: 'Gas'),
-    ServicesModel(id: '3', name: 'Water'),
-  ];
+  bool isPhoneHide = false;
+  changePhoneHide(bool? v) {
+    isPhoneHide = v!;
+    emit(SelectServiceState());
+  }
 
-  List<CategoryModel> categories = [
-    CategoryModel(id: '1', name: 'Rent'),
-    CategoryModel(id: '2', name: 'Buy'),
-  ];
-}
+  /// Get Service Types //////
+  GetServiceTypesModel serviceTypesModel = GetServiceTypesModel();
+  void getServiceTypes() async {
+    serviceTypesModel = GetServiceTypesModel();
+    subServiceTypesModel = GetSubServiceTypesModel();
+    selectedCategory = null;
+    selectedService = null;
+    emit(GetServiceTypesLoadingState());
+    var response = await api.getServiceTypes();
+    response.fold(
+      (failure) {
+        emit(GetServiceTypesErrorState());
+      },
+      (r) {
+        serviceTypesModel = r;
+        emit(GetServiceTypesSuccessState());
+      },
+    );
+  }
 
-class ServicesModel {
-  String id;
-  String name;
-  ServicesModel({required this.id, required this.name});
-}
+  /// Get Sub Service Types //////
+  GetSubServiceTypesModel subServiceTypesModel = GetSubServiceTypesModel();
+  void getSubServiceTypes(String serviceTypeId) async {
+    selectedCategory = null;
+    subServiceTypesModel = GetSubServiceTypesModel();
+    emit(GetSubServiceTypesLoadingState());
+    var response = await api.getSubServiceTypes(serviceTypeId);
+    response.fold(
+      (failure) {
+        emit(GetSubServiceTypesErrorState());
+      },
+      (r) {
+        subServiceTypesModel = r;
+        emit(GetSubServiceTypesSuccessState());
+      },
+    );
+  }
 
-class CategoryModel {
-  String id;
-  String name;
-  CategoryModel({required this.id, required this.name});
+  addOffer(BuildContext context) async {
+    emit(LoadingAddOfferState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.addOffer(
+      serviceTypeId: selectedService?.id.toString() ?? "",
+      subServiceTypeId: selectedCategory?.id.toString() ?? "",
+      lat:
+          context.read<LocationCubit>().selectedLocation?.latitude.toString() ??
+              "0",
+      long: context
+              .read<LocationCubit>()
+              .selectedLocation
+              ?.longitude
+              .toString() ??
+          "0",
+      locationName: context.read<LocationCubit>().address ,
+      media: uploadedImages.map((e) => e.path).toList(),
+      price: priceController.text,
+      description: descriptionController.text,
+      title: titleController.text,
+      isPhoneHide: isPhoneHide ? "1" : "0",
+    );
+    response.fold((l) {
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureAddOfferState());
+    }, (r) async {
+      debugPrint("code: ${r.status.toString()}");
+      // successGetBar(r.data?.jwtToken);
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        emit(SuccessAddOfferState());
+        Navigator.pop(context);
+        successGetBar(r.msg);
+        Navigator.pushReplacementNamed(context, Routes.myOffersRoute);
+      }
+    });
+  }
 }

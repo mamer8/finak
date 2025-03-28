@@ -1,5 +1,6 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/add_offer/cubit/cubit.dart';
+import 'package:finak/features/services/data/models/sub_service_types_model.dart';
 
 import '../../cubit/state.dart';
 
@@ -16,29 +17,33 @@ class _SelectCategoryWidgetState extends State<SelectCategoryWidget> {
     return BlocBuilder<AddOfferCubit, AddOfferState>(
       builder: (context, state) {
         var cubit = context.read<AddOfferCubit>();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.h),
-              child:
-                  Text("category".tr(), style: getBoldStyle(fontSize: 18.sp)),
-            ),
-            // if (state is GetAxesByAreaLoadingState)
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-            //   child: LinearProgressIndicator(
-            //     color: AppColors.primary,
-            //     backgroundColor: AppColors.white,
-            //   ),
-            // ),
-            // if (cubit.getAxesModel.data != null)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6.w),
-              child: CategoryDropDownWidget(),
-            )
-          ],
-        );
+        return cubit.serviceTypesModel.data == null
+            ? SizedBox(
+                height: 10.h,
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.h),
+                    child: Text("${"category".tr()} *",
+                        style: getBoldStyle(fontSize: 18.sp)),
+                  ),
+                  if (state is GetSubServiceTypesLoadingState)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: LinearProgressIndicator(
+                        color: AppColors.primary,
+                        backgroundColor: AppColors.white,
+                      ),
+                    ),
+                  if (cubit.subServiceTypesModel.data != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 6.w),
+                      child: CategoryDropDownWidget(),
+                    )
+                ],
+              );
       },
     );
   }
@@ -66,7 +71,7 @@ class _CategoryDropDownWidgetState extends State<CategoryDropDownWidget> {
             // border: Border.all(color: Colors.white),
             color: AppColors.textFiledBG),
         child: DropdownButtonHideUnderline(
-          child: DropdownButton<CategoryModel>(
+          child: DropdownButton<SubServiceTypeModel>(
             value: cubit.selectedCategory,
             hint: Text(
               'choose'.tr(),
@@ -78,14 +83,13 @@ class _CategoryDropDownWidgetState extends State<CategoryDropDownWidget> {
             ),
             isExpanded: true,
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1.h),
-            onChanged: (CategoryModel? newValue) {
+            onChanged: (SubServiceTypeModel? newValue) {
               cubit.onTapToSelectCategory(newValue!);
             },
-            items:
-                // cubit.getAxesModel.data!
-                cubit.categories.map<DropdownMenuItem<CategoryModel>>(
-                    (CategoryModel value) {
-              return DropdownMenuItem<CategoryModel>(
+            items: cubit.subServiceTypesModel.data
+                ?.map<DropdownMenuItem<SubServiceTypeModel>>(
+                    (SubServiceTypeModel value) {
+              return DropdownMenuItem<SubServiceTypeModel>(
                 value: value,
                 child: Text(
                   value.name ?? '',

@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/home/screens/widgets/custom_search_text_field.dart';
+import 'package:finak/features/services/screens/widgets/service_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../cubit/location_cubit.dart';
@@ -36,24 +39,101 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
         builder: (context, state) {
           return cubit.selectedLocation == null
               ? const Center(child: CustomLoadingIndicator())
-              : GoogleMap(
-                  zoomGesturesEnabled: true,
-                  zoomControlsEnabled: true,
-                  mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                      cubit.selectedLocation?.latitude ?? 0.0,
-                      cubit.selectedLocation?.longitude ?? 0.0,
-                    ),
-                    zoom: 12,
-                  ),
-                  onMapCreated: (GoogleMapController controller) {
-                    cubit.searchMapController = controller;
-                  },
-                  markers: cubit.positionMarkers,
-                  onTap: (LatLng latLng) => cubit.updateSelectedCameraPosition(
-                    latLng,
-                    context,
+              : SizedBox(
+                  height: getHeightSize(context),
+                  width: getWidthSize(context),
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        zoomGesturesEnabled: true,
+                        zoomControlsEnabled: true,
+                        mapType: MapType.normal,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            cubit.selectedLocation?.latitude ?? 0.0,
+                            cubit.selectedLocation?.longitude ?? 0.0,
+                          ),
+                          zoom: 12,
+                        ),
+                        onMapCreated: (GoogleMapController controller) {
+                          cubit.searchMapController = controller;
+                        },
+                        markers: cubit.positionMarkers,
+                        onTap: (LatLng latLng) =>
+                            cubit.updateSelectedCameraPosition(
+                          latLng,
+                          context,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Column(
+                          children: [
+                            10.h.verticalSpace,
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20.w,
+                              ),
+                              child: Row(children: [
+                                Text("search_range".tr(),
+                                    style: getBoldStyle(
+                                      fontSize: 18.sp,
+                                    )),
+                                const Spacer(),
+                                Text(
+                                    "${cubit.currentValue.toInt()} ${"km".tr()}",
+                                    style: getBoldStyle(
+                                      fontSize: 18.sp,
+                                    )),
+                              ]),
+                            ),
+                            Slider(
+                              value: cubit.currentValue,
+                              max: 400,
+                              onChangeEnd: (v) {
+                                print("Selected value: ${cubit.currentValue}");
+                              },
+                              activeColor: AppColors.primary,
+                              min: 0.1,
+                              inactiveColor: Colors.grey[300],
+                              onChanged: (double newValue) {
+                                cubit.changeValue(newValue);
+                                // EasyDebounce.debounce('search-debouncer',
+                                //     const Duration(seconds: 1), () async {
+                                //   // return await cubit.getHomeFilterData(
+                                //   //   context: context)();
+                                // });
+                              },
+                            ),
+                            // 5.h.verticalSpace,
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                              ),
+                              child: CustomSearchTextField(
+                                isFiler: false,
+                                controller: cubit.searchController,
+                                onChanged: (value) {
+                                  EasyDebounce.debounce('search-debouncer',
+                                      const Duration(seconds: 1), () async {
+                                    // await cubit.getSearchLocation(value);
+                                  });
+                                },
+                              ),
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                              ),
+                              child: const CustomServiceWidget(),
+                            ),
+                            20.h.verticalSpace,
+                            kToolbarHeight.verticalSpace,
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 );
         },
