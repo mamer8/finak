@@ -1,5 +1,6 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/no_data_widget.dart';
+import 'package:finak/features/favorite/screens/widgets/fav_button.dart';
 import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,9 +11,11 @@ import 'widgets/swiper_widget.dart';
 
 class ServiceDetailsArgs {
   final bool isOffers;
+  final bool isFavoriteScreen;
   final ServiceModel? serviceModel;
 
-  ServiceDetailsArgs({this.isOffers = false, this.serviceModel});
+  ServiceDetailsArgs({this.isOffers = false,
+      this.isFavoriteScreen = false, this.serviceModel});
 }
 
 class ServicesDetailsScreen extends StatefulWidget {
@@ -88,14 +91,15 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                       ),
                                     ),
                                     10.w.horizontalSpace,
-                                    CircleAvatar(
-                                      backgroundColor: AppColors.primary,
-                                      radius: 18.r,
-                                      child: Icon(
-                                        Icons.favorite_rounded,
-                                        color: AppColors.white,
-                                        // size: 20.w,
-                                      ),
+                                    CustomFavButton(
+                                      isDetails: true,
+                                      isFavoriteScreen: widget.args.isFavoriteScreen,
+                                      isFav: cubit.getServiceDetailsModel.data
+                                              ?.isFav ??
+                                          false,
+                                      serviceId: cubit.getServiceDetailsModel
+                                              .data?.id ??
+                                          0,
                                     ),
                                   ]),
                                   10.h.verticalSpace,

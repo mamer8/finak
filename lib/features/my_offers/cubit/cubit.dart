@@ -53,6 +53,21 @@ class MyOffersCubit extends Cubit<MyOffersState> {
       },
     );
   }
-
+ updateFav (bool isFav, String id) {
+    if (myOffersModel.data != null) {
+      for (int i = 0;
+          i < myOffersModel.data!.length;
+          i++) {
+        if (                myOffersModel
+                .data![i]
+                .id
+                .toString() ==
+            id) {
+          myOffersModel.data![i].isFav = isFav;
+        }
+      }
+    }
+    emit(GetServicesSuccessState());
+ }
   /// Get Offer Details //////
 }

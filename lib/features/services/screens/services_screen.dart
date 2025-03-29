@@ -119,9 +119,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         },
                       )
                     : state is GetServicesLoadingState ||
-                            cubit.myOffersModel.data == null
+                            cubit.getServicesModel.data == null
                         ? const Center(child: CustomLoadingIndicator())
-                        : cubit.myOffersModel.data!.isEmpty
+                        : cubit.getServicesModel.data!.isEmpty
                             ? CustomNoDataWidget(
                                 message: 'no_offers'.tr(),
                                 onTap: () {
@@ -130,7 +130,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                               )
                             : ListView.builder(
                                 itemCount:
-                                    cubit.myOffersModel.data?.length ?? 0,
+                                    cubit.getServicesModel.data?.length ?? 0,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
@@ -143,7 +143,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     child: CustomServiceWidget(
                                       isOffers: true,
                                       serviceModel:
-                                          cubit.myOffersModel.data![index],
+                                          cubit.getServicesModel.data![index],
                                     ),
                                   );
                                 },

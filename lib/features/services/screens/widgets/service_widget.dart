@@ -1,14 +1,17 @@
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/favorite/screens/widgets/fav_button.dart';
 import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
 
 class CustomServiceWidget extends StatelessWidget {
   const CustomServiceWidget({
     this.isOffers = false,
+    this.isFavoriteScreen = false,
     super.key,
     this.serviceModel,
   });
   final bool isOffers;
+  final bool isFavoriteScreen;
   final ServiceModel? serviceModel;
 
   @override
@@ -17,9 +20,9 @@ class CustomServiceWidget extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, Routes.servicesDetailsRoute,
             arguments: ServiceDetailsArgs(
-                serviceModel: serviceModel,
-                // isOffers: isOffers,
-                ));
+              serviceModel: serviceModel,
+              isFavoriteScreen: isFavoriteScreen,
+            ));
       },
       child: Row(
         children: [
@@ -33,20 +36,16 @@ class CustomServiceWidget extends StatelessWidget {
                 // isService: true,
                 borderRadius: 10.w,
               ),
-              if (!isOffers)
-                PositionedDirectional(
-                  top: 10.h,
-                  start: 10.w,
-                  child: CircleAvatar(
-                    backgroundColor: AppColors.white,
-                    radius: 15.r,
-                    child: Icon(
-                      Icons.favorite_rounded,
-                      color: AppColors.secondGrey,
-                      size: 20.w,
-                    ),
-                  ),
+              // if (!isOffers)
+              PositionedDirectional(
+                top: 10.h,
+                start: 10.w,
+                child: CustomFavButton(
+                  isFavoriteScreen: isFavoriteScreen,
+                  isFav: serviceModel?.isFav ?? false,
+                  serviceId: serviceModel?.id ?? 0,
                 ),
+              ),
             ],
           ),
           Flexible(

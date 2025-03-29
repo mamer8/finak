@@ -37,7 +37,7 @@ errorGetBar(String message) {
 successGetBar(String? message) {
   Get.showSnackbar(GetSnackBar(
     messageText: Text(
-      message ?? "success",
+      message ?? "success".tr(),
       style: Get.textTheme.bodyMedium!.copyWith(
         color: Colors.white,
         height: 1.5,

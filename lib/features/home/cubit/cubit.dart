@@ -23,4 +23,24 @@ class HomeCubit extends Cubit<HomeState> {
       },
     );
   }
+   updateFav (bool isFav, String id) {
+if (homeModel.data != null &&
+       homeModel.data!.recommended != null) {
+      for (int i = 0;
+          i < homeModel.data!.recommended!.length;
+          i++) {
+        if (
+                homeModel
+                .data!
+                .recommended![i]
+                .id
+                .toString() ==
+            id) {
+          homeModel.data!.recommended![i].isFav =
+              isFav;
+        }
+      }
+    }
+    emit(GetHomeSuccessState());
+ }
 }

@@ -131,7 +131,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       right: 12.w,
                                     ),
                                     child: CustomServiceWidget(
-                                      isOffers: true,
+                                      isFavoriteScreen: true,
+                                      
                                       serviceModel:
                                           cubit.myFavoritesModel.data![index],
                                     ),

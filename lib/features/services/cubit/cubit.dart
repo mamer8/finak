@@ -116,9 +116,10 @@ class ServicesCubit extends Cubit<ServicesState> {
 
   SubServiceTypeModel? selectedSubServiceType;
   void onTapToSelectSubServiceType(SubServiceTypeModel cat) {
-    if (selectedSubServiceType == cat) selectedSubServiceType = null;
+    if (selectedSubServiceType == cat)
+      selectedSubServiceType = null;
     else
-    selectedSubServiceType = cat;
+      selectedSubServiceType = cat;
     emit(ChangeSelectedServiceTypeState());
   }
 
@@ -161,7 +162,7 @@ class ServicesCubit extends Cubit<ServicesState> {
   }
 
   /// Get My Offers //////
-  GetServicesModel myOffersModel = GetServicesModel();
+  GetServicesModel getServicesModel = GetServicesModel();
   void getServices(BuildContext context) async {
     emit(GetServicesLoadingState());
     var response = await api.getServices(
@@ -187,9 +188,23 @@ class ServicesCubit extends Cubit<ServicesState> {
         emit(GetServicesErrorState());
       },
       (r) {
-        myOffersModel = r;
+        getServicesModel = r;
         emit(GetServicesSuccessState());
       },
     );
+  }
+
+  updateFav(bool isFav, String id) {
+    if (getServicesModel.data != null) {
+      for (int i = 0; i < getServicesModel.data!.length; i++) {
+        if (getServicesModel.data![i].id.toString() == id) {
+          getServicesModel.data![i].isFav = isFav;
+        }
+      }
+    }
+    if (getServiceDetailsModel.data != null) {
+      getServiceDetailsModel.data!.isFav = isFav;
+    }
+    emit(GetServicesSuccessState());
   }
 }

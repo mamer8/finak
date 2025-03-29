@@ -1,20 +1,23 @@
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/favorite/screens/widgets/fav_button.dart';
 import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
 
 class CustomServiceHomeWidget extends StatelessWidget {
   const CustomServiceHomeWidget({
-    super.key, this.serviceModel,
+    super.key,
+    this.serviceModel,
   });
-final ServiceModel? serviceModel;
+  final ServiceModel? serviceModel;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Routes.servicesDetailsRoute , arguments: ServiceDetailsArgs(
-            serviceModel: serviceModel,
-            // isOffers: isOffers,
-        ));
+        Navigator.pushNamed(context, Routes.servicesDetailsRoute,
+            arguments: ServiceDetailsArgs(
+              serviceModel: serviceModel,
+              // isOffers: isOffers,
+            ));
       },
       child: Column(
         children: [
@@ -53,14 +56,9 @@ final ServiceModel? serviceModel;
                   PositionedDirectional(
                     top: 10.h,
                     end: 10.w,
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.white,
-                      radius: 15.r,
-                      child: Icon(
-                        Icons.favorite_rounded,
-                        color: AppColors.secondGrey,
-                        size: 20.w,
-                      ),
+                    child: CustomFavButton(
+                      isFav: serviceModel?.isFav ?? false,
+                      serviceId: serviceModel?.id ?? 0,
                     ),
                   ),
                 ],
@@ -98,8 +96,8 @@ final ServiceModel? serviceModel;
                       SizedBox(
                         width: getWidthSize(context) * 0.6,
                         child: AutoSizeText(
-                        '${serviceModel?.price.toString() ?? "0"}'
-                        " \$",
+                          '${serviceModel?.price.toString() ?? "0"}'
+                          " \$",
                           maxLines: 1,
                           minFontSize: 10.sp,
                           // overflow: TextOverflow.ellipsis,
@@ -116,7 +114,7 @@ final ServiceModel? serviceModel;
                           5.w.horizontalSpace,
                           Flexible(
                             child: AutoSizeText(
-                               serviceModel?.locationName ?? "",
+                              serviceModel?.locationName ?? "",
                               maxLines: 1,
                               minFontSize: 10.sp,
                               style: getRegularStyle(fontSize: 14.sp),

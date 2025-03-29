@@ -1,3 +1,6 @@
+import 'package:finak/features/home/cubit/cubit.dart';
+import 'package:finak/features/my_offers/cubit/cubit.dart';
+import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:finak/features/services/data/models/service_types_model.dart';
 
@@ -50,5 +53,42 @@ class FavoritesCubit extends Cubit<FavoritesState> {
         emit(GetServicesSuccessState());
       },
     );
+  }
+
+  void addOrRemoveFavorite(BuildContext context,
+      {required String offerId, bool isFavoriteScreen = false}) async {
+    emit(AddOrRemoveFavoriteLoadingState());
+    var response = await api.addOrRemoveFavorite(offerId: offerId);
+    response.fold(
+      (failure) {
+        emit(AddOrRemoveFavoriteErrorState());
+      },
+      (r) {
+        if (r.status != 200 && r.status != 201) {
+          emit(AddOrRemoveFavoriteErrorState());
+        } else {
+          successGetBar(r.msg);
+          emit(AddOrRemoveFavoriteSuccessState(message: r.msg ?? ""));
+          updateFavouritesInModels(
+            context,
+            isFav: r.msg == "added Successfully" ? true : false,
+            id: offerId,
+          );
+          if (isFavoriteScreen) {
+            getMyFavorites();
+          }
+        }
+      },
+    );
+  }
+
+  updateFavouritesInModels(
+    BuildContext context, {
+    required bool isFav,
+    required String id,
+  }) async {
+    context.read<ServicesCubit>().updateFav(isFav, id);
+    context.read<HomeCubit>().updateFav(isFav, id);
+    context.read<MyOffersCubit>().updateFav(isFav, id);
   }
 }
