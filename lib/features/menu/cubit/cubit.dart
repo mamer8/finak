@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:finak/core/preferences/preferences.dart';
 import 'package:finak/core/utils/appwidget.dart';
+import 'package:finak/core/utils/restart_app_class.dart';
 import 'package:finak/features/main_screen/cubit/cubit.dart';
 
 import '../../../core/exports.dart';
@@ -11,6 +14,31 @@ class MenuCubit extends Cubit<MenuState> {
 
   MenuRepo api;
 
+  /// Language
+  void changeLanguage(BuildContext context, String newLanguage) async {
+    final Map<String, String> languageCodes = {
+      'Arabic': 'ar',
+      'English': 'en',
+      'German': 'de',
+      'Italian': 'it',
+      'Korean': 'ko',
+      'Russian': 'ru',
+      'Spanish': 'es'
+    };
+
+    emit(LanguageChanged()); // Emit a new state to notify the UI
+    String savedLangCode = await Preferences.instance.getSavedLang();
+    log("savedLangCode: $savedLangCode");
+    log("newLangCode: $newLanguage");
+    final String langCode = languageCodes[newLanguage] ?? 'en';
+    if (langCode != savedLangCode) {
+      await Preferences.instance.savedLang(langCode);
+      context.setLocale(Locale(langCode, ''));
+      HotRestartController.performHotRestart(context);
+    }
+  }
+
+  /// Logout
   logout(BuildContext context) async {
     emit(LoadingLogoutState());
     AppWidget.createProgressDialog(

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:finak/core/exports.dart';
@@ -17,7 +16,6 @@ class Preferences {
   factory Preferences() => instance;
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
- 
   Future<void> setUser(LoginModel loginModel) async {
     await storage.write(key: 'user', value: jsonEncode(loginModel.toJson()));
     print(await getUserModel());
@@ -61,14 +59,10 @@ class Preferences {
   }
 
   Future<String> getSavedLang() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getString(AppStrings.locale) ?? 'ar';
+    String? key = await storage.read(key: AppStrings.locale);
+    return key ?? 'en';
   }
 
-  // Future<void> savedLang(String local) async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   preferences.setString(AppStrings.locale, local);
-  // }
   Future<void> savedLang(String local) async {
     await storage.write(key: AppStrings.locale, value: local);
   }

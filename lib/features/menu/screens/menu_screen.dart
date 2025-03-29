@@ -57,6 +57,9 @@ class CustomMenu extends StatelessWidget {
                     CustmMenuRow(
                       assetName: ImageAssets.languageIcon,
                       title: 'language'.tr(),
+                      onTap: () {
+                        Navigator.pushNamed(context, Routes.languagesRoute);
+                      },
                     ),
                     if (AppConst.isLogged)
                       CustmMenuRow(

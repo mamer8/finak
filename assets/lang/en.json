@@ -76,7 +76,6 @@
     "camera": "Camera",
     "select_location": "Select Location",
     "current_password": "Current Password",
-    
     "on_boarding1": "Professional performance, easy access. Your services are now faster and more convenient!",
     "on_boarding2": "Everything you need, all in one place! Discover our services designed to make your life easier with just a tap.",
     "on_boarding3": "From maintenance to delivery, from consultations to instant assistance—every service at your fingertips!",
@@ -97,7 +96,6 @@
     "add_images": "Add Images",
     "select_category": "Select Category",
     "select_service": "Select Service",
-    
     "search_range": "Search Range(km)",
     "km": "km",
     "no_offers": " There are no offers available",
@@ -106,7 +104,6 @@
     "no_services": "There are no services available",
     "no_categories": "There are no categories available",
     "no_data": "No Data Available",
-
     "error_happened": "An error occurred, please try again later",
     "error": "Error",
     "success": "Success",
