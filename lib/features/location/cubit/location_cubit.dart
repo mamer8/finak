@@ -286,6 +286,8 @@ class LocationCubit extends Cubit<LocationState> {
 
   GetServicesModel getServicesModel = GetServicesModel();
   void getServices(BuildContext context) async {
+    selectedService = null;
+
     emit(GetServicesLoadingState());
     var response = await api.getServices(
       search: searchController.text,

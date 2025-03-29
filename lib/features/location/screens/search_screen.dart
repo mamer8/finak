@@ -112,6 +112,36 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                               ),
                               child: CustomSearchTextField(
                                 isFiler: false,
+                                suffixIcon: state is GetServicesLoadingState
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: SizedBox(
+                                          height: 10.h,
+                                          child: CircularProgressIndicator(
+                                            
+                                              color: AppColors.primary),
+                                        ),
+                                      )
+                                    : InkWell(
+                                        onTap: () => cubit.getServices(context),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
+                                              child: Text(
+                                                "search".tr(),
+                                                style: getRegularStyle(
+                                                    fontSize: 16.sp,
+                                                    color: AppColors.primary),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                 controller: cubit.searchController,
                                 onChanged: (value) {
                                   EasyDebounce.debounce('search-debouncer',

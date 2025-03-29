@@ -11,6 +11,7 @@ class CustomSearchTextField extends StatefulWidget {
   final TextEditingController? controller;
   final bool isFiler;
   final bool isHome;
+  final Widget? suffixIcon;
   const CustomSearchTextField({
     super.key,
     this.onTap,
@@ -19,6 +20,7 @@ class CustomSearchTextField extends StatefulWidget {
     this.controller,
     this.isFiler = true,
     this.isHome = false,
+    this.suffixIcon,
   });
 
   @override
@@ -81,6 +83,7 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
               onChanged: widget.onChanged,
               // validator: widget.validator,
               onFieldSubmitted: widget.onSubmitted,
+
               decoration: InputDecoration(
                   filled: true,
                   fillColor: AppColors.white,
@@ -90,6 +93,7 @@ class _CustomSearchTextFieldState extends State<CustomSearchTextField> {
                       color: myFocusNode.hasFocus
                           ? AppColors.primary
                           : AppColors.gray),
+                          suffixIcon: widget.suffixIcon,
                   prefixIcon: Icon(
                     CupertinoIcons.search,
                     color: myFocusNode.hasFocus
