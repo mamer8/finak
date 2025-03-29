@@ -36,7 +36,7 @@ class GetHomeModel {
 }
 
 class Data {
-    List<Slider>? slider;
+    List<SliderModel>? slider;
     List<ServiceTypeModel>? serviceTypes;
     List<ServiceModel>? recommended;
 
@@ -47,7 +47,7 @@ class Data {
     });
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        slider: json["slider"] == null ? [] : List<Slider>.from(json["slider"]!.map((x) => Slider.fromJson(x))),
+        slider: json["slider"] == null ? [] : List<SliderModel>.from(json["slider"]!.map((x) => SliderModel.fromJson(x))),
         serviceTypes: json["service_types"] == null ? [] : List<ServiceTypeModel>.from(json["service_types"]!.map((x) => ServiceTypeModel.fromJson(x))),
         recommended: json["recommended"] == null ? [] : List<ServiceModel>.from(json["recommended"]!.map((x) => ServiceModel.fromJson(x))),
     );
@@ -61,7 +61,7 @@ class Data {
 
 
 
-class Slider {
+class SliderModel {
     int? id;
     String? title;
     String? body;
@@ -70,7 +70,7 @@ class Slider {
     String? startDate;
     String? endDate;
 
-    Slider({
+    SliderModel({
         this.id,
         this.title,
         this.body,
@@ -80,7 +80,7 @@ class Slider {
         this.endDate,
     });
 
-    factory Slider.fromJson(Map<String, dynamic> json) => Slider(
+    factory SliderModel.fromJson(Map<String, dynamic> json) => SliderModel(
         id: json["id"],
         title: json["title"],
         body: json["body"],

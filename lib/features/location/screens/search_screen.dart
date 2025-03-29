@@ -45,8 +45,13 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                   child: Stack(
                     children: [
                       GoogleMap(
-                        zoomGesturesEnabled: true,
                         zoomControlsEnabled: true,
+                        padding: const EdgeInsets.only(bottom: 100.0),
+                        circles: cubit.circles,
+                        // indoorViewEnabled: true,
+                        // buildingsEnabled: false,
+                        // liteModeEnabled: true,
+                        // fortyFiveDegreeImageryEnabled: true,
                         mapType: MapType.normal,
                         initialCameraPosition: CameraPosition(
                           target: LatLng(
@@ -88,7 +93,7 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                             ),
                             Slider(
                               value: cubit.currentValue,
-                              max: 400,
+                              max: 100,
                               onChangeEnd: (v) {
                                 print("Selected value: ${cubit.currentValue}");
                                 cubit.getServices(context);
@@ -118,7 +123,6 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                                         child: SizedBox(
                                           height: 10.h,
                                           child: CircularProgressIndicator(
-                                            
                                               color: AppColors.primary),
                                         ),
                                       )

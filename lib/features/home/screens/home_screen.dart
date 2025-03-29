@@ -138,10 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             20.h.verticalSpace,
                             CustomSwiper(
-                              images: cubit.homeModel.data?.slider
-                                      ?.map((e) => e.image ?? "")
-                                      .toList() ??
-                                  [],
+                              slider: cubit.homeModel.data?.slider ?? [],
                             ),
                             20.h.verticalSpace,
                             // categories

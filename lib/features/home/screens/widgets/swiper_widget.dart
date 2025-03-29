@@ -1,14 +1,15 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:finak/core/exports.dart';
-import 'package:finak/core/widgets/network_image.dart';
+import 'package:finak/features/home/data/model/home_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomSwiper extends StatefulWidget {
   final double? height;
-  final List<String> images;
+  final List<SliderModel> slider;
   const CustomSwiper({
     super.key,
     this.height,
-    required this.images,
+    required this.slider,
   });
 //
   @override
@@ -31,7 +32,7 @@ class _CustomSwiperState extends State<CustomSwiper> {
             width: getWidthSize(context),
             child: Swiper(
               controller: _controller,
-              itemCount: widget.images.length,
+              itemCount: widget.slider.length,
               onIndexChanged: (index) {
                 setState(() {
                   _currentIndex = index;
@@ -40,6 +41,13 @@ class _CustomSwiperState extends State<CustomSwiper> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+                    String url = widget.slider[index].link ?? '';
+
+                    if (url.isNotEmpty) {
+                      launchUrl(Uri.parse(url),
+                          mode: LaunchMode.externalApplication);
+                    }
+
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(
@@ -50,10 +58,51 @@ class _CustomSwiperState extends State<CustomSwiper> {
                     //   ),
                     // );
                   },
-                  child: CustomNetworkImage(
-                    image: widget.images[index],
-                    fit: BoxFit.cover,
-                    borderRadius: 20.r,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      CustomNetworkImage(
+                        image: widget.slider[index].image ?? '',
+                        fit: BoxFit.cover,
+                        borderRadius: 20.r,
+                      ),
+                      Positioned(
+                        left: 20,
+                        bottom: 20,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: getWidthSize(context) * 0.5,
+                          ),
+                          child: Container(
+                            height: getHeightSize(context) * 0.1,
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(12),
+                              // border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AutoSizeText(
+                                  widget.slider[index].title ?? '',
+                                  maxLines: 1,
+                                  style: getBoldStyle(color: Colors.white),
+                                ),
+                                SizedBox(height: 5),
+                                AutoSizeText(
+                                  (widget.slider[index].body ?? '') * 7,
+                                  maxLines: 2,
+                                  style: getRegularStyle(
+                                      color: Colors.white, fontSize: 14.sp),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -70,7 +119,7 @@ class _CustomSwiperState extends State<CustomSwiper> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
-              widget.images.length,
+              widget.slider.length,
               (index) => AnimatedContainer(
                 duration: Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 4),

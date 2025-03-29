@@ -159,6 +159,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         if (r.data != null) {
           // nameController.text = r.data!.name!;
         }
+        Navigator.pop(context);
         successGetBar(r.msg);
       } else if (r.status == 401 || r.status == 407 || r.status == 403) {
         errorGetBar(r.msg ?? "error".tr());

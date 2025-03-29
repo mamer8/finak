@@ -130,7 +130,9 @@ class LocationCubit extends Cubit<LocationState> {
         ),
       ),
     };
+    setCircle();
     selectedService = null;
+
     emit(SetTransportationMarkersState());
   }
 
@@ -248,9 +250,10 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   TextEditingController searchController = TextEditingController();
-  double currentValue = 50;
+  double currentValue = 2;
   changeValue(double value) {
     currentValue = value;
+    setCircle();
     emit(ChangeValueState());
   }
 
@@ -291,8 +294,8 @@ class LocationCubit extends Cubit<LocationState> {
     emit(GetServicesLoadingState());
     var response = await api.getServices(
       search: searchController.text,
-      lat: currentLocation?.latitude.toString() ?? '0.0',
-      long: currentLocation?.longitude.toString() ?? '0.0',
+      lat: selectedLocation?.latitude.toString() ?? '0.0',
+      long: selectedLocation?.longitude.toString() ?? '0.0',
       distance: currentValue.toString(), ////asc,desc
     );
     response.fold(
@@ -301,6 +304,11 @@ class LocationCubit extends Cubit<LocationState> {
       },
       (r) {
         getServicesModel = r;
+        if (r.data != null) {
+          if (r.data!.isNotEmpty) {
+            selectedService = r.data!.first;
+          }
+        }
         setMarkers(getServicesModel.data ?? []);
         emit(GetServicesSuccessState());
       },
@@ -317,6 +325,24 @@ class LocationCubit extends Cubit<LocationState> {
     }
 
     emit(GetServicesSuccessState());
+  }
+
+  Set<Circle> circles = const <Circle>{};
+  setCircle() {
+    circles = {
+      Circle(
+        circleId: const CircleId('1'),
+        center: LatLng(selectedLocation?.latitude ?? 0.0,
+            selectedLocation?.longitude ?? 0.0),
+        radius: currentValue * 1000,
+
+        strokeWidth: 2,
+        strokeColor: AppColors.primary,
+        // fillColor: Colors.black,
+      ),
+    };
+    log("circles: $circles");
+    emit(SetCircleState());
   }
 
   @override
