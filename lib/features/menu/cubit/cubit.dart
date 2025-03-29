@@ -7,10 +7,13 @@ import 'package:finak/features/main_screen/cubit/cubit.dart';
 
 import '../../../core/exports.dart';
 import '../data/menu_repo.dart';
+import '../data/models/get_settings_model.dart';
 import 'state.dart';
 
 class MenuCubit extends Cubit<MenuState> {
-  MenuCubit(this.api) : super(MenuInitial());
+  MenuCubit(this.api) : super(MenuInitial()) {
+    getSettings();
+  }
 
   MenuRepo api;
 
@@ -101,5 +104,20 @@ class MenuCubit extends Cubit<MenuState> {
 
       emit(SuccessLogoutState());
     });
+  }
+
+  GetSettingsModel settingsModel = GetSettingsModel();
+  void getSettings() async {
+    emit(GetSettingsLoadingState());
+    var response = await api.getSettings();
+    response.fold(
+      (failure) {
+        emit(GetSettingsErrorState());
+      },
+      (r) {
+        settingsModel = r;
+        emit(GetSettingsSuccessState());
+      },
+    );
   }
 }

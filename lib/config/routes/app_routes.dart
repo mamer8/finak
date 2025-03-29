@@ -5,7 +5,8 @@ import 'package:finak/features/Auth/screens/sign_up_screen.dart';
 import 'package:finak/features/add_offer/screens/add_offer_screen.dart';
 import 'package:finak/features/favorite/screens/favorite_screen.dart';
 import 'package:finak/features/main_screen/screens/main_screen.dart';
-import 'package:finak/features/menu/screens/custom_language_screen.dart';
+import 'package:finak/features/menu/screens/language_screen.dart';
+import 'package:finak/features/menu/screens/privacy_policy_screen.dart';
 import 'package:finak/features/my_offers/screens/my_offers_screen.dart';
 import 'package:finak/features/notifications/screens/notifications_screen.dart';
 import 'package:finak/features/on_boarding/screen/onboarding_screen.dart';
@@ -43,8 +44,10 @@ class Routes {
   static const String favoritesRoute = '/favorites';
   //////////// notifications /////////////
   static const String notificationsRoute = '/notifications';
-  //////////// languages /////////////
+  //////////// Settings /////////////
   static const String languagesRoute = '/languages';
+  static const String privacyPolicyRoute = '/privacy_policy';
+
 }
 
 class AppRoutes {
@@ -132,10 +135,14 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (context) => const NotificationsScreen(),
         );
-      //////////// languages /////////////
+      //////////// Setting /////////////
       case Routes.languagesRoute:
         return MaterialPageRoute(
           builder: (context) => const LanguageSelectionScreen(),
+        );
+      case Routes.privacyPolicyRoute:
+        return MaterialPageRoute(
+          builder: (context) => const PrivacyPolicyScreen(),
         );
       // case Routes.detailsRoute:
       //   final service = settings.arguments as ServicesModel;

@@ -35,7 +35,8 @@ class FullScreenMap extends StatelessWidget {
                     cubit.mapController = controller;
                   },
                   markers: cubit.positionMarkers,
-                  onTap: (LatLng latLng) => cubit.updateSelectedCameraPosition(
+                  onTap: (LatLng latLng) =>
+                      cubit.updateSelectedPositionedCamera(
                     latLng,
                     context,
                   ),

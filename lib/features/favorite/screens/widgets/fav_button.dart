@@ -36,11 +36,11 @@ class _CustomFavButtonState extends State<CustomFavButton> {
               offerId: widget.serviceId.toString());
         },
         child: CircleAvatar(
-          backgroundColor: widget.isFav ? AppColors.primary : AppColors.white,
+          backgroundColor: AppColors.white,
           radius: widget.isDetails ? 18.r : 15.r,
           child: Icon(
             Icons.favorite_rounded,
-            color: widget.isFav ? AppColors.white : AppColors.secondGrey,
+            color: widget.isFav ? AppColors.red : AppColors.secondGrey,
             // size: 20.w,
           ),
         ),

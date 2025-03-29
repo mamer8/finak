@@ -45,7 +45,7 @@ class CustomSocialAuthWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                context.read<LoginCubit>().signInWithGoogle();
+                context.read<LoginCubit>().signInWithGoogle(context);
               },
               child: Image.asset(
                 ImageAssets.google,
@@ -66,7 +66,7 @@ class CustomSocialAuthWidget extends StatelessWidget {
             20.w.horizontalSpace,
             GestureDetector(
               onTap: () {
-                context.read<LoginCubit>().signInWithFacebook();
+                context.read<LoginCubit>().signInWithFacebook(context);
               },
               child: Image.asset(
                 ImageAssets.facebook,

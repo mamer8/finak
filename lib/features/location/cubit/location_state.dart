@@ -8,3 +8,7 @@ class ErrorCurrentLocationAddressState extends LocationState {}
 class SetTransportationMarkersState extends LocationState {}
 class SetSelectedLocationState extends LocationState {}
 class ChangeValueState extends LocationState {}
+class GetServicesLoadingState extends LocationState {}
+class GetServicesErrorState extends LocationState {}
+class GetServicesSuccessState extends LocationState {}
+class SetMarkersState extends LocationState {}

@@ -1,4 +1,5 @@
 import 'package:finak/features/home/cubit/cubit.dart';
+import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/my_offers/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/data/models/get_services_model.dart';
@@ -88,6 +89,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
     required String id,
   }) async {
     context.read<ServicesCubit>().updateFav(isFav, id);
+    context.read<LocationCubit>().updateFav(isFav, id);
     context.read<HomeCubit>().updateFav(isFav, id);
     context.read<MyOffersCubit>().updateFav(isFav, id);
   }

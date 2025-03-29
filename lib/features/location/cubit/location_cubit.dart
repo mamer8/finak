@@ -6,6 +6,8 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/location/data/repo.dart';
+import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,13 +17,16 @@ import 'package:permission_handler/permission_handler.dart' as perm;
 import 'location_state.dart';
 
 class LocationCubit extends Cubit<LocationState> {
-  LocationCubit() : super(LocationInitial()) {
+  LocationCubit(this.api) : super(LocationInitial()) {
     _loadMarkerIcon();
   }
 
+  LocationRepo api;
   StreamSubscription<Position>? _positionStream;
   Set<Marker> positionMarkers = <Marker>{};
   Uint8List? markerIcon;
+  Uint8List? markerIconSelected;
+
   loc.LocationData? currentLocation;
   bool isFirstTime = true;
   loc.LocationData? selectedLocation;
@@ -77,6 +82,7 @@ class LocationCubit extends Cubit<LocationState> {
       await _getAddressFromLatLng(
           location.latitude ?? 0.0, location.longitude ?? 0.0);
       _setTransportationMarkers();
+      _setServiceMarkesNull();
       emit(GetCurrentLocationState());
     });
 
@@ -113,8 +119,25 @@ class LocationCubit extends Cubit<LocationState> {
     emit(SetTransportationMarkersState());
   }
 
+  _setServiceMarkesNull() {
+    servicesMarkers = {
+      Marker(
+        markerId: const MarkerId('selectedLocation'),
+        icon: BitmapDescriptor.defaultMarker,
+        position: LatLng(
+          selectedLocation?.latitude ?? 0.0,
+          selectedLocation?.longitude ?? 0.0,
+        ),
+      ),
+    };
+    selectedService = null;
+    emit(SetTransportationMarkersState());
+  }
+
   Future<void> _loadMarkerIcon() async {
-    markerIcon = await _getBytesFromAsset(ImageAssets.pin, 50);
+    markerIcon = await _getBytesFromAsset(ImageAssets.pin, 30);
+    markerIconSelected = await _getBytesFromAsset(ImageAssets.pin, 40);
+
     emit(SetTransportationMarkersState());
   }
 
@@ -130,7 +153,7 @@ class LocationCubit extends Cubit<LocationState> {
         .asUint8List();
   }
 
-  Future<void> updateSelectedCameraPosition(
+  Future<void> updateSelectedPositionedCamera(
     LatLng latLng,
     BuildContext context,
   ) async {
@@ -142,8 +165,31 @@ class LocationCubit extends Cubit<LocationState> {
         CameraUpdate.newLatLng(latLng),
       );
 
+      _setSelectedPositionedLocation(latLng, context);
+    }
+  }
+
+  Future<void> updateSelectedCamera(
+    LatLng latLng,
+    BuildContext context,
+  ) async {
+    if (searchMapController != null) {
+      await searchMapController!.animateCamera(
+        CameraUpdate.newLatLng(latLng),
+      );
+
       _setSelectedLocation(latLng, context);
     }
+  }
+
+  void _setSelectedPositionedLocation(LatLng latLng, BuildContext? context) {
+    selectedLocation = loc.LocationData.fromMap({
+      "latitude": latLng.latitude,
+      "longitude": latLng.longitude,
+    });
+    _getAddressFromLatLng(latLng.latitude, latLng.longitude);
+    _setTransportationMarkers();
+    emit(SetSelectedLocationState());
   }
 
   void _setSelectedLocation(LatLng latLng, BuildContext? context) {
@@ -151,8 +197,8 @@ class LocationCubit extends Cubit<LocationState> {
       "latitude": latLng.latitude,
       "longitude": latLng.longitude,
     });
-    _getAddressFromLatLng(latLng.latitude, latLng.longitude);
-    _setTransportationMarkers();
+
+    _setServiceMarkesNull();
     emit(SetSelectedLocationState());
   }
 
@@ -201,18 +247,79 @@ class LocationCubit extends Cubit<LocationState> {
     );
   }
 
+  TextEditingController searchController = TextEditingController();
+  double currentValue = 50;
+  changeValue(double value) {
+    currentValue = value;
+    emit(ChangeValueState());
+  }
+
+  ServiceModel? selectedService;
+  Set<Marker> servicesMarkers = const <Marker>{};
+
+  setMarkers(List<ServiceModel> services) {
+    servicesMarkers = services
+        .map(
+          (e) => Marker(
+            markerId: MarkerId(e.id!.toString()),
+            // infoWindow: const InfoWindow(title: 'currentLocation'),
+            onTap: () {
+              selectedService = e;
+
+              emit(SetMarkersState());
+              setMarkers(services);
+            },
+            icon: (markerIcon != null && markerIconSelected != null)
+                ? selectedService?.id == e.id
+                    ? BitmapDescriptor.bytes(markerIconSelected!)
+                    : BitmapDescriptor.bytes(markerIcon!)
+                : BitmapDescriptor.defaultMarker,
+            position: LatLng(
+              double.parse(e.lat ?? '0.0'),
+              double.parse(e.long ?? '0.0'),
+            ),
+          ),
+        )
+        .toSet();
+    emit(SetMarkersState());
+  }
+
+  GetServicesModel getServicesModel = GetServicesModel();
+  void getServices(BuildContext context) async {
+    emit(GetServicesLoadingState());
+    var response = await api.getServices(
+      search: searchController.text,
+      lat: currentLocation?.latitude.toString() ?? '0.0',
+      long: currentLocation?.longitude.toString() ?? '0.0',
+      distance: currentValue.toString(), ////asc,desc
+    );
+    response.fold(
+      (failure) {
+        emit(GetServicesErrorState());
+      },
+      (r) {
+        getServicesModel = r;
+        setMarkers(getServicesModel.data ?? []);
+        emit(GetServicesSuccessState());
+      },
+    );
+  }
+
+  updateFav(bool isFav, String id) {
+    if (getServicesModel.data != null) {
+      for (int i = 0; i < getServicesModel.data!.length; i++) {
+        if (getServicesModel.data![i].id.toString() == id) {
+          getServicesModel.data![i].isFav = isFav;
+        }
+      }
+    }
+
+    emit(GetServicesSuccessState());
+  }
+
   @override
   Future<void> close() {
     _positionStream?.cancel();
     return super.close();
   }
-
-  TextEditingController searchController = TextEditingController();
-double currentValue = 50;
-changeValue(double value) {
-   
-    currentValue = value;
-    emit(ChangeValueState());
-  }
-
 }

@@ -33,6 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     context.read<HomeCubit>().getHome();
     context.read<ProfileCubit>().getProfile();
+    if (context.read<ServicesCubit>().serviceTypesModel.data == null) {
+      context.read<ServicesCubit>().getServiceTypes();
+    }
     super.initState();
   }
 
@@ -74,14 +77,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 15.w,
                             ),
                             5.w.horizontalSpace,
-                            BlocBuilder<LocationCubit, LocationState>(
-                                builder: (context, state) {
-                              var locationCubit = context.read<LocationCubit>();
-                              return Text(
-                                locationCubit.address,
-                                style: getRegularStyle(fontSize: 14.sp),
-                              );
-                            })
+                            Flexible(
+                              child: BlocBuilder<LocationCubit, LocationState>(
+                                  builder: (context, state) {
+                                var locationCubit =
+                                    context.read<LocationCubit>();
+                                return AutoSizeText(
+                                  locationCubit.address,
+                                  maxLines: 1,
+                                  style: getRegularStyle(fontSize: 14.sp),
+                                );
+                              }),
+                            )
                           ],
                         )
                       ],

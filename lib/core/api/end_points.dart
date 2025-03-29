@@ -4,6 +4,7 @@ class EndPoints {
 
   /// Auth
   static const String loginUrl = '${baseUrl}user/login';
+  static const String loginWithSocialUrl = '${baseUrl}user/login-with-social';
   static const String registerUrl = '${baseUrl}user/register';
   static const String profileUrl = '${baseUrl}user/profile';
   static const String resetPasswordUrl = '${baseUrl}user/reset-password';
@@ -17,10 +18,12 @@ class EndPoints {
   static const String getServiceTypesUrl = '${baseUrl}user/get-service_types';
   static const String getSubServiceTypesUrl = '${baseUrl}user/get-sub-service_types';
   static const String getOffersUrl = '${baseUrl}user/get-offers';
+  static const String getOffersOnMapUrl = '${baseUrl}user/get-offers-on-map';
   static const String getMyOffersUrl = '${baseUrl}user/get-my-offers';
   static const String getOfferDetailsUrl = '${baseUrl}user/get-offer-details';
   static const String addOfferUrl = '${baseUrl}user/add-offer';
   static const String closeOfferUrl = '${baseUrl}user/close-offer';
   static const String getMyFavUrl = '${baseUrl}user/get-my-fav';
   static const String addOrDeleteFavUrl = '${baseUrl}user/add-or-delete-fav';
+  static const String getSettingsUrl = '${baseUrl}user/get-settings';
 }

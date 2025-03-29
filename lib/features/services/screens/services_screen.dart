@@ -31,6 +31,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
     if (widget.args?.selected != null) {
       context.read<ServicesCubit>().selectedServiceType = widget.args?.selected;
     } else {
+      // context.read<ServicesCubit>().clearFilters();
       context.read<ServicesCubit>().selectedServiceType = null;
     }
     if (context.read<ServicesCubit>().serviceTypesModel.data == null) {

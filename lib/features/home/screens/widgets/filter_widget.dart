@@ -252,7 +252,8 @@ class _MyFiltersWidgetState extends State<MyFiltersWidget> {
                       Navigator.pop(context);
                       if (widget.isHome) {
                         Navigator.pushNamed(context, Routes.servicesRoute,
-                            arguments: ServicesScreenArgs());
+                            arguments: ServicesScreenArgs(
+                                selected: cubit.selectedServiceType));
                       }
 
                       cubit.getServices(context);

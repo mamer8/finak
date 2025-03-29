@@ -107,7 +107,9 @@
     "error_happened": "An error occurred, please try again later",
     "error": "Error",
     "success": "Success",
-   
+    "you_not_user": "You are not a user",
+    "pending": "Pending",
+    "refused": "Refused",
     "": "",
     "-": "-"
 }

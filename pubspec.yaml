@@ -74,6 +74,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   intl_phone_field: ^3.2.0
   easy_debounce: ^2.0.3
+  flutter_html:
  
  
 

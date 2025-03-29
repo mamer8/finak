@@ -46,6 +46,36 @@ class CustomServiceWidget extends StatelessWidget {
                   serviceId: serviceModel?.id ?? 0,
                 ),
               ),
+              if (serviceModel?.status != 1)
+                PositionedDirectional(
+                  bottom: 10.h,
+                  end: 10.w,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: serviceModel?.status == 0
+                          ? AppColors.secondGrey
+                          : serviceModel?.status == 2
+                              ? AppColors.red
+                              : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5.r),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5),
+                      child: Text(
+                        serviceModel?.status == 0
+                            ? "pending".tr()
+                            : serviceModel?.status == 2
+                                ? "refused".tr()
+                                : "",
+                        style: getRegularStyle(
+                          fontSize: 14.sp,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
           Flexible(

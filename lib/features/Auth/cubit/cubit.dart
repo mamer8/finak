@@ -29,7 +29,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   // GlobalKey<FormState> formKeyForgotPassword = GlobalKey<FormState>();
   TextEditingController phoneControllerForgotPassword = TextEditingController();
-  
+
   TextEditingController otpController = TextEditingController();
 
   // GlobalKey<FormState> formKeyNewPassword = GlobalKey<FormState>();
@@ -126,9 +126,16 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+// Sign in with google
+  String userGmail = '';
+  String userPhoto = '';
+  String userName = '';
+  String? accessToken = '';
+
   /// Social Login
 
-  Future<UserCredential?> signInWithGoogle() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
+    // Future<UserCredential?> signInWithGoogle() async {
     try {
       log("Starting Google Sign-In process");
 
@@ -151,44 +158,46 @@ class LoginCubit extends Cubit<LoginState> {
         log("Google Sign-In canceled by user");
         return null;
       }
-
+      userGmail = googleUser.email;
+      userName = googleUser.displayName ?? '';
+      userPhoto = googleUser.photoUrl ?? '';
       log("Google user signed in: ${googleUser.email}");
-
+      loginWithSocial(context, type: 'google');
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       // log("Google auth tokens obtained: accessToken=${googleAuth.accessToken != null}, idToken=${googleAuth.idToken != null}");
       log("Google auth tokens: accessToken=${googleAuth.accessToken}, idToken=${googleAuth.idToken}");
 
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      // // Create a new credential
+      // final credential = GoogleAuthProvider.credential(
+      //   accessToken: googleAuth.accessToken,
+      //   idToken: googleAuth.idToken,
+      // );
 
-      log("Google credential created, attempting Firebase sign-in");
-      accessToken = googleAuth.accessToken;
-      userGmail = googleUser.email;
-      userName = googleUser.displayName!;
-      userPhoto = googleUser.photoUrl!;
-      log("User Gmail: $userGmail");
-      log("User Name: $userName");
-      log("User Photo: $userPhoto");
-      // *** Alternative approach to handle the credential conversion issue ***
-      try {
-        // Create a custom token to use for authentication
-        final authResult =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        log("Firebase sign-in successful: ${authResult.user?.uid}");
-        return authResult;
-      } catch (firebaseError) {
-        log("Firebase authentication error: $firebaseError");
+      // log("Google credential created, attempting Firebase sign-in");
+      // accessToken = googleAuth.accessToken;
+      // userGmail = googleUser.email;
+      // userName = googleUser.displayName!;
+      // userPhoto = googleUser.photoUrl!;
+      // log("User Gmail: $userGmail");
+      // log("User Name: $userName");
+      // log("User Photo: $userPhoto");
+      // // *** Alternative approach to handle the credential conversion issue ***
+      // try {
+      //   // Create a custom token to use for authentication
+      //   final authResult =
+      //       await FirebaseAuth.instance.signInWithCredential(credential);
+      //   log("Firebase sign-in successful: ${authResult.user?.uid}");
+      //   return authResult;
+      // } catch (firebaseError) {
+      //   log("Firebase authentication error: $firebaseError");
 
-        // If the direct method fails, try alternative sign-in
-        // You might need to implement a custom backend solution
-        // that exchanges Google tokens for Firebase tokens
-        throw firebaseError;
-      }
+      //   // If the direct method fails, try alternative sign-in
+      //   // You might need to implement a custom backend solution
+      //   // that exchanges Google tokens for Firebase tokens
+      //   throw firebaseError;
+      // }
     } catch (e, stackTrace) {
       log("Google sign-in error: $e");
       log("Stack trace: $stackTrace");
@@ -196,13 +205,8 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  // Sign in with google
-  String userGmail = '';
-  String userPhoto = '';
-  String userName = '';
-  String? accessToken = '';
-
-  Future<UserCredential> signInWithFacebook() async {
+  Future<void> signInWithFacebook(BuildContext context) async {
+    // Future<UserCredential> signInWithFacebook() async {
     try {
       // Clear any previous login state
       await FacebookAuth.instance.logOut();
@@ -216,20 +220,23 @@ class LoginCubit extends Cubit<LoginState> {
         // Get Facebook user data first
         final userData = await FacebookAuth.instance.getUserData();
         log("Facebook user data: $userData");
+        userGmail = userData['email'];
+        userName = userData['name'];
+        userPhoto = userData['picture']['data']['url'];
+        loginWithSocial(context, type: 'facebook');
+        // // Create credential with token
+        // final credential = FacebookAuthProvider.credential(
+        //     loginResult.accessToken!.tokenString);
 
-        // Create credential with token
-        final credential = FacebookAuthProvider.credential(
-            loginResult.accessToken!.tokenString);
-
-        // Sign in to Firebase with explicit error handling
-        try {
-          final userCredential =
-              await FirebaseAuth.instance.signInWithCredential(credential);
-          return userCredential;
-        } catch (firebaseError) {
-          log("Firebase authentication error: $firebaseError");
-          throw firebaseError;
-        }
+        // // Sign in to Firebase with explicit error handling
+        // try {
+        //   final userCredential =
+        //       await FirebaseAuth.instance.signInWithCredential(credential);
+        //   return userCredential;
+        // } catch (firebaseError) {
+        //   log("Firebase authentication error: $firebaseError");
+        //   throw firebaseError;
+        // }
       } else {
         throw Exception("Facebook login failed: ${loginResult.message}");
       }
@@ -323,8 +330,43 @@ class LoginCubit extends Cubit<LoginState> {
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
         } else {
+          errorGetBar("you_not_user".tr());
+          // Navigator.pushNamedAndRemoveUntil(
+          //     context, Routes.mainRoute, (route) => false);
+        }
+      }
+    });
+  }
+
+  loginWithSocial(BuildContext context, {required String type}) async {
+    emit(LoadingLoginState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.loginWithSocial(
+        type: type, name: userName, email: userGmail, imageURL: userPhoto);
+    response.fold((l) {
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureLoginState());
+    }, (r) async {
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        loginModel = r;
+
+        emit(SuccessLoginState());
+        Navigator.pop(context);
+        successGetBar(r.msg);
+
+        await Preferences.instance.setUser(r);
+        prefs.setBool("ISLOGGED", true);
+        if (loginModel.data?.userType == 0) {
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
+        } else {
+          errorGetBar("you_not_user".tr());
+          // Navigator.pushNamedAndRemoveUntil(
+          //     context, Routes.mainRoute, (route) => false);
         }
       }
     });
@@ -369,8 +411,9 @@ class LoginCubit extends Cubit<LoginState> {
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
         } else {
-          Navigator.pushNamedAndRemoveUntil(
-              context, Routes.mainRoute, (route) => false);
+          errorGetBar("you_not_user".tr());
+          // Navigator.pushNamedAndRemoveUntil(
+          //     context, Routes.mainRoute, (route) => false);
         }
       }
     });

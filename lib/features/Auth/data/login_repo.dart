@@ -24,6 +24,29 @@ class LoginRepo {
     }
   }
 
+  Future<Either<Failure, LoginModel>> loginWithSocial({
+    required String imageURL,
+    required String type,
+    required String name,
+    required String email,
+  }) async {
+    try {
+      var response = await api.post(
+        EndPoints.loginWithSocialUrl,
+        body: {
+          'name': name,
+          'social_type': type,
+          'email': email,
+          'image': imageURL,
+        },
+      );
+
+      return Right(LoginModel.fromJson(response));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
   Future<Either<Failure, LoginModel>> register({
     required String password,
     required String phone,

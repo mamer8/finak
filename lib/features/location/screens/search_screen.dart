@@ -58,9 +58,8 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                         onMapCreated: (GoogleMapController controller) {
                           cubit.searchMapController = controller;
                         },
-                        markers: cubit.positionMarkers,
-                        onTap: (LatLng latLng) =>
-                            cubit.updateSelectedCameraPosition(
+                        markers: cubit.servicesMarkers,
+                        onTap: (LatLng latLng) => cubit.updateSelectedCamera(
                           latLng,
                           context,
                         ),
@@ -92,6 +91,7 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                               max: 400,
                               onChangeEnd: (v) {
                                 print("Selected value: ${cubit.currentValue}");
+                                cubit.getServices(context);
                               },
                               activeColor: AppColors.primary,
                               min: 0.1,
@@ -116,18 +116,21 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                                 onChanged: (value) {
                                   EasyDebounce.debounce('search-debouncer',
                                       const Duration(seconds: 1), () async {
-                                    // await cubit.getSearchLocation(value);
+                                    cubit.getServices(context);
                                   });
                                 },
                               ),
                             ),
                             const Spacer(),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
+                            if (cubit.selectedService != null)
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                ),
+                                child: CustomServiceWidget(
+                                  serviceModel: cubit.selectedService,
+                                ),
                               ),
-                              child: const CustomServiceWidget(),
-                            ),
                             20.h.verticalSpace,
                             kToolbarHeight.verticalSpace,
                           ],

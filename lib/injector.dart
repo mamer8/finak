@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:finak/features/Auth/cubit/cubit.dart';
+import 'package:finak/features/Auth/data/login_repo.dart';
 import 'package:finak/features/add_offer/cubit/cubit.dart';
 import 'package:finak/features/add_offer/data/repo.dart';
 import 'package:finak/features/favorite/cubit/cubit.dart';
-import 'package:finak/features/favorite/cubit/state.dart';
 import 'package:finak/features/favorite/data/repo.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/home/data/repo.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
+import 'package:finak/features/location/data/repo.dart';
+import 'package:finak/features/main_screen/cubit/cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/menu/data/menu_repo.dart';
 import 'package:finak/features/my_offers/cubit/cubit.dart';
@@ -18,14 +21,8 @@ import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/profile/data/repo.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/data/repo.dart';
-import 'package:flutter/foundation.dart';
-import 'package:finak/features/Auth/cubit/cubit.dart';
-import 'package:finak/features/Auth/data/login_repo.dart';
-import 'package:finak/features/main_screen/cubit/cubit.dart';
 import 'package:finak/features/splash/cubit/cubit.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/api/app_interceptors.dart';
@@ -81,7 +78,9 @@ Future<void> setup() async {
     ),
   );
   serviceLocator.registerFactory(
-    () => LocationCubit(),
+    () => LocationCubit(
+         serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => FavoritesCubit(
@@ -117,6 +116,7 @@ Future<void> setup() async {
   serviceLocator.registerLazySingleton(() => MyOffersRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => FavoritesRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => ProfileRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => LocationRepo(serviceLocator()));
   serviceLocator
       .registerLazySingleton(() => NotificationsRepo(serviceLocator()));
 

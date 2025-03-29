@@ -14,8 +14,10 @@ class ServiceDetailsArgs {
   final bool isFavoriteScreen;
   final ServiceModel? serviceModel;
 
-  ServiceDetailsArgs({this.isOffers = false,
-      this.isFavoriteScreen = false, this.serviceModel});
+  ServiceDetailsArgs(
+      {this.isOffers = false,
+      this.isFavoriteScreen = false,
+      this.serviceModel});
 }
 
 class ServicesDetailsScreen extends StatefulWidget {
@@ -93,7 +95,8 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                     10.w.horizontalSpace,
                                     CustomFavButton(
                                       isDetails: true,
-                                      isFavoriteScreen: widget.args.isFavoriteScreen,
+                                      isFavoriteScreen:
+                                          widget.args.isFavoriteScreen,
                                       isFav: cubit.getServiceDetailsModel.data
                                               ?.isFav ??
                                           false,
@@ -183,7 +186,9 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                                   "");
                                         },
                                       ),
-                                  ] else ...[
+                                  ]
+                                   else ...
+                                  [
                                     Divider(
                                       color: AppColors.gray,
                                     ),

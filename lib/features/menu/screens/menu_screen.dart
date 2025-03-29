@@ -18,6 +18,7 @@ class CustomMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<MenuCubit>();
     return Scaffold(
       body: BlocBuilder<MenuCubit, MenuState>(builder: (context, state) {
         return Padding(
@@ -93,14 +94,29 @@ class CustomMenu extends StatelessWidget {
                           Navigator.pushNamed(context, Routes.favoritesRoute);
                         },
                       ),
-                    CustmMenuRow(
-                      assetName: ImageAssets.privacyPolicyIcon,
-                      title: 'privacy_policy'.tr(),
-                    ),
-                    CustmMenuRow(
-                      assetName: ImageAssets.supportIcon,
-                      title: 'support'.tr(),
-                    ),
+                    if (cubit.settingsModel.data?.privacy != null)
+                      CustmMenuRow(
+                        assetName: ImageAssets.privacyPolicyIcon,
+                        title: 'privacy_policy'.tr(),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.privacyPolicyRoute);
+                        },
+                      ),
+                    if (cubit.settingsModel.data?.phone != null)
+                      CustmMenuRow(
+                        assetName: ImageAssets.supportIcon,
+                        title: 'support'.tr(),
+                        onTap: () async {
+                          String whatsappNumber =
+                              cubit.settingsModel.data?.phone ?? '';
+                          String url = 'https://wa.me/$whatsappNumber';
+                          if (!await launchUrl(Uri.parse(url),
+                              mode: LaunchMode.externalApplication)) {
+                            throw Exception('Could not launch $url');
+                          }
+                        },
+                      ),
                     CustmMenuRow(
                       assetName: ImageAssets.rateAppIcon,
                       title: 'rate_app'.tr(),
@@ -157,7 +173,8 @@ class CustomMenu extends StatelessWidget {
                     ),
                   ],
                 ))),
-                10.h.verticalSpace,
+                20.h.verticalSpace,
+                kToolbarHeight.verticalSpace,
               ],
             );
           }),
