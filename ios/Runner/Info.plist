@@ -78,10 +78,22 @@
         			<string>Editor</string>
         			<key>CFBundleURLSchemes</key>
         			<array>
+        			<string>fb1370336117295411</string>
         				<string>com.googleusercontent.apps.349266882446-o96kmhar9iu4netgb9c792g9kskq3oif</string>
         			</array>
         		</dict>
         	</array>
+        	<key>FacebookAppID</key>
+            <string>1370336117295411</string>
+            <key>FacebookClientToken</key>
+            <string>7de9177a39f2d7c373e6decf58403245</string>
+            <key>FacebookDisplayName</key>
+            <string>Finak</string>
+            <key>LSApplicationQueriesSchemes</key>
+            <array>
+              <string>fbapi</string>
+              <string>fb-messenger-share-api</string>
+            </array>
         <key>GIDClientID</key>
         <string>349266882446-o96kmhar9iu4netgb9c792g9kskq3oif.apps.googleusercontent.com</string>
 
