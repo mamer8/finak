@@ -1,11 +1,25 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/Auth/cubit/cubit.dart';
 import 'package:finak/features/Auth/cubit/state.dart';
+import 'package:finak/features/main_screen/cubit/cubit.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
 
 import 'widgets/social_auth_widget.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    context.read<MainCubit>().getHomePage();
+    context.read<ProfileCubit>().loginModel.data = null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +43,22 @@ class LoginScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       50.h.verticalSpace,
-                      Text("login".tr(),
-                          style: getBoldStyle(
-                              fontSize: 20.sp, color: AppColors.primary)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("login".tr(),
+                              style: getBoldStyle(
+                                  fontSize: 20.sp, color: AppColors.primary)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, Routes.mainRoute);
+                            },
+                            child: Text("skip".tr(),
+                                style: getRegularStyle(
+                                    fontSize: 16.sp, color: AppColors.primary)),
+                          ),
+                        ],
+                      ),
                       10.h.verticalSpace,
                       Text("welcome_back".tr(),
                           style: getRegularStyle(

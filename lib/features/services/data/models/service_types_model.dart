@@ -44,11 +44,13 @@ class ServiceTypeModel {
   int? id;
   String? name;
   String? image;
+  int? needPrice;
 
   ServiceTypeModel({
     this.id,
     this.name,
     this.image,
+    this.needPrice,
   });
 
   factory ServiceTypeModel.fromJson(Map<String, dynamic> json) =>
@@ -56,11 +58,13 @@ class ServiceTypeModel {
         id: json["id"],
         name: json["name"],
         image: json["image"],
+        needPrice: json["need_price"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "image": image,
+        "need_price": needPrice,
       };
 }

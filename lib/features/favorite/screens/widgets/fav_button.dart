@@ -26,14 +26,19 @@ class _CustomFavButtonState extends State<CustomFavButton> {
         builder: (context, state) {
       return InkWell(
         onTap: () {
-          print("widget.isFav: ${widget.isFav}");
-          setState(() {
-            widget.isFav = !(widget.isFav);
-          });
-          print("widget.isFav after edit: ${widget.isFav}");
-          cubit.addOrRemoveFavorite(context,
-              isFavoriteScreen: widget.isFavoriteScreen,
-              offerId: widget.serviceId.toString());
+          checkLoggingStatus(
+            context,
+            onPressed: () {
+              print("widget.isFav: ${widget.isFav}");
+              setState(() {
+                widget.isFav = !(widget.isFav);
+              });
+              print("widget.isFav after edit: ${widget.isFav}");
+              cubit.addOrRemoveFavorite(context,
+                  isFavoriteScreen: widget.isFavoriteScreen,
+                  offerId: widget.serviceId.toString());
+            },
+          );
         },
         child: CircleAvatar(
           backgroundColor: AppColors.white,

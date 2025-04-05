@@ -137,8 +137,8 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   Future<void> _loadMarkerIcon() async {
-    markerIcon = await _getBytesFromAsset(ImageAssets.pin, 30);
-    markerIconSelected = await _getBytesFromAsset(ImageAssets.pin, 40);
+    markerIcon = await _getBytesFromAsset(ImageAssets.pin, 40);
+    markerIconSelected = await _getBytesFromAsset(ImageAssets.pin, 50);
 
     emit(SetTransportationMarkersState());
   }

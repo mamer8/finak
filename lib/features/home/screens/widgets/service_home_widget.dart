@@ -93,18 +93,19 @@ class CustomServiceHomeWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: getMediumStyle(fontSize: 16.sp, fontHeight: 1.2),
                       ),
-                      SizedBox(
-                        width: getWidthSize(context) * 0.6,
-                        child: AutoSizeText(
-                          '${serviceModel?.price.toString() ?? "0"}'
-                          " \$",
-                          maxLines: 1,
-                          minFontSize: 10.sp,
-                          // overflow: TextOverflow.ellipsis,
-                          style: getBoldStyle(
-                              fontSize: 14.sp, color: AppColors.primary),
+                      if (serviceModel?.price != null)
+                        SizedBox(
+                          width: getWidthSize(context) * 0.6,
+                          child: AutoSizeText(
+                            '${serviceModel?.price.toString() ?? "0"}'
+                            " \$",
+                            maxLines: 1,
+                            minFontSize: 10.sp,
+                            // overflow: TextOverflow.ellipsis,
+                            style: getBoldStyle(
+                                fontSize: 14.sp, color: AppColors.primary),
+                          ),
                         ),
-                      ),
                       Row(
                         children: [
                           Image.asset(

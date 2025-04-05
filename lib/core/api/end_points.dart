@@ -8,6 +8,7 @@ class EndPoints {
   static const String registerUrl = '${baseUrl}user/register';
   static const String profileUrl = '${baseUrl}user/profile';
   static const String resetPasswordUrl = '${baseUrl}user/reset-password';
+  static const String addPhoneUrl = '${baseUrl}user/update-phone';
   static const String logoutUrl = '${baseUrl}user/logout';
   static const String fcmUrl = '${baseUrl}user/store-fcm';
   static const String deleteAccountUrl = '${baseUrl}user/delete-account';

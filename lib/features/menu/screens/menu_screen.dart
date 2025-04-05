@@ -28,12 +28,15 @@ class CustomMenu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               30.h.verticalSpace,
-              CustomNetworkImage(
-                  image: profileCubit.loginModel.data?.image ?? '',
-                  isUser: true,
-                  width: 100.w,
-                  height: 100.w,
-                  borderRadius: 50.w),
+              InkWell(
+                onTap: () => profileCubit.getProfile(),
+                child: CustomNetworkImage(
+                    image: profileCubit.loginModel.data?.image ?? '',
+                    isUser: true,
+                    width: 100.w,
+                    height: 100.w,
+                    borderRadius: 50.w),
+              ),
               10.h.verticalSpace,
               Text(
                 AppConst.isLogged
@@ -42,11 +45,17 @@ class CustomMenu extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: getBoldStyle(fontSize: 18.sp),
               ),
-              Text(
-                profileCubit.loginModel.data?.phone ?? '',
-                textAlign: TextAlign.center,
-                style: getRegularStyle(color: AppColors.black, fontSize: 14.sp),
-              ),
+              if (AppConst.isLogged)
+                Text(
+                  profileCubit.loginModel.data?.isSocial == 1
+                      ? profileCubit.loginModel.data?.email ??
+                          profileCubit.loginModel.data?.phone ??
+                          ''
+                      : profileCubit.loginModel.data?.phone ?? '',
+                  textAlign: TextAlign.center,
+                  style:
+                      getRegularStyle(color: AppColors.black, fontSize: 14.sp),
+                ),
               30.h.verticalSpace,
               Expanded(
                   child: SingleChildScrollView(
@@ -160,7 +169,9 @@ class CustomMenu extends StatelessWidget {
                       assetName: ImageAssets.deleteIcon,
                       title: 'delete_profile'.tr(),
                       onTap: () {
-                        context.read<MenuCubit>().deleteAccount(context);
+                        deleteAccountDialog(context, onPressed: () {
+                          context.read<MenuCubit>().deleteAccount(context);
+                        });
                       },
                       withRow: false,
                     ),
@@ -168,7 +179,9 @@ class CustomMenu extends StatelessWidget {
                     title: !AppConst.isLogged ? 'login'.tr() : 'logout'.tr(),
                     assetName: ImageAssets.logoutIcon,
                     onTap: () {
-                      context.read<MenuCubit>().logout(context);
+                      AppConst.isLogged
+                          ? context.read<MenuCubit>().logout(context)
+                          : Navigator.pushNamed(context, Routes.loginRoute);
                     },
                     isLast: true,
                     withRow: false,

@@ -4,6 +4,7 @@ import 'package:country_pickers/utils/utils.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/Auth/cubit/cubit.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:intl_phone_field/countries.dart';
@@ -384,6 +385,7 @@ class _CustomPhoneFormFieldState extends State<CustomPhoneFormField> {
         setState(() {
           initialCountryCodee = '+${country.phoneCode}';
            context.read<LoginCubit>().countryCode = initialCountryCodee;
+           context.read<ProfileCubit>().countryCode = initialCountryCodee;
           fieldKey = UniqueKey(); // Change key to force rebuild
         });
       }

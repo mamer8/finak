@@ -47,7 +47,7 @@ class AddOfferRepo {
         'service_type_id': serviceTypeId,
         'title': title,
         'body': description,
-        'price': price,
+        if (price.isNotEmpty) 'price': price,
         'sub_service_type_id': subServiceTypeId,
         'lat': lat,
         'long': long,

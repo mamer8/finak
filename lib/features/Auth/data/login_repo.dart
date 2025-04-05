@@ -92,4 +92,20 @@ class LoginRepo {
       return Left(ServerFailure());
     }
   }
+  Future<Either<Failure, LoginModel>> addPhone({
+    required String phone,
+  }) async {
+    try {
+      var response = await api.post(
+        EndPoints.addPhoneUrl,
+        body: {
+          'phone': phone,
+        },
+      );
+
+      return Right(LoginModel.fromJson(response));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

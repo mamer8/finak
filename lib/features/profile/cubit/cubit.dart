@@ -1,11 +1,14 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:finak/core/preferences/preferences.dart';
 import 'package:finak/core/utils/appwidget.dart';
 import 'package:finak/features/Auth/data/models/login_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../core/exports.dart';
+import '../data/countries_code.dart';
 import '../data/repo.dart';
 import 'state.dart';
 
@@ -85,9 +88,20 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  bool hidePhone = false;
-  void changeHidePhone(bool value) {
-    hidePhone = value;
+  bool isPhoneHide = false;
+  changePhoneHide(BuildContext context, bool? v) {
+    if (v == false) {
+      if (loginModel.data?.phone == null) {
+        addPhoneDialog(context, onPressed: () {
+          Navigator.pushNamed(context, Routes.addPhoneRoute);
+        });
+        return;
+      } else {
+        isPhoneHide = v!;
+      }
+    } else {
+      isPhoneHide = v!;
+    }
     emit(HidePhoneChangedSuccessfully());
   }
 
@@ -101,13 +115,20 @@ class ProfileCubit extends Cubit<ProfileState> {
       }, (r) {
         if (r.status == 200 || r.status == 201) {
           loginModel = r;
-          storeFCM();
+          // storeFCM();
           if (r.data != null) {
             nameController.text = r.data!.name ?? '';
             emailController.text = r.data!.email ?? '';
             phoneController.text = r.data!.phone ?? '';
+            if (r.data!.phone == null) {
+              isPhoneHide = true;
+            } else {
+              isPhoneHide = false;
+            }
             // hidePhone = r.data!.hidePhone ?? false;
             changeProfile(false);
+            checkIsPhoneUpdate();
+            if (r.data!.phone != null) splitPhoneNumber(r.data!.phone ?? '');
           }
         } else if (r.status == 401 || r.status == 407 || r.status == 403) {
           prefs.setBool("ISLOGGED", false);
@@ -130,10 +151,34 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   bool isProfileChanged = false;
+  bool isPhoneUpdated = false;
+
   void changeProfile(bool value) {
     isProfileChanged = value;
     emit(ProfileChangedSuccessfully());
   }
+
+  void checkIsPhoneUpdate() {
+    if (userPhone == phoneController.text) {
+      isPhoneUpdated = false;
+    } else {
+      isPhoneUpdated = true;
+    }
+
+    emit(ProfileChangedSuccessfully());
+  }
+  // void checkIsPhoneUpdate() {
+  //   if (loginModel.data!.phone != null) {
+  //     if (loginModel.data!.phone!.contains(phoneController.text)) {
+  //       isPhoneUpdated = true;
+  //     } else {
+  //       isPhoneUpdated = false;
+  //     }
+  //   } else {
+  //     isPhoneUpdated = false;
+  //   }
+  //   emit(ProfileChangedSuccessfully());
+  // }
 
   updateUserData(
     BuildContext context,
@@ -156,6 +201,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         loginModel = r;
         profileImage = null;
         changeProfile(false);
+        checkIsPhoneUpdate();
         if (r.data != null) {
           // nameController.text = r.data!.name!;
         }
@@ -201,5 +247,17 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
       emit(GetAccountSuccess());
     });
+  }
+
+  String userPhone = '';
+  splitPhoneNumber(String phoneNumber) {
+    try {
+      final parsed = PhoneNumber.parse(phoneNumber);
+      countryCode = '+${parsed.countryCode}';
+      phoneController.text = parsed.nsn;
+      userPhone = parsed.nsn;
+    } catch (e) {
+      log("Error parsing phone number: $e");
+    }
   }
 }

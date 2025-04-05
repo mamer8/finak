@@ -72,6 +72,7 @@ class _CustomSwiperState extends State<CustomSwiper> {
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
                             maxWidth: getWidthSize(context) * 0.5,
+                            minWidth: getWidthSize(context) * 0.3,
                           ),
                           child: Container(
                             height: getHeightSize(context) * 0.1,
@@ -92,7 +93,7 @@ class _CustomSwiperState extends State<CustomSwiper> {
                                 ),
                                 SizedBox(height: 5),
                                 AutoSizeText(
-                                  (widget.slider[index].body ?? '') * 7,
+                                  (widget.slider[index].body ?? ''),
                                   maxLines: 2,
                                   style: getRegularStyle(
                                       color: Colors.white, fontSize: 14.sp),

@@ -70,7 +70,7 @@ class MenuCubit extends Cubit<MenuState> {
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.loginRoute, (route) => false);
       }
-      context.read<MainCubit>().getHomePage();
+     
       emit(SuccessLogoutState());
     });
   }
@@ -99,7 +99,7 @@ class MenuCubit extends Cubit<MenuState> {
         Preferences.instance.clearUser();
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.loginRoute, (route) => false);
-        context.read<MainCubit>().getHomePage();
+       
       }
 
       emit(SuccessLogoutState());

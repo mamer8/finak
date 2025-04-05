@@ -6,8 +6,8 @@ import 'widgets/custom_pin_code.dart';
 import 'widgets/social_auth_widget.dart';
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key, required this.isRegister});
-  final bool isRegister;
+  const OTPScreen({super.key, required this.type});
+  final OTPTypes type;
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
@@ -61,7 +61,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         // Navigator.pushNamed(context, Routes.newPasswordRoute);
                         if (formKeyOtp.currentState!.validate()) {
                           cubit.verifyOtp(context,
-                              isRegister: widget.isRegister);
+                              type : widget.type,);
                         }
                       },
                     ),

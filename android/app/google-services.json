@@ -39,10 +39,46 @@
               "client_type": 3
             },
             {
-              "client_id": "349266882446-o96kmhar9iu4netgb9c792g9kskq3oif.apps.googleusercontent.com",
+              "client_id": "349266882446-5spqvpomted9rrm6rir450vnnq8l8kha.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.topbusiness.finak"
+                "bundle_id": "com.topbusiness.finakadmin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349266882446:android:2fbc0619951ec01ec27edf",
+        "android_client_info": {
+          "package_name": "com.topbusiness.finakadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349266882446-msr8fdk3ghfh42u9ghso4mvl5j82j5li.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaRYI4Q6qi7VNvkyr8zj_U8ZPo_tn16zY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349266882446-msr8fdk3ghfh42u9ghso4mvl5j82j5li.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "349266882446-5spqvpomted9rrm6rir450vnnq8l8kha.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.topbusiness.finakadmin"
               }
             }
           ]

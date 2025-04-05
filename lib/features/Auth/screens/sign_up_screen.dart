@@ -129,7 +129,7 @@ class SignUpScreen extends StatelessWidget {
                         title: "sign_up",
                         onPressed: () {
                           if (formKeySignUp.currentState!.validate()) {
-                            cubit.sendOTP(context, isRegister: true);
+                            cubit.sendOTP(context, type: OTPTypes.register);
                           }
                         },
                       ),

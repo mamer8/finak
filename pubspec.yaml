@@ -76,7 +76,7 @@ dependencies:
   easy_debounce: ^2.0.3
   flutter_html:
   country_pickers: ^3.0.1
- 
+  phone_numbers_parser: ^9.0.3
  
 
 
@@ -110,4 +110,13 @@ flutter:
   fonts:
     - family: Jost
       fonts:
-        - asset: assets/fonts/Jost.ttf
+        - asset: assets/fonts/Jost-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Jost-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Jost-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Jost-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Jost-Bold.ttf
+          weight: 700

@@ -1,3 +1,5 @@
+import 'package:finak/features/Auth/cubit/cubit.dart';
+import 'package:finak/features/Auth/screens/add_phone_screen.dart';
 import 'package:finak/features/Auth/screens/forgot_password_screen.dart';
 import 'package:finak/features/Auth/screens/new_password_screen.dart';
 import 'package:finak/features/Auth/screens/otp_screen.dart';
@@ -31,6 +33,7 @@ class Routes {
   static const String forgotPasswordRoute = '/forgot_password';
   static const String otpRoute = '/otp';
   static const String newPasswordRoute = '/new_password';
+  static const String addPhoneRoute = '/add_phone';
   ///////////// Services /////////////
   static const String servicesRoute = '/services';
   static const String servicesDetailsRoute = '/services_details';
@@ -82,13 +85,17 @@ class AppRoutes {
           builder: (context) => const ForgotPasswordScreen(),
         );
       case Routes.otpRoute:
-        final isRegister = settings.arguments as bool;
+         OTPTypes  type = settings.arguments as OTPTypes;
         return MaterialPageRoute(
-          builder: (context) =>  OTPScreen(isRegister:  isRegister,),
+          builder: (context) =>  OTPScreen(type:  type,),
         );
       case Routes.newPasswordRoute:
         return MaterialPageRoute(
           builder: (context) => const NewPasswordScreen(),
+        );
+      case Routes.addPhoneRoute:
+        return MaterialPageRoute(
+          builder: (context) => const AddPhoneScreen(),
         );
       ///////////// Services /////////////
       case Routes.servicesRoute:

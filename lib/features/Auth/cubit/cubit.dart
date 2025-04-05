@@ -5,13 +5,17 @@ import 'package:finak/core/preferences/preferences.dart';
 import 'package:finak/core/utils/appwidget.dart';
 import 'package:finak/core/utils/dialogs.dart';
 import 'package:finak/features/Auth/data/models/login_model.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../data/login_repo.dart';
 import 'state.dart';
+
+enum OTPTypes { forgotPassword, register, addPhone }
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this.api) : super(LoginStateInitial());
@@ -36,6 +40,8 @@ class LoginCubit extends Cubit<LoginState> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
+  TextEditingController phoneControllerAddPhone = TextEditingController();
+
   final FirebaseAuth _mAuth = FirebaseAuth.instance;
   String? verificationId;
   String? smsCode;
@@ -43,15 +49,18 @@ class LoginCubit extends Cubit<LoginState> {
 
   String countryCode = '+20';
   String phone = "+201027639683";
-  Future<void> sendOTP(BuildContext context, {bool isRegister = true}) async {
+  Future<void> sendOTP(BuildContext context,
+      {OTPTypes type = OTPTypes.forgotPassword}) async {
     AppWidget.createProgressDialog(context);
     emit(SendCodeLoading());
 
     try {
       await _mAuth.verifyPhoneNumber(
-        phoneNumber: isRegister
+        phoneNumber: type == OTPTypes.register
             ? "$countryCode${phoneControllerSignUp.text}"
-            : "$countryCode${phoneControllerForgotPassword.text}",
+            : type == OTPTypes.forgotPassword
+                ? "$countryCode${phoneControllerForgotPassword.text}"
+                : "$countryCode${phoneControllerAddPhone.text}",
         verificationCompleted: (PhoneAuthCredential credential) {
           smsCode = credential.smsCode;
           if (smsCode != null) {
@@ -71,7 +80,7 @@ class LoginCubit extends Cubit<LoginState> {
           log("Verification ID: $verificationId");
 
           Navigator.pop(context);
-          Navigator.pushNamed(context, Routes.otpRoute, arguments: isRegister);
+          Navigator.pushNamed(context, Routes.otpRoute, arguments: type);
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           this.verificationId = verificationId;
@@ -85,7 +94,8 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> verifyOtp(BuildContext context, {bool isRegister = true}) async {
+  Future<void> verifyOtp(BuildContext context,
+      {OTPTypes type = OTPTypes.forgotPassword}) async {
     AppWidget.createProgressDialog(context); // Show loading
 
     try {
@@ -110,10 +120,12 @@ class LoginCubit extends Cubit<LoginState> {
       emit(CheckCodeSuccessfully());
       debugPrint("OTP verification successful");
 
-      if (isRegister) {
+      if (type == OTPTypes.register) {
         register(context);
-      } else {
+      } else if (type == OTPTypes.forgotPassword) {
         Navigator.pushReplacementNamed(context, Routes.newPasswordRoute);
+      } else if (type == OTPTypes.addPhone) {
+       addPhone(context);
       }
     } catch (error) {
       // Dismiss progress dialog
@@ -246,53 +258,101 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-//  Future<UserCredential> signInWithApple() async {
-//   final appleProvider = AppleAuthProvider();
-//   // if (kIsWeb) {
-//     // await FirebaseAuth.instance.signInWithPopup(appleProvider);
-//   // } else {
-//     await FirebaseAuth.instance.signInWithProvider(appleProvider);
-//   // }
-//   return await FirebaseAuth.instance.signInWithProvider(appleProvider);
-// }
-
-  Future<UserCredential?> signInWithApple() async {
+  Future<void> signInWithApple() async {
     try {
-      log("Starting Apple Sign-In process");
-
+      log("Starting Apple Sign-In...");
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
         webAuthenticationOptions: WebAuthenticationOptions(
-          clientId:
-              "com.topbusiness.finak", // Replace with your Apple Service ID
+          clientId: "com.topbusiness.finakapp", // Apple Service ID
           redirectUri: Uri.parse(
             "https://finak-8a4c9.firebaseapp.com/__/auth/handler",
           ),
         ),
       );
 
-      log("Apple user signed in: ${credential.email ?? 'No email provided'}");
-
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: credential.identityToken,
         accessToken: credential.authorizationCode,
       );
 
-      log("Attempting Firebase authentication");
-
-      final authResult =
-          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      log("Firebase sign-in successful: ${authResult.user?.uid}");
-      return authResult;
-    } catch (e, stackTrace) {
-      log("Apple sign-in error: $e");
-      log("Stack trace: $stackTrace");
-      return null;
+      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      log("Apple Sign-In successful!");
+    } catch (e) {
+      print("Apple Sign-In Error: $e");
+      if (e is PlatformException) {
+        log("Error code: ${e.code}");
+        log("Error message: ${e.message}");
+        log("Error details: ${e.details}");
+      }
     }
   }
+  // Future<void> signInWithApple() async {
+  //   try {
+  //     log("Starting Apple Sign-In process");
+
+  //     final credential = await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //       webAuthenticationOptions: WebAuthenticationOptions(
+  //         clientId:
+  //             "com.topbusiness.finakapp", // Replace with your Apple Service ID
+  //         redirectUri: Uri.parse(
+  //           "https://finak-8a4c9.firebaseapp.com/__/auth/handler",
+  //         ),
+  //       ),
+  //     );
+
+  //     log("Apple user signed in: ${credential.email ?? 'No email provided'}");
+
+  //   } catch (e, stackTrace) {
+  //     log("Apple sign-in error: $e");
+  //     log("Stack trace: $stackTrace");
+
+  //   }
+  // }
+  // Future<UserCredential?> signInWithApple() async {
+  //   try {
+  //     log("Starting Apple Sign-In process");
+
+  //     final credential = await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //       webAuthenticationOptions: WebAuthenticationOptions(
+  //         clientId:
+  //             "com.topbusiness.finakapp", // Replace with your Apple Service ID
+  //         redirectUri: Uri.parse(
+  //           "https://finak-8a4c9.firebaseapp.com/__/auth/handler",
+  //         ),
+  //       ),
+  //     );
+
+  //     log("Apple user signed in: ${credential.email ?? 'No email provided'}");
+
+  //     final oauthCredential = OAuthProvider("apple.com").credential(
+  //       idToken: credential.identityToken,
+  //       accessToken: credential.authorizationCode,
+  //     );
+
+  //     log("Attempting Firebase authentication");
+
+  //     final authResult =
+  //         await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+  //     log("Firebase sign-in successful: ${authResult.user?.uid}");
+  //     return authResult;
+  //   } catch (e, stackTrace) {
+  //     log("Apple sign-in error: $e");
+  //     log("Stack trace: $stackTrace");
+  //     return null;
+  //   }
+  // }
 
   /////// API CALLS //////
   LoginModel loginModel = LoginModel();
@@ -447,6 +507,35 @@ class LoginCubit extends Cubit<LoginState> {
         confirmNewPasswordController.clear();
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.loginRoute, (route) => false);
+      }
+    });
+  }
+
+  addPhone(BuildContext context) async {
+    emit(LoadingLoginState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.addPhone(
+      phone: "$countryCode${phoneControllerAddPhone.text}",
+    );
+    response.fold((l) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureLoginState());
+    }, (r) async {
+      debugPrint("code: ${r.status.toString()}");
+      Navigator.pop(context);
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        emit(SuccessLoginState());
+        successGetBar(r.msg);
+        phoneControllerAddPhone.clear();
+        context.read<ProfileCubit>().getProfile();
+
+        Navigator.pop(context);
+        Navigator.pop(context);
       }
     });
   }

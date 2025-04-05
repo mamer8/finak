@@ -109,7 +109,15 @@
     "success": "Success",
     "you_not_user": "You are not a user",
     "pending": "Pending",
-    "refused": "Refused",
+    "refused": "Rejected",
+    "skip": "Skip",
+    "delete_account_desc": "Are you sure you want to delete this account?",
+    "delete": "Delete",
+    "you_must_add": "You must add a valid phone number",    
+    "will_send_add_phone": "We will send a verification code to your phone number",
+    "add_phone": "Add Phone",
+    "update_phone": "Update Phone",
+   
     "": "",
     "-": "-"
 }

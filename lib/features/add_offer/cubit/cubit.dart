@@ -130,12 +130,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     emit(SelectServiceState());
   }
 
-  bool isPhoneHide = false;
-  changePhoneHide(bool? v) {
-    isPhoneHide = v!;
-    emit(SelectServiceState());
-  }
-
+ 
   /// Get Service Types //////
   GetServiceTypesModel serviceTypesModel = GetServiceTypesModel();
   void getServiceTypes() async {
@@ -174,7 +169,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     );
   }
 
-  addOffer(BuildContext context) async {
+  addOffer(BuildContext context,{required bool isPhoneHide}) async {
     emit(LoadingAddOfferState());
     AppWidget.createProgressDialog(context);
     final response = await api.addOffer(
@@ -189,9 +184,9 @@ class AddOfferCubit extends Cubit<AddOfferState> {
               ?.longitude
               .toString() ??
           "0",
-      locationName: context.read<LocationCubit>().address ,
+      locationName: context.read<LocationCubit>().address,
       media: uploadedImages.map((e) => e.path).toList(),
-      price: priceController.text,
+      price: selectedService?.needPrice == 1 ? priceController.text : "",
       description: descriptionController.text,
       title: titleController.text,
       isPhoneHide: isPhoneHide ? "1" : "0",
@@ -210,8 +205,19 @@ class AddOfferCubit extends Cubit<AddOfferState> {
         emit(SuccessAddOfferState());
         Navigator.pop(context);
         successGetBar(r.msg);
+        clearDate();
         Navigator.pushReplacementNamed(context, Routes.myOffersRoute);
       }
     });
+  }
+
+  clearDate() {
+    titleController.clear();
+    priceController.clear();
+    descriptionController.clear();
+    uploadedImages.clear();
+    selectedService = null;
+    selectedCategory = null;
+   
   }
 }

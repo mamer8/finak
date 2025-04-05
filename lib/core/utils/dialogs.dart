@@ -76,6 +76,7 @@ messageGetBar(String message) {
     snackPosition: SnackPosition.TOP,
   ));
 }
+
 checkLoggingStatus(BuildContext context, {void Function()? onPressed}) async {
   print("AppConst.isLogged: ${AppConst.isLogged}");
   if (AppConst.isLogged) {
@@ -105,6 +106,47 @@ checkLoggingStatus(BuildContext context, {void Function()? onPressed}) async {
       btnCancelText: "cancel".tr(),
     ).show();
   }
+}
+
+deleteAccountDialog(BuildContext context, {void Function()? onPressed}) async {
+  await AwesomeDialog(
+    context: context,
+    customHeader: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Image.asset(
+        ImageAssets.logoImage,
+      ),
+    ),
+    animType: AnimType.topSlide,
+    showCloseIcon: true,
+    padding: EdgeInsets.all(10.w),
+    title: "delete_account_desc".tr(),
+    titleTextStyle: getRegularStyle(fontSize: 16.sp),
+    btnOkText: "delete".tr(),
+    btnOkOnPress: onPressed,
+    btnCancelOnPress: () {},
+    btnCancelText: "cancel".tr(),
+  ).show();
+}
+addPhoneDialog(BuildContext context, {void Function()? onPressed}) async {
+  await AwesomeDialog(
+    context: context,
+    customHeader: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Image.asset(
+        ImageAssets.logoImage,
+      ),
+    ),
+    animType: AnimType.topSlide,
+    showCloseIcon: true,
+    padding: EdgeInsets.all(10.w),
+    title: "you_must_add".tr(),
+    titleTextStyle: getRegularStyle(fontSize: 16.sp),
+    btnOkText: "add".tr(),
+    btnOkOnPress: onPressed,
+    btnCancelOnPress: () {},
+    btnCancelText: "cancel".tr(),
+  ).show();
 }
 
 /*----------------------------------------------------------------------------*/

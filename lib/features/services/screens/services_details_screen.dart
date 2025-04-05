@@ -106,6 +106,8 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                     ),
                                   ]),
                                   10.h.verticalSpace,
+                                  if (cubit.getServiceDetailsModel.data?.price !=
+                                      null)
                                   Text(
                                     '${cubit.getServiceDetailsModel.data?.price.toString() ?? "0"}'
                                     " \$",
