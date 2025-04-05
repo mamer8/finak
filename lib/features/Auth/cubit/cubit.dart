@@ -266,12 +266,12 @@ class LoginCubit extends Cubit<LoginState> {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: "com.topbusiness.finakapp", // Apple Service ID
-          redirectUri: Uri.parse(
-            "https://finak-8a4c9.firebaseapp.com/__/auth/handler",
-          ),
-        ),
+        // webAuthenticationOptions: WebAuthenticationOptions(
+        //   clientId: "com.topbusiness.finakapp", // Apple Service ID
+        //   redirectUri: Uri.parse(
+        //     "https://finak-8a4c9.firebaseapp.com/__/auth/handler",
+        //   ),
+        // ),
       );
 
       final oauthCredential = OAuthProvider("apple.com").credential(

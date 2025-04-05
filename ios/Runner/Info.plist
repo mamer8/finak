@@ -24,6 +24,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,5 +47,43 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+    	<array>
+    		<string>sms</string>
+    		<string>tel</string>
+    	</array>
+    	<key>NSCameraUsageDescription</key>
+        	<string>This app requires access to your camera to take photos for profile pictures and to select images for various features.</string>
+        	<key>NSPhotoLibraryUsageDescription</key>
+        	<string>This app requires access to your photo library to select images for profile pictures and other user content.</string>
+        	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        	<string>This app needs access to your location in the background to provide accurate delivery updates and ensure your orders are delivered to the correct location.</string>
+        	<key>NSLocationAlwaysUsageDescription</key>
+        	<string>This app needs access to your location in the background to provide accurate delivery updates and ensure your orders are delivered to the correct location.</string>
+        	<key>NSLocationWhenInUseUsageDescription</key>
+        	<string>This app needs access to your location to provide accurate pickup and delivery locations, and to help our delivery partners navigate to your doorstep.</string>
+        	<key>NSMicrophoneUsageDescription</key>
+        	<string>This app needs access to your microphone to enable voice commands and provide a better user experience.</string>
+        	<key>UIBackgroundModes</key>
+            	<array>
+            		<string>fetch</string>
+            		<string>remote-notification</string>
+            	</array>
+	<key>FLTEnableImpeller</key>
+        <false/>
+        <key>CFBundleURLTypes</key>
+        	<array>
+        		<dict>
+        			<key>CFBundleTypeRole</key>
+        			<string>Editor</string>
+        			<key>CFBundleURLSchemes</key>
+        			<array>
+        				<string>com.googleusercontent.apps.349266882446-o96kmhar9iu4netgb9c792g9kskq3oif</string>
+        			</array>
+        		</dict>
+        	</array>
+        <key>GIDClientID</key>
+        <string>349266882446-o96kmhar9iu4netgb9c792g9kskq3oif.apps.googleusercontent.com</string>
+
 </dict>
 </plist>
