@@ -71,6 +71,7 @@ class LoginCubit extends Cubit<LoginState> {
           Navigator.pop(context);
 
           emit(CheckCodeInvalidCode());
+          log("Verification failed: ${e.message}");
           errorGetBar("Error: ${e.message}");
         },
         codeSent: (String verificationId, int? resendToken) {
@@ -125,7 +126,7 @@ class LoginCubit extends Cubit<LoginState> {
       } else if (type == OTPTypes.forgotPassword) {
         Navigator.pushReplacementNamed(context, Routes.newPasswordRoute);
       } else if (type == OTPTypes.addPhone) {
-       addPhone(context);
+        addPhone(context);
       }
     } catch (error) {
       // Dismiss progress dialog

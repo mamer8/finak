@@ -17,6 +17,7 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   // Initialize Dependencies
   await injector.setup();
   Bloc.observer = AppBlocObserver();

@@ -204,7 +204,7 @@ class ProfileScreen extends StatelessWidget {
                                       fontSize: 18.sp,
                                       color: AppColors.primary)),
                             )
-                          : SizedBox(),
+                          : SizedBox(), 
                   30.h.verticalSpace,
                 ],
               ),

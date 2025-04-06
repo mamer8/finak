@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAaRYI4Q6qi7VNvkyr8zj_U8ZPo_tn16zY',
-    appId: '1:349266882446:android:3193923455ecbf1cc27edf',
-    messagingSenderId: '349266882446',
-    projectId: 'finak-8a4c9',
-    storageBucket: 'finak-8a4c9.firebasestorage.app',
+    apiKey: 'AIzaSyClFOy6gSnXHpVhgG0d--TtmOHWoPHt-s8',
+    appId: '1:1073143436243:android:4bbb4e10b752fc3d25d526',
+    messagingSenderId: '1073143436243',
+    projectId: 'finak-application',
+    storageBucket: 'finak-application.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCT4-N97SV_mLPt3UiS3a3gArN3HLqJOGQ',
-    appId: '1:349266882446:ios:9ed635725e19a564c27edf',
-    messagingSenderId: '349266882446',
-    projectId: 'finak-8a4c9',
-    storageBucket: 'finak-8a4c9.firebasestorage.app',
+    apiKey: 'AIzaSyCThiIH33ClvmE5aTuWHlNoEHi447-Vyr4',
+    appId: '1:1073143436243:ios:ade5404b49cbabd125d526',
+    messagingSenderId: '1073143436243',
+    projectId: 'finak-application',
+    storageBucket: 'finak-application.firebasestorage.app',
     iosBundleId: 'com.topbusiness.finak',
   );
+
 }

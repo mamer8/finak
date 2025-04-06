@@ -1,84 +1,48 @@
 {
   "project_info": {
-    "project_number": "349266882446",
-    "project_id": "finak-8a4c9",
-    "storage_bucket": "finak-8a4c9.firebasestorage.app"
+    "project_number": "1073143436243",
+    "project_id": "finak-application",
+    "storage_bucket": "finak-application.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:349266882446:android:3193923455ecbf1cc27edf",
+        "mobilesdk_app_id": "1:1073143436243:android:4bbb4e10b752fc3d25d526",
         "android_client_info": {
-          "package_name": "com.topbusiness.finak"
+          "package_name": "com.topbusiness.finakapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "349266882446-bsoqktql8972j4t1qi35fdmjtp473eom.apps.googleusercontent.com",
+          "client_id": "1073143436243-9apqhkact3vnlsqafrik71utkmri9t1q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.topbusiness.finak",
+            "package_name": "com.topbusiness.finakapp",
             "certificate_hash": "0488fde3796314893b09e7bfc023eba70de3dc12"
           }
         },
         {
-          "client_id": "349266882446-msr8fdk3ghfh42u9ghso4mvl5j82j5li.apps.googleusercontent.com",
+          "client_id": "1073143436243-ce945vvh841vtif1mu4ci2e8em1l4m7l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaRYI4Q6qi7VNvkyr8zj_U8ZPo_tn16zY"
+          "current_key": "AIzaSyClFOy6gSnXHpVhgG0d--TtmOHWoPHt-s8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "349266882446-msr8fdk3ghfh42u9ghso4mvl5j82j5li.apps.googleusercontent.com",
+              "client_id": "1073143436243-ce945vvh841vtif1mu4ci2e8em1l4m7l.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "349266882446-5spqvpomted9rrm6rir450vnnq8l8kha.apps.googleusercontent.com",
+              "client_id": "1073143436243-nb5ful4m2tfberq0rrotgut6esk43hdo.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.topbusiness.finakadmin"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:349266882446:android:2fbc0619951ec01ec27edf",
-        "android_client_info": {
-          "package_name": "com.topbusiness.finakadmin"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "349266882446-msr8fdk3ghfh42u9ghso4mvl5j82j5li.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAaRYI4Q6qi7VNvkyr8zj_U8ZPo_tn16zY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "349266882446-msr8fdk3ghfh42u9ghso4mvl5j82j5li.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "349266882446-5spqvpomted9rrm6rir450vnnq8l8kha.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.topbusiness.finakadmin"
+                "bundle_id": "com.topbusiness.finak"
               }
             }
           ]
