@@ -15,6 +15,7 @@ class AppColors {
   static Color grey5 = HexColor('#EFEFEE');
   static Color grey6 = HexColor('#373737');
   static Color grey7 = HexColor('#979797');
+  static Color grey8 = HexColor('#E5E5E5');
   static Color notificationBorder = HexColor('#A9BCC0');
   static Color notificationBG = HexColor('#F5F5F5');
   static Color textFiledBG = HexColor('#F2F2F2');

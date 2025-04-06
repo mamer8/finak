@@ -36,6 +36,8 @@ class ImageAssets {
   static const String supportIcon = '$iconsPath/support.png';
   static const String locationIcon = '$iconsPath/location.png';
   static const String filterIcon = '$iconsPath/filter.png';
+  static const String sendIcon = '$iconsPath/send.png';
+  static const String messagesIcon = '$iconsPath/messages.png';
 
   //Lottie
 

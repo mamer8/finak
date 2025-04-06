@@ -45,7 +45,7 @@ class SignUpScreen extends StatelessWidget {
                       50.h.verticalSpace,
                       CustomTextField(
                         title: "full_name",
-                        labelText: "enter_name".tr(),
+                        hintText: "enter_name".tr(),
                         controller: cubit.nameControllerSignUp,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -56,7 +56,7 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       CustomTextField(
                         title: "email",
-                        labelText: "enter_email".tr(),
+                        hintText: "enter_email".tr(),
                         isOptional: true,
                         controller: cubit.emailControllerSignUp,
                         keyboardType: TextInputType.emailAddress,
@@ -83,7 +83,7 @@ class SignUpScreen extends StatelessWidget {
                           builder: (context, value, child) {
                             return CustomTextField(
                               title: "password",
-                              labelText: "enter_password".tr(),
+                              hintText: "enter_password".tr(),
                               controller: cubit.passwordControllerSignUp,
                               isPassword: true,
                               onChanged: (v) {
@@ -107,7 +107,7 @@ class SignUpScreen extends StatelessWidget {
                           builder: (context, value, child) {
                             return CustomTextField(
                               title: "confirm_password",
-                              labelText: "enter_password".tr(),
+                              hintText: "enter_password".tr(),
                               controller: cubit.confirmPasswordController,
                               isPassword: true,
                               onChanged: (v) {

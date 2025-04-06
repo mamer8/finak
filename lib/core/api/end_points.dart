@@ -27,4 +27,9 @@ class EndPoints {
   static const String getMyFavUrl = '${baseUrl}user/get-my-fav';
   static const String addOrDeleteFavUrl = '${baseUrl}user/add-or-delete-fav';
   static const String getSettingsUrl = '${baseUrl}user/get-settings';
+  ///// Chat
+  static const String createRoomUrl = '${baseUrl}user/create-room';
+  static const String getRoomMessagesUrl = '${baseUrl}user/get-room-messages';
+  static const String getMyChatsUrl = '${baseUrl}user/get-my-chats';
+  static const String sendMessageUrl = '${baseUrl}user/send-message';
 }

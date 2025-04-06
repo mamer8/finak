@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       CustomTextField(
                         title: "password",
-                        labelText: "enter_password".tr(),
+                        hintText: "enter_password".tr(),
                         controller: cubit.passwordControllerLogin,
                         isPassword: true,
                         validator: (value) {

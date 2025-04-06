@@ -1,4 +1,5 @@
 import 'package:finak/features/add_offer/cubit/cubit.dart';
+import 'package:finak/features/chat/cubit/cubit.dart';
 import 'package:finak/features/favorite/cubit/cubit.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
@@ -84,6 +85,9 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider(
             create: (_) => injector.serviceLocator<NotificationsCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => injector.serviceLocator<ChatCubit>(),
           ),
         ],
         child: GetMaterialApp(

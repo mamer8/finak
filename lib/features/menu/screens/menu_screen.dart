@@ -94,6 +94,14 @@ class CustomMenu extends StatelessWidget {
                     ),
                   if (AppConst.isLogged)
                     CustmMenuRow(
+                      assetName: ImageAssets.messagesIcon,
+                      title: 'messages'.tr(),
+                      onTap: () {
+                        Navigator.pushNamed(context, Routes.messagesRoute);
+                      },
+                    ),
+                  if (AppConst.isLogged)
+                    CustmMenuRow(
                       assetName: ImageAssets.favoriteIcon,
                       title: 'favorite'.tr(),
                       onTap: () {

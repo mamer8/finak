@@ -12,7 +12,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 class CustomTextField extends StatefulWidget {
-  final String? labelText;
+  final String? hintText;
   final Function()? onTap;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
@@ -32,7 +32,7 @@ class CustomTextField extends StatefulWidget {
   //FocusNode myFocusNode = FocusNode();
   const CustomTextField({
     super.key,
-    this.labelText,
+    this.hintText,
     this.prefixIcon,
     this.validator,
     this.suffixIcon,
@@ -117,7 +117,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     fillColor: widget.enabled!
                         ? AppColors.textFiledBG
                         : AppColors.gray.withOpacity(0.5),
-                    hintText: widget.labelText,
+                    hintText: widget.hintText,
                     hintStyle: getRegularStyle(
                         color: AppColors.black, fontSize: 14.sp),
 

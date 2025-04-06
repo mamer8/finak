@@ -5,6 +5,8 @@ import 'package:finak/features/Auth/screens/new_password_screen.dart';
 import 'package:finak/features/Auth/screens/otp_screen.dart';
 import 'package:finak/features/Auth/screens/sign_up_screen.dart';
 import 'package:finak/features/add_offer/screens/add_offer_screen.dart';
+import 'package:finak/features/chat/screens/chat_screen.dart';
+import 'package:finak/features/chat/screens/my_messages_screen.dart';
 import 'package:finak/features/favorite/screens/favorite_screen.dart';
 import 'package:finak/features/main_screen/screens/main_screen.dart';
 import 'package:finak/features/menu/screens/language_screen.dart';
@@ -50,6 +52,9 @@ class Routes {
   //////////// Settings /////////////
   static const String languagesRoute = '/languages';
   static const String privacyPolicyRoute = '/privacy_policy';
+  ///////////// Chat /////////////
+   static const String chatRoute = '/chat';
+   static const String messagesRoute = '/messages';
 
 }
 
@@ -151,14 +156,19 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (context) => const PrivacyPolicyScreen(),
         );
-      // case Routes.detailsRoute:
-      //   final service = settings.arguments as ServicesModel;
-      //   return MaterialPageRoute(
-      //     // Extract the service model argument from the settings arguments map
-      //
-      //     builder: (context) => Details(service: service),
-      //   );
-      //
+      //////////// Chat /////////////
+      case Routes.chatRoute:
+        return MaterialPageRoute(
+          builder: (context) => const ChatScreen(),
+        );
+      case Routes.messagesRoute:
+        return MaterialPageRoute(
+          builder: (context) => const MyMessagesScreen(),
+        );
+      // case Routes.messagesRoute:
+    
+ 
+
 
       // return PageTransition(
       //   child: MainScreen(),

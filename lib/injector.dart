@@ -3,6 +3,8 @@ import 'package:finak/features/Auth/cubit/cubit.dart';
 import 'package:finak/features/Auth/data/login_repo.dart';
 import 'package:finak/features/add_offer/cubit/cubit.dart';
 import 'package:finak/features/add_offer/data/repo.dart';
+import 'package:finak/features/chat/cubit/cubit.dart';
+import 'package:finak/features/chat/data/repo.dart';
 import 'package:finak/features/favorite/cubit/cubit.dart';
 import 'package:finak/features/favorite/data/repo.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
@@ -102,6 +104,11 @@ Future<void> setup() async {
       serviceLocator(),
     ),
   );
+  serviceLocator.registerFactory(
+    () => ChatCubit(
+      serviceLocator(),
+    ),
+  );
 
 //!----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
@@ -117,6 +124,7 @@ Future<void> setup() async {
   serviceLocator.registerLazySingleton(() => FavoritesRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => ProfileRepo(serviceLocator()));
   serviceLocator.registerLazySingleton(() => LocationRepo(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => ChatRepo(serviceLocator()));
   serviceLocator
       .registerLazySingleton(() => NotificationsRepo(serviceLocator()));
 

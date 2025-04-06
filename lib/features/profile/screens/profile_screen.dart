@@ -101,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
                   50.h.verticalSpace,
                   CustomTextField(
                     title: "full_name",
-                    labelText: "enter_name".tr(),
+                    hintText: "enter_name".tr(),
                     controller: cubit.nameController,
                     onChanged: (value) {
                       cubit.changeProfile(true);
@@ -115,7 +115,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   CustomTextField(
                     title: "email",
-                    labelText: "enter_email".tr(),
+                    hintText: "enter_email".tr(),
                     isOptional: true,
                     enabled:
                         cubit.loginModel.data?.isSocial == 0 ? true : false,
@@ -204,7 +204,7 @@ class ProfileScreen extends StatelessWidget {
                                       fontSize: 18.sp,
                                       color: AppColors.primary)),
                             )
-                          : SizedBox(), 
+                          : SizedBox(),
                   30.h.verticalSpace,
                 ],
               ),

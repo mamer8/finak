@@ -49,7 +49,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 CustomTextField(
                   title: 'title'.tr(),
                   controller: c.titleController,
-                  labelText: 'enter_title'.tr(),
+                  hintText: 'enter_title'.tr(),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'enter_title'.tr();
@@ -67,7 +67,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                     title: 'price'.tr(),
                     isOptional: true,
                     controller: c.priceController,
-                    labelText: 'enter_price'.tr(),
+                    hintText: 'enter_price'.tr(),
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   )
@@ -77,7 +77,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   title: 'description'.tr(),
                   isMessage: true,
                   controller: c.descriptionController,
-                  labelText: 'enter_description'.tr(),
+                  hintText: 'enter_description'.tr(),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'enter_description'.tr();

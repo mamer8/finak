@@ -77,6 +77,7 @@ dependencies:
   flutter_html:
   country_pickers: ^3.0.1
   phone_numbers_parser: ^9.0.3
+  chat_bubbles: ^1.6.0
  
 
 

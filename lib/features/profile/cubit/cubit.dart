@@ -115,7 +115,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       }, (r) {
         if (r.status == 200 || r.status == 201) {
           loginModel = r;
-          // storeFCM();
+          storeFCM();
           if (r.data != null) {
             nameController.text = r.data!.name ?? '';
             emailController.text = r.data!.email ?? '';

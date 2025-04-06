@@ -33,7 +33,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     50.h.verticalSpace,
                     CustomTextField(
                       title: "new_password",
-                      labelText: "enter_password".tr(),
+                      hintText: "enter_password".tr(),
                       isPassword: true,
                       controller: cubit.newPasswordController,
                       onChanged: (v) {
@@ -54,7 +54,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     ),
                     CustomTextField(
                       title: "confirm_password",
-                      labelText: "enter_password".tr(),
+                      hintText: "enter_password".tr(),
                       controller: cubit.confirmNewPasswordController,
                       isPassword: true,
                       onChanged: (v) {

@@ -37,7 +37,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                   50.h.verticalSpace,
                   CustomTextField(
                     title: "current_password",
-                    labelText: "enter_password".tr(),
+                    hintText: "enter_password".tr(),
                     controller: cubit.passwordController,
                     isPassword: true,
                     validator: (value) {
@@ -51,7 +51,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                   ),
                   CustomTextField(
                     title: "new_password",
-                    labelText: "enter_password".tr(),
+                    hintText: "enter_password".tr(),
                     controller: cubit.newpasswordController,
                     isPassword: true,
                     validator: (value) {
@@ -68,7 +68,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                   ),
                   CustomTextField(
                     title: "confirm_password",
-                    labelText: "enter_password".tr(),
+                    hintText: "enter_password".tr(),
                     controller: cubit.confirmPasswordController,
                     isPassword: true,
                     validator: (value) {
