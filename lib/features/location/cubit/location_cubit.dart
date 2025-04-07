@@ -108,7 +108,7 @@ class LocationCubit extends Cubit<LocationState> {
       Marker(
         markerId: const MarkerId('selectedLocation'),
         icon: markerIcon != null
-            ? BitmapDescriptor.fromBytes(markerIcon!)
+            ? BitmapDescriptor.bytes(markerIcon!)
             : BitmapDescriptor.defaultMarker,
         position: LatLng(
           selectedLocation?.latitude ?? 0.0,
@@ -137,8 +137,8 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   Future<void> _loadMarkerIcon() async {
-    markerIcon = await _getBytesFromAsset(ImageAssets.pin, 40);
-    markerIconSelected = await _getBytesFromAsset(ImageAssets.pin, 50);
+    markerIcon = await _getBytesFromAsset(ImageAssets.pin, 30);
+    markerIconSelected = await _getBytesFromAsset(ImageAssets.pin, 40);
 
     emit(SetTransportationMarkersState());
   }

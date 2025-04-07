@@ -66,43 +66,45 @@ class _CustomSwiperState extends State<CustomSwiper> {
                         fit: BoxFit.cover,
                         borderRadius: 20.r,
                       ),
-                      Positioned(
-                        left: 20,
-                        bottom: 20,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: getWidthSize(context) * 0.5,
-                            minWidth: getWidthSize(context) * 0.3,
-                          ),
-                          child: Container(
-                            height: getHeightSize(context) * 0.1,
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(12),
-                              // border: Border.all(color: Colors.white, width: 2),
+                      if (widget.slider[index].body != null ||
+                          widget.slider[index].title != null)
+                        Positioned(
+                          left: 20,
+                          bottom: 20,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: getWidthSize(context) * 0.5,
+                              minWidth: getWidthSize(context) * 0.3,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                AutoSizeText(
-                                  widget.slider[index].title ?? '',
-                                  maxLines: 1,
-                                  style: getBoldStyle(color: Colors.white),
-                                ),
-                                SizedBox(height: 5),
-                                AutoSizeText(
-                                  (widget.slider[index].body ?? ''),
-                                  maxLines: 2,
-                                  style: getRegularStyle(
-                                      color: Colors.white, fontSize: 14.sp),
-                                ),
-                              ],
+                            child: Container(
+                              height: getHeightSize(context) * 0.1,
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(12),
+                                // border: Border.all(color: Colors.white, width: 2),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  AutoSizeText(
+                                    widget.slider[index].title ?? '',
+                                    maxLines: 1,
+                                    style: getBoldStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(height: 5),
+                                  AutoSizeText(
+                                    (widget.slider[index].body ?? ''),
+                                    maxLines: 2,
+                                    style: getRegularStyle(
+                                        color: Colors.white, fontSize: 14.sp),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 );

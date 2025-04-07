@@ -76,7 +76,7 @@ class _PositionMapState extends State<PositionMap> {
                                 cubit.selectedLocation!.latitude ?? 0.0,
                                 cubit.selectedLocation!.longitude ?? 0.0,
                               ),
-                              zoom: 10,
+                              zoom: 12,
                             ),
                             onMapCreated: (GoogleMapController controller) {
                               cubit.positionMapController = controller;

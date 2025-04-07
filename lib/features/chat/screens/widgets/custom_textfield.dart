@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:finak/core/exports.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -39,13 +40,11 @@ class _CustomMessageTextFieldState extends State<CustomMessageTextField> {
             Flexible(
               child: CustomTextField(
                 controller: cubit.messageController,
-                hintText: 'type_your_message'.tr(),
-             
-             
+                hintText: 'enter_your_message'.tr(),
                 onChanged: (value) {
-                   setState(() {
-                          cubit.messageController.text = value;
-                        });
+                  setState(() {
+                    cubit.messageController.text = value;
+                  });
                   // if (value.isNotEmpty) {
                   //   cubit.changeSendButtonState(true);
                   // } else {
@@ -59,23 +58,27 @@ class _CustomMessageTextFieldState extends State<CustomMessageTextField> {
               onTap: () async {
                 cubit.messageController.text.isNotEmpty
                     ? await cubit.sendMessage(
-                      receiverId: "5",
-                      roomId:  "5",
-                       )
+                        receiverId: "5",
+                        roomId: "5",
+                      )
                     : await cubit.pickImage(
-                      receiverId: "5",
-                      roomId:  "5",
+                        receiverId: "5",
+                        roomId: "5",
                       );
               },
               child: CircleAvatar(
-                minRadius: 10.w ,
-                maxRadius: 10.w,
                 backgroundColor: AppColors.primary,
-                child:Icon(
-                  cubit.messageController.text.isNotEmpty
-                      ? Icons.send
-                      : Icons.add,
-                  color: AppColors.white,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.identity()
+                    ..scale(
+                        context.locale.languageCode == 'ar' ? -1.0 : 1.0, 1.0),
+                  child: Icon(
+                    cubit.messageController.text.isNotEmpty
+                        ? CupertinoIcons.paperplane_fill
+                        : Icons.photo_camera,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
             ),

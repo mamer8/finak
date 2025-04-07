@@ -46,12 +46,11 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                     children: [
                       GoogleMap(
                         zoomControlsEnabled: true,
-                        padding: const EdgeInsets.only(bottom: 100.0),
+                        padding: EdgeInsets.only(
+                            bottom: cubit.selectedService != null
+                                ? kToolbarHeight + getHeightSize(context) * 0.21
+                                : kToolbarHeight + 20.h),
                         circles: cubit.circles,
-                        // indoorViewEnabled: true,
-                        // buildingsEnabled: false,
-                        // liteModeEnabled: true,
-                        // fortyFiveDegreeImageryEnabled: true,
                         mapType: MapType.normal,
                         initialCameraPosition: CameraPosition(
                           target: LatLng(

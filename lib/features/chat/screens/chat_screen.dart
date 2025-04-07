@@ -15,12 +15,12 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-   @override
-   void initState() {
-    context.read<ChatCubit>().getChat(
-        roomId: '1', isFirst: true);
-
-   
+  @override
+  void initState() {
+    // context.read<ChatCubit>().getChat(roomId: '1', isFirst: true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ChatCubit>().scrollToLastMessage();
+    });
     super.initState();
   }
 
@@ -35,23 +35,22 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: EdgeInsets.all(12.w),
           child: Column(
             children: [
-               Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                        child: ListView.builder(
-                          controller: cubit.scrollController,
-                          shrinkWrap: true,
-                          itemCount: 10,
-                          itemBuilder: (context, index) =>
-                              CustomMessageContainer(
-                           
-                           
-                          ),
-                        ),
-                      ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: ListView.builder(
+                    controller: cubit.scrollController,
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    itemBuilder: (context, index) => CustomMessageContainer(
+                      isSender: index % 2 == 0,
+                      isText: index % 3 == 0,
+                      id: index,
                     ),
-                    CustomMessageTextField(),
-              Text('AYA OMAR'),
+                  ),
+                ),
+              ),
+              CustomMessageTextField(),
             ],
           ),
         ),
