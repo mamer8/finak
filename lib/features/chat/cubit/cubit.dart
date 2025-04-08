@@ -1,11 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:finak/core/utils/appwidget.dart';
 import 'package:finak/features/Auth/data/models/default_model.dart';
+import 'package:finak/features/chat/data/models/add_message_model.dart';
+import 'package:finak/features/chat/data/models/create_room_model.dart';
+import 'package:finak/features/chat/data/models/get_messages_model.dart';
+import 'package:finak/features/chat/data/models/get_rooms_model.dart';
+import 'package:finak/features/services/cubit/cubit.dart';
+import 'package:finak/features/services/cubit/state.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/exports.dart';
 import '../data/repo.dart';
+import '../screens/chat_screen.dart';
 import 'state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
@@ -18,8 +26,6 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future pickImage({
     required String roomId,
-    required String receiverId,
- 
   }) async {
     emit(LoadinglogoNewImage());
     try {
@@ -29,7 +35,6 @@ class ChatCubit extends Cubit<ChatState> {
       // pickedImage = imageTemporary;
       sendMessage(
         roomId: roomId,
-        receiverId: receiverId,
         image: imageTemporary.path,
       );
       emit(LoadedPickedImageState());
@@ -38,61 +43,155 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  AddMessageModel? addMessageModel;
   sendMessage({
     required String roomId,
-    required String receiverId,
     String? image,
   }) async {
+    String message = messageController.text.trim();
+    messageController.clear();
+    if (message.isNotEmpty) {
+      getMessagesModel?.data?.add(
+        MessageModel(
+          message: message,
+          isMe: 1,
+          type: 0,
+          id: 0,
+        ),
+      );
+      scrollToLastMessage();
+    }
     emit(LoadingSendMessageState());
 
     final res = await api.sendMessage(
       roomId: roomId,
-      receiverId: receiverId,
-      messageOrPath: image ?? messageController.text,
+      messageOrPath: image ?? message,
       type: image != null ? 1 : 0, // 1 for image, 0 for text
     );
     res.fold((l) {
+      getMessagesModel?.data?.removeLast();
       emit(FailureSendMessageState());
     }, (r) {
-      messageController.clear();
-      getChat(
-        roomId: roomId,
-      );
-      Timer(Duration(milliseconds: 200), () {
-        scrollToLastMessage();
-      });
+      if (r.data?.message == null) {
+        getMessagesModel?.data?.removeLast();
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        if (image != null) {
+          getMessagesModel?.data?.add(r.data!);
+          getMessagesModel?.data?.sort((a, b) => a.id!.compareTo(b.id!));
+          scrollToLastMessage();
+        } else {
+          getMessages(
+            roomId: roomId,
+          );
+          // getMessagesModel?.data?.add(r.data!);
+          // getMessagesModel?.data?.sort((a, b) => a.id!.compareTo(b.id!));
+        }
+        // addMessageModel = r;
+        // getMessagesModel?.data?.add(r.data!);
+        // getMessagesModel?.data?.sort((a, b) => a.id!.compareTo(b.id!));
+        // getMessages(
+        //   roomId: roomId,
+        // );
+      }
 
       emit(SuccessSendMessageState());
     });
   }
 
-  DefaultPostModel? getChatModel;
-
   final ScrollController scrollController = ScrollController();
 
   scrollToLastMessage() {
-    //scrollController.position.maxScrollExtent
-    scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollController.animateTo(scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn);
+    });
     emit(ScrollToLastMessageState());
   }
 
-  Future getChat({required String roomId, bool isFirst = false}) async {
+  GetMessagesModel? getMessagesModel;
+  getMessages(
+      {required String roomId,
+      bool isFirst = false,
+      bool isNotification = false}) async {
+    if (isFirst) {
+      messageController.clear();
+      getMessagesModel = null;
+    }
     emit(LoadingGetChatState());
 
-    final res = await api.getChat(
+    final res = await api.getMessages(
       roomId: roomId,
     );
     res.fold((l) {
       emit(FailureGetChatState());
     }, (r) {
-      print(r.msg);
-      getChatModel = r;
-      if (isFirst && getChatModel != null) {
+      getMessagesModel = r;
+      if (isFirst && r.data != null) {
+        scrollToLastMessage();
+      } else if (isNotification && r.data != null) {
         scrollToLastMessage();
       }
       emit(SuccessGetChatState());
+    });
+  }
+
+  GetRoomsModel? getRoomsModel;
+  getMyChats() async {
+    emit(LoadingGetMyChatsState());
+
+    final res = await api.getMyChats();
+    res.fold((l) {
+      emit(FailureGetMyChatsState());
+    }, (r) {
+      getRoomsModel = r;
+      emit(SuccessGetMyChatsState());
+    });
+  }
+
+  CreateRoomModel? createRoomModel;
+  createRoom(
+    BuildContext context, {
+    required String recieverId,
+    required String recieverName,
+  }) async {
+    AppWidget.createProgressDialog(context);
+    emit(LoadingCreateRoomState());
+
+    final res = await api.createRoom(
+      recieverId: recieverId,
+    );
+    res.fold((l) {
+      Navigator.pop(context);
+      emit(FailureCreateRoomState());
+    }, (r) {
+      Navigator.pop(context);
+      if (r.data?.roomId != null) {
+        Navigator.pushNamed(context, Routes.chatRoute,
+            arguments: ChatScreenArguments(
+              r.data?.roomId ?? 0,
+              recieverName,
+            ));
+        if (context
+                .read<ServicesCubit>()
+                .getServiceDetailsModel
+                .data
+                ?.provider !=
+            null) {
+          context
+              .read<ServicesCubit>()
+              .getServiceDetailsModel
+              .data!
+              .provider!
+              .roomId = r.data?.roomId;
+          context.read<ServicesCubit>().emit(GetServiceDetailsSuccessState());
+        }
+      } else {
+        errorGetBar(r.msg ?? "error".tr());
+      }
+
+      emit(SuccessCreateRoomState());
     });
   }
 }

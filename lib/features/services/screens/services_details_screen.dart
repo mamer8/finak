@@ -1,5 +1,7 @@
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/no_data_widget.dart';
+import 'package:finak/features/chat/cubit/cubit.dart';
+import 'package:finak/features/chat/screens/chat_screen.dart';
 import 'package:finak/features/favorite/screens/widgets/fav_button.dart';
 import 'package:finak/features/services/data/models/get_services_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -106,15 +108,16 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                     ),
                                   ]),
                                   10.h.verticalSpace,
-                                  if (cubit.getServiceDetailsModel.data?.price !=
+                                  if (cubit
+                                          .getServiceDetailsModel.data?.price !=
                                       null)
-                                  Text(
-                                    '${cubit.getServiceDetailsModel.data?.price.toString() ?? "0"}'
-                                    " \$",
-                                    style: getMediumStyle(
-                                        fontSize: 18.sp,
-                                        color: AppColors.primary),
-                                  ),
+                                    Text(
+                                      '${cubit.getServiceDetailsModel.data?.price.toString() ?? "0"}'
+                                      " \$",
+                                      style: getMediumStyle(
+                                          fontSize: 18.sp,
+                                          color: AppColors.primary),
+                                    ),
                                   10.h.verticalSpace,
                                   Text(
                                     "location".tr(),
@@ -188,9 +191,7 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                                   "");
                                         },
                                       ),
-                                  ]
-                                   else ...
-                                  [
+                                  ] else ...[
                                     Divider(
                                       color: AppColors.gray,
                                     ),
@@ -266,9 +267,51 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                               ),
                                             ),
                                           10.w.horizontalSpace,
-                                          SvgPicture.asset(
-                                            ImageAssets.messageIcon,
-                                            width: 40.w,
+                                          InkWell(
+                                            onTap: () async {
+                                              if (cubit.getServiceDetailsModel
+                                                      .data?.provider?.roomId !=
+                                                  null) {
+                                                Navigator.pushNamed(
+                                                    context, Routes.chatRoute,
+                                                    arguments:
+                                                        ChatScreenArguments(
+                                                      cubit
+                                                              .getServiceDetailsModel
+                                                              .data
+                                                              ?.provider
+                                                              ?.roomId ??
+                                                          0,
+                                                      cubit
+                                                              .getServiceDetailsModel
+                                                              .data
+                                                              ?.provider
+                                                              ?.name ??
+                                                          "",
+                                                    ));
+                                              } else {
+                                                await context
+                                                    .read<ChatCubit>()
+                                                    .createRoom(context,
+                                                        recieverName: cubit
+                                                                .getServiceDetailsModel
+                                                                .data
+                                                                ?.provider
+                                                                ?.name ??
+                                                            "",
+                                                        recieverId: cubit
+                                                                .getServiceDetailsModel
+                                                                .data
+                                                                ?.provider
+                                                                ?.id
+                                                                .toString() ??
+                                                            "");
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              ImageAssets.messageIcon,
+                                              width: 40.w,
+                                            ),
                                           ),
                                         ]),
                                       ],

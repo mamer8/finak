@@ -158,8 +158,11 @@ class AppRoutes {
         );
       //////////// Chat /////////////
       case Routes.chatRoute:
+        final args = settings.arguments as ChatScreenArguments;
         return MaterialPageRoute(
-          builder: (context) => const ChatScreen(),
+          builder: (context) =>  ChatScreen( 
+            args: args,
+          ),
         );
       case Routes.messagesRoute:
         return MaterialPageRoute(

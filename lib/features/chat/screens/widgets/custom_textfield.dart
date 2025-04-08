@@ -10,9 +10,9 @@ import '../../cubit/state.dart';
 
 class CustomMessageTextField extends StatefulWidget {
   CustomMessageTextField({
-    super.key,
+    super.key, required this.roomId,
   });
-
+final String roomId;
   @override
   State<CustomMessageTextField> createState() => _CustomMessageTextFieldState();
 }
@@ -58,12 +58,11 @@ class _CustomMessageTextFieldState extends State<CustomMessageTextField> {
               onTap: () async {
                 cubit.messageController.text.isNotEmpty
                     ? await cubit.sendMessage(
-                        receiverId: "5",
-                        roomId: "5",
+                      
+                        roomId: widget.roomId,
                       )
                     : await cubit.pickImage(
-                        receiverId: "5",
-                        roomId: "5",
+                        roomId: widget.roomId,
                       );
               },
               child: CircleAvatar(

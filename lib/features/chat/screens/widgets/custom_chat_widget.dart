@@ -1,4 +1,5 @@
 import 'package:finak/core/exports.dart';
+import 'package:finak/features/chat/data/models/get_messages_model.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:photo_view/photo_view.dart';
@@ -7,68 +8,61 @@ import 'package:photo_view/photo_view_gallery.dart';
 class CustomMessageContainer extends StatelessWidget {
   const CustomMessageContainer({
     super.key,
-    required this.isSender,
-    required this.isText,
-    required this.id,
+    required this.messageModel,
   });
-  final bool isSender;
-  final bool isText;
-  final int id;
+  final MessageModel messageModel;
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          !isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      crossAxisAlignment: messageModel.isMe == 1
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.end,
       children: [
-        isText
+        messageModel.type == 0
             ? BubbleSpecialOne(
-                text: "i’m fine , how are you",
-                isSender: isSender,
-                color: isSender ? AppColors.primary : AppColors.grey8,
+                text: messageModel.message ?? "",
+                isSender: messageModel.isMe == 1,
+                color: messageModel.isMe == 1
+                    ? AppColors.primary
+                    : AppColors.grey8,
                 textStyle: getRegularStyle(
                     fontSize: 16.sp,
-                    color: isSender ? AppColors.white : AppColors.black),
+                    color: messageModel.isMe == 1
+                        ? AppColors.white
+                        : AppColors.black),
               )
             : BubbleNormalImage(
                 id: id.toString(),
                 image: CustomNetworkImage(
-                  image:
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCTY9yQsemri6TJEiZB-2n7UK--Yv5oPw6IA&s",
+                  image: messageModel.message ?? "",
+
                   width: getWidthSize(context) / 2,
                   // height: getSize(context) / 2,
                 ),
-                color: isSender ? AppColors.primary : AppColors.grey8,
-                isSender: isSender,
+                color: messageModel.isMe == 1
+                    ? AppColors.primary
+                    : AppColors.grey8,
+                isSender: messageModel.isMe == 1,
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ImageViewScreen(
-                        imageUrl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCTY9yQsemri6TJEiZB-2n7UK--Yv5oPw6IA&s",
+                        imageUrl: messageModel.message ?? "",
                       ),
                     ),
                   );
                 },
                 tail: true,
-              )
-        // Container(
-        //     alignment:
-        //         isSender ? Alignment.centerRight : Alignment.centerLeft,
-        //     // color: Colors.red,
-        //     // width: getSize(context),
-        //     child: CustomNetworkImage(
-        //       image:
-        //           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCTY9yQsemri6TJEiZB-2n7UK--Yv5oPw6IA&s",
-        //       width: getWidthSize(context) / 2,
-        //       // height: getSize(context) / 2,
-        //     ))
-        ,
+              ),
         Container(
-          alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: messageModel.isMe == 1
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            "10:00 AM",
+            messageModel.createdAt ?? "",
             style: getRegularStyle(
               color: AppColors.grey2,
               fontSize: 12.sp,

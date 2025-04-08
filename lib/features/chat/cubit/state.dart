@@ -11,4 +11,10 @@ class LoadingGetChatState extends ChatState {}
 class FailureGetChatState extends ChatState {}
 class SuccessGetChatState extends ChatState {}
 class ScrollToLastMessageState extends ChatState {}
+class LoadingGetMyChatsState extends ChatState {}
+class FailureGetMyChatsState extends ChatState {}
+class SuccessGetMyChatsState extends ChatState {}
+class LoadingCreateRoomState extends ChatState {}
+class FailureCreateRoomState extends ChatState {}
+class SuccessCreateRoomState extends ChatState {}
 

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,11 @@ class NotificationService {
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessage.listen((message) {
+      print("Foreground Message Received: ${message.notification?.title}");
+      print("Message Data: ${message.data}");
+
+      navigatorKey.currentState?.pushNamed(Routes.notificationsRoute);
+
       _showLocalNotification(
         title: message.notification?.title ?? '',
         body: message.notification?.body ?? '',
@@ -130,7 +136,8 @@ class NotificationService {
     required String body,
     String? payload,
   }) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
       'your_channel_id',
       'your_channel_name',
       channelDescription: 'your_channel_description',

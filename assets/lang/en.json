@@ -119,6 +119,8 @@
     "update_phone": "Update Phone",
     "messages": "Messages",
    
+    "no_messages": "There are no messages",
+    "image": "Image",
     "": "",
     "-": "-"
 }

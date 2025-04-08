@@ -130,33 +130,42 @@ class Media {
 }
 
 class Provider {
+  int ? id;
   String? name;
   String? image;
   String? postedAt;
   String? phone;
   dynamic email;
+  int? roomId;
 
   Provider({
     this.name,
+    this.id,
+
     this.image,
     this.postedAt,
     this.phone,
     this.email,
+    this.roomId,
   });
 
   factory Provider.fromJson(Map<String, dynamic> json) => Provider(
         name: json["name"],
+        id: json["id"],
         image: json["image"],
         postedAt: json["posted_at"],
         phone: json["phone"],
         email: json["email"],
+        roomId: json["room_id"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "id": id,
         "image": image,
         "posted_at": postedAt,
         "phone": phone,
         "email": email,
+        "room_id": roomId,
       };
 }

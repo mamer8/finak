@@ -32,4 +32,7 @@ class EndPoints {
   static const String getRoomMessagesUrl = '${baseUrl}user/get-room-messages';
   static const String getMyChatsUrl = '${baseUrl}user/get-my-chats';
   static const String sendMessageUrl = '${baseUrl}user/send-message';
+  ///////// Notifications
+  static const String getNotificationsUrl = '${baseUrl}user/get-notifications';
+  static const String markAsSeenUrl = '${baseUrl}user/see-notification';
 }
