@@ -39,6 +39,7 @@ class Data {
   int? notificationCount;
   String? email;
   int? userType;
+  int? status;
   int? isSocial;
   String? phone;
   String? image;
@@ -50,6 +51,7 @@ class Data {
     this.notificationCount,
     this.email,
     this.userType,
+    this.status,
     this.isSocial,
     this.phone,
     this.image,
@@ -62,6 +64,7 @@ class Data {
         notificationCount: json["notification_count"],
         email: json["email"],
         userType: json["user_type"],
+        status: json["status"],
         isSocial: json["is_social"],
         phone: json["phone"],
         image: json["image"],
@@ -74,6 +77,7 @@ class Data {
         "notification_count": notificationCount,
         "email": email,
         "user_type": userType,
+        "status": status,
         "is_social": isSocial,
         "phone": phone,
         "image": image,

@@ -385,15 +385,15 @@ class LoginCubit extends Cubit<LoginState> {
 
         await Preferences.instance.setUser(r);
         prefs.setBool("ISLOGGED", true);
-
         if (loginModel.data?.userType == 0) {
-          // 0 for user
+        context.read<ProfileCubit>(). storeFCM(); 
+
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
+       
         } else {
           errorGetBar("you_not_user".tr());
-          // Navigator.pushNamedAndRemoveUntil(
-          //     context, Routes.mainRoute, (route) => false);
+    
         }
       }
     });
@@ -422,12 +422,13 @@ class LoginCubit extends Cubit<LoginState> {
         await Preferences.instance.setUser(r);
         prefs.setBool("ISLOGGED", true);
         if (loginModel.data?.userType == 0) {
+          context.read<ProfileCubit>(). storeFCM(); 
+
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
         } else {
           errorGetBar("you_not_user".tr());
-          // Navigator.pushNamedAndRemoveUntil(
-          //     context, Routes.mainRoute, (route) => false);
+       
         }
       }
     });
@@ -468,13 +469,14 @@ class LoginCubit extends Cubit<LoginState> {
         await Preferences.instance.setUser(r);
         prefs.setBool("ISLOGGED", true);
         if (loginModel.data?.userType == 0) {
+          context.read<ProfileCubit>(). storeFCM(); 
+
           // 0 for user
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
         } else {
           errorGetBar("you_not_user".tr());
-          // Navigator.pushNamedAndRemoveUntil(
-          //     context, Routes.mainRoute, (route) => false);
+         
         }
       }
     });
@@ -533,7 +535,7 @@ class LoginCubit extends Cubit<LoginState> {
         emit(SuccessLoginState());
         successGetBar(r.msg);
         phoneControllerAddPhone.clear();
-        context.read<ProfileCubit>().getProfile();
+        context.read<ProfileCubit>().getProfile(context);
 
         Navigator.pop(context);
         Navigator.pop(context);

@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:finak/features/menu/screens/menu_screen.dart';
+import 'package:finak/features/profile/cubit/cubit.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import '../cubit/cubit.dart';
@@ -17,6 +21,22 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen((message) {
+      if (!mounted) return;
+      log("onMessage: ${message.data.toString()}");
+      if (message.data['reference_table'] != "rooms") {
+        context.read<ProfileCubit>().getProfile(context);
+      }
+      // if (message.data['reference_table'] == "general_offers") {
+      //   context.read<MainCubit>().getHomePage();
+      // }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var cubit = context.read<MainCubit>();

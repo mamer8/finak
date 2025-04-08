@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<HomeCubit>().getHome();
-    context.read<ProfileCubit>().getProfile();
+    context.read<ProfileCubit>().getProfile(context);
     if (context.read<ServicesCubit>().serviceTypesModel.data == null) {
       context.read<ServicesCubit>().getServiceTypes();
     }
@@ -107,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: AppColors.primary,
             onRefresh: () async {
               cubit.getHome();
+              context.read<ProfileCubit>().getProfile(context);
             },
             child: state is GetHomeErrorState
                 ? CustomNoDataWidget(

@@ -1,14 +1,20 @@
 import 'package:finak/features/add_offer/cubit/cubit.dart';
 import 'package:finak/features/chat/cubit/cubit.dart';
+import 'package:finak/features/chat/screens/chat_screen.dart';
 import 'package:finak/features/favorite/cubit/cubit.dart';
 import 'package:finak/features/home/cubit/cubit.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/menu/cubit/cubit.dart';
 import 'package:finak/features/my_offers/cubit/cubit.dart';
 import 'package:finak/features/notifications/cubit/cubit.dart';
+import 'package:finak/features/notifications/screens/notifications_screen.dart';
 import 'package:finak/features/on_boarding/cubit/onboarding_cubit.dart';
 import 'package:finak/features/profile/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
+import 'package:finak/features/services/data/models/get_services_model.dart';
+import 'package:finak/features/services/screens/services_details_screen.dart';
+import 'package:finak/features/splash/screens/splash_screen.dart';
+import 'package:finak/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -43,6 +49,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    NotificationService notificationService = NotificationService();
     // print(text);
 
     return MultiBlocProvider(
@@ -92,15 +99,31 @@ class _MyAppState extends State<MyApp> {
         ],
         child: GetMaterialApp(
           supportedLocales: context.supportedLocales,
+          navigatorKey: notificationService.navigatorKey,
           locale: context.locale,
           theme: appTheme(),
           themeMode: ThemeMode.light,
           darkTheme: ThemeData.light(),
-
-          // standard dark theme
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
           title: AppStrings.appName,
+          home: isWithNotification
+              ? notificationType == 'offers'
+                  ? ServicesDetailsScreen(
+                      args: ServiceDetailsArgs(
+                          isFromNotification: true,
+                          serviceModel: ServiceModel(
+                            id: int.tryParse(
+                              notificationId,
+                            ),
+                          )))
+                  : notificationType == 'rooms'
+                      ? ChatScreen(
+                          args: ChatScreenArguments(
+                              int.tryParse(notificationId) ?? 0, "",
+                              isFromNotifation: true))
+                      : NotificationsScreen()
+              : const SplashScreen(),
           onGenerateRoute: AppRoutes.onGenerateRoute,
         ));
   }

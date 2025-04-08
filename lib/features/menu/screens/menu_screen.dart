@@ -28,15 +28,12 @@ class CustomMenu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               30.h.verticalSpace,
-              InkWell(
-                onTap: () => profileCubit.getProfile(),
-                child: CustomNetworkImage(
-                    image: profileCubit.loginModel.data?.image ?? '',
-                    isUser: true,
-                    width: 100.w,
-                    height: 100.w,
-                    borderRadius: 50.w),
-              ),
+              CustomNetworkImage(
+                  image: profileCubit.loginModel.data?.image ?? '',
+                  isUser: true,
+                  width: 100.w,
+                  height: 100.w,
+                  borderRadius: 50.w),
               10.h.verticalSpace,
               Text(
                 AppConst.isLogged

@@ -106,7 +106,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   LoginModel loginModel = LoginModel();
-  getProfile() async {
+  getProfile(BuildContext context) async {
     if (AppConst.isLogged) {
       emit(GetAccountLoading());
       final res = await api.getProfile();
@@ -114,25 +114,32 @@ class ProfileCubit extends Cubit<ProfileState> {
         emit(GetAccountError());
       }, (r) {
         if (r.status == 200 || r.status == 201) {
-          loginModel = r;
-          storeFCM();
-          if (r.data != null) {
-            nameController.text = r.data!.name ?? '';
-            emailController.text = r.data!.email ?? '';
-            phoneController.text = r.data!.phone ?? '';
-            if (r.data!.phone == null) {
-              isPhoneHide = true;
-            } else {
-              isPhoneHide = false;
+          if (r.data?.status == 0) {
+            prefs.setBool("ISLOGGED", false);
+            Preferences.instance.clearUser();
+            Navigator.pushNamedAndRemoveUntil(
+                context, Routes.loginRoute, (route) => false);
+          } else {
+            loginModel = r;
+
+            if (r.data != null) {
+              nameController.text = r.data!.name ?? '';
+              emailController.text = r.data!.email ?? '';
+              phoneController.text = r.data!.phone ?? '';
+              if (r.data!.phone == null) {
+                isPhoneHide = true;
+              } else {
+                isPhoneHide = false;
+              }
+              // hidePhone = r.data!.hidePhone ?? false;
+              changeProfile(false);
+              checkIsPhoneUpdate();
+              if (r.data!.phone != null) splitPhoneNumber(r.data!.phone ?? '');
             }
-            // hidePhone = r.data!.hidePhone ?? false;
-            changeProfile(false);
-            checkIsPhoneUpdate();
-            if (r.data!.phone != null) splitPhoneNumber(r.data!.phone ?? '');
           }
         } else if (r.status == 401 || r.status == 407 || r.status == 403) {
           prefs.setBool("ISLOGGED", false);
-          // AppConst.isLogged = false;
+
           Preferences.instance.clearUser();
         }
         emit(GetAccountSuccess());

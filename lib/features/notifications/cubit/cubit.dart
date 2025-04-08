@@ -29,13 +29,17 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     res.fold((l) {
       emit(FailureMarkAsSeenState());
     }, (r) {
-      getNotifications();
+      if (r.status == 200 || r.status == 201) {
+         getNotifications();
       if (context.read<ProfileCubit>().loginModel.data != null) {
         context.read<ProfileCubit>().loginModel.data!.notificationCount =
             context.read<ProfileCubit>().loginModel.data!.notificationCount! -
                 1;
       }
       context.read<ProfileCubit>().emit(GetAccountSuccess());
+      }
+      
+     
 
       emit(SuccessMarkAsSeenState());
     });

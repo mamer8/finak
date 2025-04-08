@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/notifications/cubit/cubit.dart';
 import 'package:finak/features/notifications/data/models/get_notifications_model.dart';
+import 'package:finak/features/services/data/models/get_services_model.dart';
+import 'package:finak/features/services/screens/services_details_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomNotificationCard extends StatelessWidget {
   const CustomNotificationCard({
@@ -12,10 +17,55 @@ class CustomNotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.read<NotificationsCubit>().markAsSeen(
-              context,
-              notificationId: notificationModel.id.toString(),
-            );
+        log(notificationModel.referenceTable.toString());
+        if (notificationModel.isSeen == 0) {
+          notificationModel.isSeen = 1;
+          context.read<NotificationsCubit>().markAsSeen(
+                context,
+                notificationId: notificationModel.id.toString(),
+              );
+        }
+        if (notificationModel.referenceTable == 'offers') {
+          Navigator.pushNamed(context, Routes.servicesDetailsRoute,
+              arguments: ServiceDetailsArgs(
+                serviceModel: ServiceModel(
+                  id: notificationModel.referenceId,
+                ),
+              ));
+        } else if (notificationModel.referenceTable == 'general_offers' &&
+            notificationModel.referenceLink != null) {
+          String url = notificationModel.referenceLink ?? '';
+
+          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.r)),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "notification_details".tr(),
+                      style: TextStyle(
+                          fontSize: 18.sp, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close, color: Colors.black),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                content: Text(
+                  notificationModel.body ?? "",
+                  style: TextStyle(fontSize: 14.sp),
+                ),
+              );
+            },
+          );
+        }
       },
       child: Container(
         decoration: BoxDecoration(

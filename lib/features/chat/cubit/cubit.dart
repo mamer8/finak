@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:finak/core/utils/appwidget.dart';
@@ -99,7 +100,7 @@ class ChatCubit extends Cubit<ChatState> {
     });
   }
 
-  final ScrollController scrollController = ScrollController();
+   ScrollController scrollController = ScrollController();
 
   scrollToLastMessage() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -109,12 +110,22 @@ class ChatCubit extends Cubit<ChatState> {
     });
     emit(ScrollToLastMessageState());
   }
+initScroll () {
+ scrollController = ScrollController();
+  emit(ScrollToLastMessageState());
+}
+  disposeScrollController() {
+    scrollController.dispose();
+    emit(ScrollToLastMessageState());
+  }
 
   GetMessagesModel? getMessagesModel;
   getMessages(
       {required String roomId,
       bool isFirst = false,
       bool isNotification = false}) async {
+        log("isFirst : $isFirst");
+        log ("isNotification : $isNotification"); 
     if (isFirst) {
       messageController.clear();
       getMessagesModel = null;
@@ -128,7 +139,7 @@ class ChatCubit extends Cubit<ChatState> {
       emit(FailureGetChatState());
     }, (r) {
       getMessagesModel = r;
-      if (isFirst && r.data != null) {
+      if (isFirst && r.data != null && r.data!.isNotEmpty) {
         scrollToLastMessage();
       } else if (isNotification && r.data != null) {
         scrollToLastMessage();
@@ -136,7 +147,6 @@ class ChatCubit extends Cubit<ChatState> {
       emit(SuccessGetChatState());
     });
   }
-
   GetRoomsModel? getRoomsModel;
   getMyChats() async {
     emit(LoadingGetMyChatsState());

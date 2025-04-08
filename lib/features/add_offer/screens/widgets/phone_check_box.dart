@@ -15,7 +15,7 @@ class _CustomPhoneCheckBoxState extends State<CustomPhoneCheckBox> {
   @override
   void initState() {
     if (context.read<ProfileCubit>().loginModel.data == null) {
-      context.read<ProfileCubit>().getProfile();
+      context.read<ProfileCubit>().getProfile(context);
     }
     super.initState();
   }

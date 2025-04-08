@@ -39,6 +39,7 @@ class NotificationModel {
     String? body;
     int? referenceId;
     String? referenceTable;
+    String? referenceLink;
     String? createdAt;
 
     NotificationModel({
@@ -48,6 +49,7 @@ class NotificationModel {
         this.body,
         this.referenceId,
         this.referenceTable,
+        this.referenceLink,
         this.createdAt,
     });
 
@@ -58,6 +60,7 @@ class NotificationModel {
         body: json["body"],
         referenceId: json["reference_id"],
         referenceTable: json["reference_table"],
+        referenceLink: json["reference_link"],
         createdAt: json["created_at"],
     );
 
@@ -68,6 +71,7 @@ class NotificationModel {
         "body": body,
         "reference_id": referenceId,
         "reference_table": referenceTable,
+        "reference_link": referenceLink,
         "created_at": createdAt,
     };
 }

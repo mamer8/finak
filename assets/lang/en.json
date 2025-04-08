@@ -1,6 +1,6 @@
 {
     "login": "Login",
-    "welcome_back": "Welcome come Back To FINAK . ",
+    "welcome_back": "Welcome Back To FINAK . ",
     "phone": "Phone Number",
     "enter_phone": "Enter Your Phone",
     "password": "Password",
@@ -121,6 +121,7 @@
    
     "no_messages": "There are no messages",
     "image": "Image",
+    "notification_details": "Notification Details",
     "": "",
     "-": "-"
 }

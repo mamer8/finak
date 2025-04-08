@@ -8,8 +8,9 @@ import 'package:photo_view/photo_view_gallery.dart';
 class CustomDetailsSwiper extends StatefulWidget {
   final List<String> images;
   final String title;
+  final void Function()? onTap;
   const CustomDetailsSwiper(
-      {super.key, required this.images, required this.title});
+      {super.key, required this.images, required this.title, this.onTap});
 
   @override
   _CustomDetailsSwiperState createState() => _CustomDetailsSwiperState();
@@ -89,9 +90,7 @@ class _CustomDetailsSwiperState extends State<CustomDetailsSwiper> {
             child: Row(
               children: [
                 InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+                  onTap: widget.onTap,
                   child: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
