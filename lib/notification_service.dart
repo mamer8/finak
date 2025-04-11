@@ -9,9 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:finak/config/routes/app_routes.dart';
 import 'package:finak/core/preferences/preferences.dart';
- bool isWithNotification = false;
-  String notificationId = "0";
-  String notificationType = "";
+ 
+   RemoteMessage? initialMessageRecieved;
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
 
@@ -43,9 +42,8 @@ class NotificationService {
     // Handle when app is completely closed and opened via notification
     RemoteMessage? initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
-      isWithNotification = true;
-      notificationType = initialMessage.data['reference_table'] ?? "";
-      notificationId = initialMessage.data['reference_id'] ?? "";
+      initialMessageRecieved = initialMessage;
+    
     }
 
     // Handle notification click when app is in background

@@ -107,20 +107,23 @@ class _MyAppState extends State<MyApp> {
           localizationsDelegates: context.localizationDelegates,
           debugShowCheckedModeBanner: false,
           title: AppStrings.appName,
-          home: isWithNotification
-              ? notificationType == 'offers'
+          home: initialMessageRecieved != null
+              ? initialMessageRecieved!.data['reference_table'] == 'offers'
                   ? ServicesDetailsScreen(
                       args: ServiceDetailsArgs(
-                          isFromNotification: true,
-                          serviceModel: ServiceModel(
-                            id: int.tryParse(
-                              notificationId,
-                            ),
-                          )))
-                  : notificationType == 'rooms'
+                      isFromNotification: true,
+                      serviceModel: ServiceModel(
+                        id: int.tryParse(
+                            initialMessageRecieved!.data['reference_id']),
+                      ),
+                    ))
+                  : initialMessageRecieved!.data['reference_table'] == 'rooms'
                       ? ChatScreen(
                           args: ChatScreenArguments(
-                              int.tryParse(notificationId) ?? 0, "",
+                              int.tryParse(initialMessageRecieved!
+                                      .data['reference_id']) ??
+                                  0,
+                              initialMessageRecieved!.data['sender_name'] ?? "",
                               isFromNotifation: true))
                       : NotificationsScreen()
               : const SplashScreen(),
