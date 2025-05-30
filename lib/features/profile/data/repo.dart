@@ -37,6 +37,21 @@ class ProfileRepo {
       return Left(ServerFailure());
     }
   }
+  Future<Either<Failure, DefaultPostModel>> toggleLanguage() async {
+      String lang = await Preferences.instance.getSavedLang();
+
+    log("lang =  $lang");
+
+    try {
+      var response = await api.post(EndPoints.toggleLanguageUrl, body: {
+        'language':  lang,
+        
+      });
+      return Right(DefaultPostModel.fromJson(response));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 
   Future<Either<Failure, LoginModel>> updateUserData(
       {required String name, required String email, String? imagePath}) async {

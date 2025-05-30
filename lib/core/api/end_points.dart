@@ -11,6 +11,7 @@ class EndPoints {
   static const String addPhoneUrl = '${baseUrl}user/update-phone';
   static const String logoutUrl = '${baseUrl}user/logout';
   static const String fcmUrl = '${baseUrl}user/store-fcm';
+  static const String toggleLanguageUrl = '${baseUrl}user/toggle-language';
   static const String deleteAccountUrl = '${baseUrl}user/delete-account';
   static const String updateProfileUrl = '${baseUrl}user/update-profile';
   static const String changePasswordUrl = '${baseUrl}user/change-password';

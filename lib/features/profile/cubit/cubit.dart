@@ -135,6 +135,8 @@ class ProfileCubit extends Cubit<ProfileState> {
               changeProfile(false);
               checkIsPhoneUpdate();
               if (r.data!.phone != null) splitPhoneNumber(r.data!.phone ?? '');
+
+              toggleLanguage();
             }
           }
         } else if (r.status == 401 || r.status == 407 || r.status == 403) {
@@ -150,6 +152,16 @@ class ProfileCubit extends Cubit<ProfileState> {
   storeFCM() async {
     emit(GetAccountLoading());
     final response = await api.storeFcm();
+    response.fold((l) {
+      emit(GetAccountError());
+    }, (r) {
+      emit(GetAccountSuccess());
+    });
+  }
+
+  toggleLanguage() async {
+    emit(GetAccountLoading());
+    final response = await api.toggleLanguage();
     response.fold((l) {
       emit(GetAccountError());
     }, (r) {
