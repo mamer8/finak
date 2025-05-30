@@ -101,7 +101,7 @@ class CustomEditUploadImageWidget extends StatelessWidget {
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(12)),
                                       child:
-                                          CustomUploadedImageWidget(imgPath: e),
+                                          CustomUploadedImageWidget(imgPath: e.image),
                                     ),
                                   ),
                                 ),

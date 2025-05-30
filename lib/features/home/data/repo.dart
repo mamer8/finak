@@ -8,7 +8,7 @@ class HomeRepo {
   Future<Either<Failure, GetHomeModel>> getHomeData({String? country}) async {
     try {
       var response = await api.get(EndPoints.homeUrl, queryParameters: {
-        // if (country != null && country != 'Unknown') 'country': country,
+        if (country != null && country != 'Unknown') 'country': country,
       });
       return Right(GetHomeModel.fromJson(response));
     } on ServerException {

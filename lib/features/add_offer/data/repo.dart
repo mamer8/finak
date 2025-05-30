@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:finak/core/api/base_api_consumer.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/features/Auth/data/models/default_model.dart';
+import 'package:finak/features/services/data/models/get_service_details_model.dart';
 import 'package:finak/features/services/data/models/service_types_model.dart';
 import 'package:finak/features/services/data/models/sub_service_types_model.dart';
 
@@ -71,7 +72,7 @@ class AddOfferRepo {
     required String long,
     required String locationName,
     String? country,
-    required List<String> media,
+    required List<MediaModel> media,
     required String price,
     required String description,
     required String title,
@@ -89,7 +90,11 @@ class AddOfferRepo {
         'country'  : country,
         'is_phone_hide': isPhoneHide, //0,1==0:no 1:yes
         for (int i = 0; i < media.length; i++)
-          'media[$i]': await MultipartFile.fromFile(media[i]),
+          'media[$i][id]': media[i].id,
+          for (int i = 0; i < media.length; i++)
+          'media[$i][image]':media[i].id == null? await MultipartFile.fromFile(media[i].image!)
+          : media[i].image,
+          
       } ,
        formDataIsEnabled: true
       );

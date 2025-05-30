@@ -191,8 +191,8 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                                         .data?.isOpen
                                                         .toString() ==
                                                     "0"
-                                                ? "close".tr()
-                                                : "open".tr(),
+                                                ? "closed".tr()
+                                                : "opened".tr(),
                                             style: getRegularStyle(
                                                 fontSize: 14.sp,
                                                 color: AppColors.secondPrimary))

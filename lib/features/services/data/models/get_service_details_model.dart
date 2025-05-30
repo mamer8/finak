@@ -49,7 +49,7 @@ class ServiceDataModel {
   bool? isFav;
   int? isOpen;
   int? status;
-  List<Media>? media;
+  List<MediaModel>? media;
   bool? isMine;
   Provider? provider;
   String? serviceType;
@@ -91,7 +91,7 @@ class ServiceDataModel {
         status: json["status"],
         media: json["media"] == null
             ? []
-            : List<Media>.from(json["media"]!.map((x) => Media.fromJson(x))),
+            : List<MediaModel>.from(json["media"]!.map((x) => MediaModel.fromJson(x))),
         isMine: json["is_mine"],
         provider: json["provider"] == null
             ? null
@@ -120,16 +120,16 @@ class ServiceDataModel {
       };
 }
 
-class Media {
+class MediaModel {
   int? id;
   String? image;
 
-  Media({
+  MediaModel({
     this.id,
     this.image,
   });
 
-  factory Media.fromJson(Map<String, dynamic> json) => Media(
+  factory MediaModel.fromJson(Map<String, dynamic> json) => MediaModel(
         id: json["id"],
         image: json["image"],
       );

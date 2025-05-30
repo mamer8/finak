@@ -57,7 +57,7 @@
     "clear": "Clear",
     "apply": "Apply",
     "close": "Close",
-    "open": "Opened",
+    "open": "Open",
     "closed": "Closed",
     "update": "Update",
     "change_password": "Change Password",
@@ -122,6 +122,9 @@
     "no_messages": "There are no messages",
     "image": "Image",
     "notification_details": "Notification Details",
+    "update_offer": "Update Offer",
+    "opened": "Opened",
+    "edit": "Edit",
     "": "",
     "-": "-"
 }

@@ -42,8 +42,7 @@ class _UpdateOfferScreenState extends State<UpdateOfferScreen> {
             model.subServiceType ?? '',
           );
       context.read<AddOfferCubit>().updatedImages =
-          model.media?.map((e) => e.image ?? '').toList() ?? [];
-
+          model.media?.map((e) => e).toList() ?? [];
       context.read<ProfileCubit>().isPhoneHide = model.isPhoneHide == 1;
     }
   }
@@ -135,14 +134,15 @@ class _UpdateOfferScreenState extends State<UpdateOfferScreen> {
                 CustomPhoneCheckBox(),
                 30.verticalSpace,
                 CustomButton(
-                  title: "add".tr(),
+                  title: "update".tr(),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      // if (c.uploadedImages.isEmpty) {
-                      //   errorGetBar('add_images'.tr());
-                      //   return;
-                      // } else
-                      if (context.read<LocationCubit>().selectedLocation ==
+                      if (c.updatedImages.isEmpty) {
+                        errorGetBar('add_images'.tr());
+                        return;
+                      } else if (context
+                              .read<LocationCubit>()
+                              .selectedLocation ==
                           null) {
                         errorGetBar('select_location'.tr());
                       } else {

@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:finak/core/utils/appwidget.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
+import 'package:finak/features/services/data/models/get_service_details_model.dart';
 import 'package:finak/features/services/data/models/service_types_model.dart';
 import 'package:finak/features/services/data/models/sub_service_types_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/exports.dart';
@@ -58,7 +58,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
   }
 
   List<File> uploadedImages = [];
-  List<String> updatedImages = [];
+  List<MediaModel> updatedImages = [];
   Future<void> pickImages(BuildContext context, bool isGallery,
       {bool isUpdate = false}) async {
     final picker = ImagePicker();
@@ -69,7 +69,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
         if (isUpdate) {
           updatedImages.addAll(
-            pickedFiles.map((file) => file.path).toList(),
+            pickedFiles.map((file) => MediaModel(image: file.path)).toList(),
           );
           emit(FilePickedSuccessfully());
           log("updatedImages: $updatedImages");
@@ -88,7 +88,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
 
       if (pickedFile != null) {
         if (isUpdate) {
-          updatedImages.add(pickedFile.path);
+          updatedImages.add(MediaModel(image: pickedFile.path));
           emit(FilePickedSuccessfully());
           log("updatedImages: $updatedImages");
         } else {
@@ -109,8 +109,8 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     emit(FileRemovedSuccessfully());
   }
 
-  removeUpdatedImage(String path) {
-    updatedImages.remove(path);
+  removeUpdatedImage(MediaModel media) {
+    updatedImages.remove(media);
     emit(FileRemovedSuccessfully());
   }
 
@@ -258,7 +258,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
               .toString() ??
           "0",
       locationName: context.read<LocationCubit>().address,
-      media: uploadedImages.map((e) => e.path).toList(),
+      media: updatedImages.map((e) => e).toList(),
       price: updatedpriceController.text,
       description: updateddescriptionController.text,
       title: updatedtitleController.text,
