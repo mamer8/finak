@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:finak/core/utils/appwidget.dart';
@@ -19,9 +20,8 @@ class AddOfferCubit extends Cubit<AddOfferState> {
 
   /// pick image from gallery or camera
 
-  void showImageSourceDialog(
-    BuildContext context,
-  ) async {
+  void showImageSourceDialog(BuildContext context,
+      {bool isUpdate = false}) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -33,7 +33,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                pickImages(context, true);
+                pickImages(context, true, isUpdate: isUpdate);
               },
               child: Text(
                 'gallery'.tr(),
@@ -43,7 +43,7 @@ class AddOfferCubit extends Cubit<AddOfferState> {
             ),
             TextButton(
               onPressed: () {
-                pickImages(context, false);
+                pickImages(context, false, isUpdate: isUpdate);
               },
               child: Text(
                 "camera".tr(),
@@ -57,40 +57,28 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     );
   }
 
-  // removeImage(File file) {
-  //   uploadedImage.remove(file);
-
-  //   emit(FileRemovedSuccessfully());
-  // }
-
-  // List<File> uploadedImage = [];
-
-  // Future pickImage(BuildContext context, bool isGallery) async {
-  //   final picker = ImagePicker();
-  //   final pickedFile = await picker.pickImage(
-  //       source: isGallery ? ImageSource.gallery : ImageSource.camera);
-
-  //   if (pickedFile != null) {
-  //     uploadedImage.add(File(pickedFile.path));
-
-  //     emit(FilePickedSuccessfully());
-  //   } else {
-  //     emit(FileNotPicked());
-  //   }
-  //   Navigator.pop(context);
-  // }
-
   List<File> uploadedImages = [];
-
-  Future<void> pickImages(BuildContext context, bool isGallery) async {
+  List<String> updatedImages = [];
+  Future<void> pickImages(BuildContext context, bool isGallery,
+      {bool isUpdate = false}) async {
     final picker = ImagePicker();
 
     if (isGallery) {
       final List<XFile>? pickedFiles = await picker.pickMultiImage();
 
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
-        uploadedImages.addAll(pickedFiles.map((file) => File(file.path)));
-        emit(FilePickedSuccessfully());
+        if (isUpdate) {
+          updatedImages.addAll(
+            pickedFiles.map((file) => file.path).toList(),
+          );
+          emit(FilePickedSuccessfully());
+          log("updatedImages: $updatedImages");
+        }
+        {
+          uploadedImages.addAll(pickedFiles.map((file) => File(file.path)));
+          log("uploadedImages: $uploadedImages");
+          emit(FilePickedSuccessfully());
+        }
       } else {
         emit(FileNotPicked());
       }
@@ -99,8 +87,15 @@ class AddOfferCubit extends Cubit<AddOfferState> {
           await picker.pickImage(source: ImageSource.camera);
 
       if (pickedFile != null) {
-        uploadedImages.add(File(pickedFile.path));
-        emit(FilePickedSuccessfully());
+        if (isUpdate) {
+          updatedImages.add(pickedFile.path);
+          emit(FilePickedSuccessfully());
+          log("updatedImages: $updatedImages");
+        } else {
+          uploadedImages.add(File(pickedFile.path));
+          log("uploadedImages: $uploadedImages");
+          emit(FilePickedSuccessfully());
+        }
       } else {
         emit(FileNotPicked());
       }
@@ -109,9 +104,13 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     Navigator.pop(context);
   }
 
-  removeImage(File file) {
+  removeUploadedImage(File file) {
     uploadedImages.remove(file);
+    emit(FileRemovedSuccessfully());
+  }
 
+  removeUpdatedImage(String path) {
+    updatedImages.remove(path);
     emit(FileRemovedSuccessfully());
   }
 

@@ -65,6 +65,7 @@ class CustomUploadImageWidget extends StatelessWidget {
                           if (cubit.uploadedImages.length < 7) {
                             cubit.showImageSourceDialog(
                               context,
+                              
                             );
                           } else {
                             errorGetBar("لقد تعديت الحد الاقصى");
@@ -99,7 +100,7 @@ class CustomUploadImageWidget extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(12)),
-                                      child: CustomUploadedImageWidget(img: e),
+                                      child: CustomUploadedImageWidget(imgPath: e.path),
                                     ),
                                   ),
                                 ),
@@ -108,7 +109,7 @@ class CustomUploadImageWidget extends StatelessWidget {
                                   end: -8,
                                   child: GestureDetector(
                                     onTap: () {
-                                      cubit.removeImage(e);
+                                      cubit.removeUploadedImage(e);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

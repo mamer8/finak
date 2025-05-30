@@ -62,9 +62,10 @@ class CustomEditUploadImageWidget extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
                       child: GestureDetector(
                         onTap: () {
-                          if (cubit.uploadedImages.length < 7) {
+                          if (cubit.updatedImages.length < 7) {
                             cubit.showImageSourceDialog(
                               context,
+                              isUpdate: true,
                             );
                           } else {
                             errorGetBar("لقد تعديت الحد الاقصى");
@@ -73,7 +74,7 @@ class CustomEditUploadImageWidget extends StatelessWidget {
                         child: CustomDocumentWidget(),
                       ),
                     ),
-                    ...cubit.uploadedImages.map(
+                    ...cubit.updatedImages.map(
                       (e) => Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 3.w, vertical: 3.h),
@@ -99,7 +100,8 @@ class CustomEditUploadImageWidget extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(12)),
-                                      child: CustomUploadedImageWidget(img: e),
+                                      child:
+                                          CustomUploadedImageWidget(imgPath: e),
                                     ),
                                   ),
                                 ),
@@ -108,7 +110,7 @@ class CustomEditUploadImageWidget extends StatelessWidget {
                                   end: -8,
                                   child: GestureDetector(
                                     onTap: () {
-                                      cubit.removeImage(e);
+                                      cubit.removeUpdatedImage(e);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

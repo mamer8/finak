@@ -24,9 +24,7 @@ class _UpdateOfferScreenState extends State<UpdateOfferScreen> {
   @override
   void initState() {
     super.initState();
-
     final model = widget.serviceDataModel;
-
     if (model != null) {
       final latitude = double.tryParse(model.lat ?? '') ?? 0.0;
       final longitude = double.tryParse(model.long ?? '') ?? 0.0;
@@ -43,6 +41,8 @@ class _UpdateOfferScreenState extends State<UpdateOfferScreen> {
             model.serviceType ?? '',
             model.subServiceType ?? '',
           );
+      context.read<AddOfferCubit>().updatedImages =
+          model.media?.map((e) => e.image ?? '').toList() ?? [];
 
       context.read<ProfileCubit>().isPhoneHide = model.isPhoneHide == 1;
     }
