@@ -6,8 +6,8 @@ import 'package:finak/features/add_offer/cubit/state.dart';
 import 'custom_upload_decument.dart';
 import 'custom_uploaded_image.dart';
 
-class ImagesWidegt extends StatelessWidget {
-  const ImagesWidegt({
+class CustomEditUploadImageWidget extends StatelessWidget {
+  const CustomEditUploadImageWidget({
     super.key,
   });
 

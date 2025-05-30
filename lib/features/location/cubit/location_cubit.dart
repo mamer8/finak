@@ -1,7 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:developer';
+import 'dart:developer' as developer;
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -35,7 +36,7 @@ class LocationCubit extends Cubit<LocationState> {
   GoogleMapController? mapController;
   GoogleMapController? positionMapController;
 
-  String country = "country";
+  // String country = "country";
   String city = "city";
   String address = "address";
   String address2 = "address2";
@@ -167,7 +168,7 @@ class LocationCubit extends Cubit<LocationState> {
         CameraUpdate.newLatLng(latLng),
       );
 
-      _setSelectedPositionedLocation(latLng, context);
+      setSelectedPositionedLocation(latLng, context);
     }
   }
 
@@ -184,12 +185,21 @@ class LocationCubit extends Cubit<LocationState> {
     }
   }
 
-  void _setSelectedPositionedLocation(LatLng latLng, BuildContext? context) {
+  void setSelectedPositionedLocation(LatLng latLng, BuildContext? context) {
     selectedLocation = loc.LocationData.fromMap({
       "latitude": latLng.latitude,
       "longitude": latLng.longitude,
     });
     _getAddressFromLatLng(latLng.latitude, latLng.longitude);
+    _setTransportationMarkers();
+    emit(SetSelectedLocationState());
+  }
+  void setSelectedPositionedLocationToDefault( ) {
+    selectedLocation = loc.LocationData.fromMap({
+      "latitude": currentLocation?.latitude ?? 0.0,
+      "longitude": currentLocation?.longitude ?? 0.0,
+    });
+    _getAddressFromLatLng(selectedLocation!.latitude ?? 0.0, selectedLocation!.longitude ?? 0.0);
     _setTransportationMarkers();
     emit(SetSelectedLocationState());
   }
@@ -211,7 +221,7 @@ class LocationCubit extends Cubit<LocationState> {
           await placemarkFromCoordinates(latitude, longitude);
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks.first;
-        country = place.country ?? "";
+        // country = place.country ?? "";
         city = place.locality ?? "";
         address2 =
             "${place.street}, ${place.locality}, ${place.postalCode}, ${place.country}, ${place.administrativeArea}, ${place.name}, ${place.subLocality}, ${place.subThoroughfare}";
@@ -224,6 +234,21 @@ class LocationCubit extends Cubit<LocationState> {
       debugPrint("Error: ${e.toString()}");
       emit(ErrorCurrentLocationAddressState());
     }
+    _getCountryInEnglish();
+  }
+
+  String? country;
+  Future<void> _getCountryInEnglish() async {
+    if (selectedLocation == null) {
+      print("Current location is not available.");
+      return;
+    }
+    country = await api.getCountryInEnglish(
+      selectedLocation!.latitude ?? 0.0,
+      selectedLocation!.longitude ?? 0.0,
+    );
+    emit(GetCurrentLocationAddressState());
+    developer.log("Country: $country");
   }
 
   void _showLocationPermissionDialog(BuildContext context) {
@@ -251,6 +276,62 @@ class LocationCubit extends Cubit<LocationState> {
 
   TextEditingController searchController = TextEditingController();
   double currentValue = 2;
+  double mapZoom = 12;
+  // void setMapZoom() {
+
+  //   double newZoom = (16 - (currentValue / 6)).clamp(5.0, 16.0);
+
+  //   mapZoom = newZoom;
+
+  //   if (searchMapController != null) {
+  //     searchMapController!.animateCamera(
+  //       CameraUpdate.newCameraPosition(
+  //         CameraPosition(
+  //           target: LatLng(
+  //             selectedLocation?.latitude ?? 0.0,
+  //             selectedLocation?.longitude ?? 0.0,
+  //           ),
+  //           zoom: mapZoom,
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //   emit(SetMapZoomState());
+  // }
+
+  void setMapZoom() {
+    final double radiusInMeters = currentValue * 1000;
+    final LatLng center = LatLng(
+      selectedLocation?.latitude ?? 0.0,
+      selectedLocation?.longitude ?? 0.0,
+    );
+
+    final double lat = center.latitude;
+    final double lng = center.longitude;
+
+    // Earth radius in meters
+    const double earthRadius = 6378137.0;
+
+    // Angular distance in radians on a great circle
+    double angularDistance = radiusInMeters / earthRadius;
+
+    double latDelta = angularDistance * (180 / pi);
+    double lngDelta = angularDistance * (180 / pi) / cos(lat * pi / 180);
+
+    LatLng southWest = LatLng(lat - latDelta, lng - lngDelta);
+    LatLng northEast = LatLng(lat + latDelta, lng + lngDelta);
+
+    final bounds = LatLngBounds(southwest: southWest, northeast: northEast);
+
+    if (searchMapController != null) {
+      searchMapController!.animateCamera(
+        CameraUpdate.newLatLngBounds(bounds, 50), // 50 = padding in pixels
+      );
+    }
+
+    emit(SetMapZoomState());
+  }
+
   changeValue(double value) {
     currentValue = value;
     setCircle();
@@ -341,7 +422,7 @@ class LocationCubit extends Cubit<LocationState> {
         // fillColor: Colors.black,
       ),
     };
-    log("circles: $circles");
+    developer.log("circles: $circles");
     emit(SetCircleState());
   }
 

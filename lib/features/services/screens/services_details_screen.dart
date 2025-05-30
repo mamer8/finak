@@ -198,20 +198,49 @@ class _ServicesDetailsScreenState extends State<ServicesDetailsScreen> {
                                                 color: AppColors.secondPrimary))
                                       ])),
                                       30.h.verticalSpace,
-                                      if (cubit.getServiceDetailsModel.data
-                                              ?.isOpen
-                                              .toString() ==
-                                          "1")
-                                        CustomButton(
-                                          title: "close".tr(),
-                                          onPressed: () {
-                                            cubit.closeOffer(context,
-                                                offerId: widget
-                                                        .args.serviceModel?.id
-                                                        .toString() ??
-                                                    "");
-                                          },
-                                        ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: CustomButton(
+                                              title:
+                                                  cubit.getServiceDetailsModel
+                                                              .data?.isOpen
+                                                              .toString() ==
+                                                          "1"
+                                                      ? "close".tr()
+                                                      : "open".tr(),
+                                              onPressed: () {
+                                                cubit.closeOrOpenOffer(context,
+                                                    isClose: cubit
+                                                            .getServiceDetailsModel
+                                                            .data
+                                                            ?.isOpen
+                                                            .toString() ==
+                                                        "1",
+                                                    offerId: widget.args
+                                                            .serviceModel?.id
+                                                            .toString() ??
+                                                        "");
+                                              },
+                                            ),
+                                          ),
+                                          // 10.w.horizontalSpace,
+                                          Expanded(
+                                            child: CustomButton(
+                                              title: "edit".tr(),
+                                              fontColor: AppColors.primary,
+                                              backgroundColor: AppColors.white,
+                                              onPressed: () {
+                                                Navigator.pushNamed(context,
+                                                    Routes.updateOfferRoute,
+                                                    arguments: cubit
+                                                        .getServiceDetailsModel
+                                                        .data);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ] else ...[
                                       Divider(
                                         color: AppColors.gray,

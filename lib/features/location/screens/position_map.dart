@@ -10,8 +10,9 @@ import 'full_screen_map.dart';
 class PositionMap extends StatefulWidget {
   const PositionMap({
     super.key,
+    this.isUpdate = false,
   });
-
+  final bool isUpdate;
   @override
   State<PositionMap> createState() => _PositionMapState();
 }
@@ -22,9 +23,12 @@ class _PositionMapState extends State<PositionMap> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context
-            .read<LocationCubit>()
-            .checkAndRequestLocationPermission(context);
+        if (context.read<LocationCubit>().selectedLocation == null &&
+            !widget.isUpdate) {
+          context
+              .read<LocationCubit>()
+              .checkAndRequestLocationPermission(context);
+        }
       }
     });
   }

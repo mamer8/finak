@@ -68,7 +68,6 @@ class FavoritesCubit extends Cubit<FavoritesState> {
         if (r.status != 200 && r.status != 201) {
           emit(AddOrRemoveFavoriteErrorState());
         } else {
-          successGetBar(r.msg);
           emit(AddOrRemoveFavoriteSuccessState(message: r.msg ?? ""));
           updateFavouritesInModels(
             context,

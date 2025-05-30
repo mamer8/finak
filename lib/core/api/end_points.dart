@@ -23,7 +23,9 @@ class EndPoints {
   static const String getMyOffersUrl = '${baseUrl}user/get-my-offers';
   static const String getOfferDetailsUrl = '${baseUrl}user/get-offer-details';
   static const String addOfferUrl = '${baseUrl}user/add-offer';
+  static const String updateOfferUrl = '${baseUrl}user/update-offer/';
   static const String closeOfferUrl = '${baseUrl}user/close-offer';
+  static const String openOfferUrl = '${baseUrl}user/open-offer';
   static const String getMyFavUrl = '${baseUrl}user/get-my-fav';
   static const String addOrDeleteFavUrl = '${baseUrl}user/add-or-delete-fav';
   static const String getSettingsUrl = '${baseUrl}user/get-settings';

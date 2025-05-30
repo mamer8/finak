@@ -195,6 +195,7 @@ Future<bool> _showExitDialog(BuildContext context) async {
   ).show();
 
   return exitConfirmed;
+
 }
 
 //! bottom nav 

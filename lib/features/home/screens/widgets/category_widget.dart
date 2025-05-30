@@ -14,27 +14,29 @@ class CustomCategoryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.r),
-          color: isSelected ? AppColors.primary : AppColors.secondGrey,
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: Row(
-          children: [
-            CustomNetworkImage(
-              image: model.image ?? "",
-              width: 20.w,
-              height: 20.w,
-            ),
-            5.w.horizontalSpace,
-            Text(
-              model.name ?? "",
-              style: getMediumStyle(color: AppColors.white, fontSize: 14.sp),
-            ),
-          ],
+    return Center(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50.r),
+            color: isSelected ? AppColors.primary : AppColors.secondGrey,
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+          child: Row(
+            children: [
+              CustomNetworkImage(
+                image: model.image ?? "",
+                width: 40.w,
+                height: 40.w,
+              ),
+              5.w.horizontalSpace,
+              Text(
+                model.name ?? "",
+                style: getMediumStyle(color: AppColors.white, fontSize: 18.sp),
+              ),
+            ],
+          ),
         ),
       ),
     );

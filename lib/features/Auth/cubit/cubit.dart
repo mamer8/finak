@@ -385,16 +385,16 @@ class LoginCubit extends Cubit<LoginState> {
 
         await Preferences.instance.setUser(r);
         prefs.setBool("ISLOGGED", true);
-        if (loginModel.data?.userType == 0) {
-        context.read<ProfileCubit>(). storeFCM(); 
+        // if (loginModel.data?.userType == 0) {
+        context.read<ProfileCubit>().storeFCM();
 
-          Navigator.pushNamedAndRemoveUntil(
-              context, Routes.mainRoute, (route) => false);
-       
-        } else {
-          errorGetBar("you_not_user".tr());
-    
-        }
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.mainRoute, (route) => false);
+
+        // } else {
+        //   errorGetBar("you_not_user".tr());
+
+        // }
       }
     });
   }
@@ -422,13 +422,12 @@ class LoginCubit extends Cubit<LoginState> {
         await Preferences.instance.setUser(r);
         prefs.setBool("ISLOGGED", true);
         if (loginModel.data?.userType == 0) {
-          context.read<ProfileCubit>(). storeFCM(); 
+          context.read<ProfileCubit>().storeFCM();
 
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
         } else {
           errorGetBar("you_not_user".tr());
-       
         }
       }
     });
@@ -469,14 +468,13 @@ class LoginCubit extends Cubit<LoginState> {
         await Preferences.instance.setUser(r);
         prefs.setBool("ISLOGGED", true);
         if (loginModel.data?.userType == 0) {
-          context.read<ProfileCubit>(). storeFCM(); 
+          context.read<ProfileCubit>().storeFCM();
 
           // 0 for user
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainRoute, (route) => false);
         } else {
           errorGetBar("you_not_user".tr());
-         
         }
       }
     });

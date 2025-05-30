@@ -25,3 +25,4 @@ class GetServicesSuccessState extends LocationState {}
 class SetMarkersState extends LocationState {}
 
 class SetCircleState extends LocationState {}
+class SetMapZoomState extends LocationState {}

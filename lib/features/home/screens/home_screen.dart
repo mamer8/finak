@@ -15,7 +15,7 @@ import 'package:finak/features/services/screens/services_screen.dart';
 
 import 'widgets/category_widget.dart';
 import 'widgets/custom_notification_widget.dart';
-import 'widgets/custom_search_text_field.dart';
+import '../../services/screens/widgets/custom_search_text_field.dart';
 import 'widgets/service_home_widget.dart';
 import 'widgets/swiper_widget.dart';
 
@@ -31,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<HomeCubit>().getHome();
+    context.read<HomeCubit>().getHome(context);
     context.read<ProfileCubit>().getProfile(context);
     if (context.read<ServicesCubit>().serviceTypesModel.data == null) {
       context.read<ServicesCubit>().getServiceTypes();
@@ -106,14 +106,14 @@ class _HomeScreenState extends State<HomeScreen> {
               child: RefreshIndicator(
             color: AppColors.primary,
             onRefresh: () async {
-              cubit.getHome();
+              cubit.getHome(context);
               context.read<ProfileCubit>().getProfile(context);
             },
             child: state is GetHomeErrorState
                 ? CustomNoDataWidget(
                     message: 'error_happened'.tr(),
                     onTap: () {
-                      cubit.getHome();
+                      cubit.getHome(context);
                     },
                   )
                 : state is GetHomeLoadingState || cubit.homeModel.data == null
@@ -138,15 +138,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                             20.h.verticalSpace,
-                            CustomSwiper(
-                              slider: cubit.homeModel.data?.slider ?? [],
-                            ),
-                            20.h.verticalSpace,
+                            if (cubit.homeModel.data?.slider != null &&
+                                cubit.homeModel.data!.slider!.isNotEmpty)
+                              CustomSwiper(
+                                slider: cubit.homeModel.data?.slider ?? [],
+                              ),
+                            // 20.h.verticalSpace,
                             // categories
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               child: SizedBox(
-                                height: getHeightSize(context) * 0.05,
+                                height: getHeightSize(context) * 0.1,
                                 child: ListView.separated(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: cubit.homeModel.data?.serviceTypes
@@ -172,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            20.h.verticalSpace,
+                            // 20.h.verticalSpace,
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               child: Row(

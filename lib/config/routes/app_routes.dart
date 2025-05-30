@@ -5,6 +5,7 @@ import 'package:finak/features/Auth/screens/new_password_screen.dart';
 import 'package:finak/features/Auth/screens/otp_screen.dart';
 import 'package:finak/features/Auth/screens/sign_up_screen.dart';
 import 'package:finak/features/add_offer/screens/add_offer_screen.dart';
+import 'package:finak/features/add_offer/screens/update_offer_screen.dart';
 import 'package:finak/features/chat/screens/chat_screen.dart';
 import 'package:finak/features/chat/screens/my_messages_screen.dart';
 import 'package:finak/features/favorite/screens/favorite_screen.dart';
@@ -16,6 +17,7 @@ import 'package:finak/features/notifications/screens/notifications_screen.dart';
 import 'package:finak/features/on_boarding/screen/onboarding_screen.dart';
 import 'package:finak/features/profile/screens/profile_screen.dart';
 import 'package:finak/features/profile/screens/change_password_screen.dart';
+import 'package:finak/features/services/data/models/get_service_details_model.dart';
 import 'package:finak/features/services/screens/services_details_screen.dart';
 import 'package:finak/features/services/screens/services_screen.dart';
 import 'package:finak/features/splash/screens/splash_screen.dart';
@@ -41,6 +43,7 @@ class Routes {
   static const String servicesDetailsRoute = '/services_details';
 //////////// offers /////////////
   static const String addOfferRoute = '/add_offer';
+  static const String updateOfferRoute = '/update_offer';
   static const String myOffersRoute = '/my_offers';
   ////////////// Profile /////////////
   static const String profileRoute = '/profile';
@@ -121,6 +124,13 @@ class AppRoutes {
       case Routes.addOfferRoute:
         return MaterialPageRoute(
           builder: (context) => const AddOfferScreen(),
+        );
+      case Routes.updateOfferRoute:
+      ServiceDataModel ? serviceDataModel = settings.arguments as ServiceDataModel;
+        return MaterialPageRoute(
+          builder: (context) =>  UpdateOfferScreen(
+            serviceDataModel: serviceDataModel,
+          ),
         );
       case Routes.myOffersRoute:
         return MaterialPageRoute(

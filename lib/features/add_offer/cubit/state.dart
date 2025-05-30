@@ -27,3 +27,4 @@ class FailureAddOfferState extends AddOfferState {}
 class SuccessAddOfferState extends AddOfferState {}
 
 class LoadingAddOfferState extends AddOfferState {}
+class UpdateControllerState extends AddOfferState {}

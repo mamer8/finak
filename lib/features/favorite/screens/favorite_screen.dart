@@ -2,7 +2,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/no_data_widget.dart';
 import 'package:finak/features/home/screens/widgets/category_widget.dart';
-import 'package:finak/features/home/screens/widgets/custom_search_text_field.dart';
+import 'package:finak/features/services/screens/widgets/custom_search_text_field.dart';
 import 'package:finak/features/services/screens/widgets/service_widget.dart';
 
 import '../cubit/cubit.dart';
@@ -54,7 +54,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               },
             ),
 
-            20.h.verticalSpace,
+            // 20.h.verticalSpace,
 
             // categories
             if (state is GetServicesTypeLoadingState ||
@@ -70,7 +70,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: SizedBox(
-                  height: getHeightSize(context) * 0.05,
+                  height: getHeightSize(context) * 0.1,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: cubit.serviceTypesModel.data!.length,
@@ -93,7 +93,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 ),
               ),
 
-            20.h.verticalSpace,
+            // 20.h.verticalSpace,
 
             Expanded(
               child: RefreshIndicator(
@@ -102,16 +102,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   cubit.getMyFavorites();
                 },
                 child: state is GetServicesErrorState
-                        ? CustomNoDataWidget(
-                            message: 'error_happened'.tr(),
-                            onTap: () {
-                              cubit.getMyFavorites();
-                            },
-                          )
-                        :  state is GetServicesLoadingState ||
-                        cubit.myFavoritesModel.data == null
-                    ? const Center(child: CustomLoadingIndicator())
-                    :cubit.myFavoritesModel.data!.isEmpty
+                    ? CustomNoDataWidget(
+                        message: 'error_happened'.tr(),
+                        onTap: () {
+                          cubit.getMyFavorites();
+                        },
+                      )
+                    : state is GetServicesLoadingState ||
+                            cubit.myFavoritesModel.data == null
+                        ? const Center(child: CustomLoadingIndicator())
+                        : cubit.myFavoritesModel.data!.isEmpty
                             ? CustomNoDataWidget(
                                 message: 'no_favorite'.tr(),
                                 onTap: () {
@@ -132,7 +132,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                     ),
                                     child: CustomServiceWidget(
                                       isFavoriteScreen: true,
-                                      
                                       serviceModel:
                                           cubit.myFavoritesModel.data![index],
                                     ),

@@ -2,37 +2,57 @@ import 'package:finak/core/exports.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
 import 'package:finak/features/location/screens/position_map.dart';
 import 'package:finak/features/profile/cubit/cubit.dart';
+import 'package:finak/features/services/data/models/get_service_details_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
-import 'widgets/upload_image_widget.dart';
+import 'widgets/edit_upload_image_widget copy.dart';
 import 'widgets/phone_check_box.dart';
-import 'widgets/select_category.dart';
-import 'widgets/select_service.dart';
 
-class AddOfferScreen extends StatefulWidget {
-  const AddOfferScreen({
+class UpdateOfferScreen extends StatefulWidget {
+  const UpdateOfferScreen({
     super.key,
+    this.serviceDataModel,
   });
-
+  final ServiceDataModel? serviceDataModel;
   @override
-  State<AddOfferScreen> createState() => _AddOfferScreenState();
+  State<UpdateOfferScreen> createState() => _UpdateOfferScreenState();
 }
 
-class _AddOfferScreenState extends State<AddOfferScreen> {
+class _UpdateOfferScreenState extends State<UpdateOfferScreen> {
   @override
   void initState() {
-    if (context.read<AddOfferCubit>().serviceTypesModel.data == null) {
-      context.read<AddOfferCubit>().getServiceTypes();
-    }
     super.initState();
+
+    final model = widget.serviceDataModel;
+
+    if (model != null) {
+      final latitude = double.tryParse(model.lat ?? '') ?? 0.0;
+      final longitude = double.tryParse(model.long ?? '') ?? 0.0;
+
+      context.read<LocationCubit>().setSelectedPositionedLocation(
+            LatLng(latitude, longitude),
+            context,
+          );
+
+      context.read<AddOfferCubit>().addUpdateController(
+            model.title ?? '',
+            model.price != null ? model.price.toString() : '',
+            model.body ?? '',
+            model.serviceType ?? '',
+            model.subServiceType ?? '',
+          );
+
+      context.read<ProfileCubit>().isPhoneHide = model.isPhoneHide == 1;
+    }
   }
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context, title: 'add_offer'.tr()),
+      appBar: customAppBar(context, title: 'update_offer'.tr()),
       body:
           BlocBuilder<AddOfferCubit, AddOfferState>(builder: (context, state) {
         var c = context.read<AddOfferCubit>();
@@ -44,11 +64,11 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomUploadImageWidget(),
+                const CustomEditUploadImageWidget(),
                 10.verticalSpace,
                 CustomTextField(
                   title: 'title'.tr(),
-                  controller: c.titleController,
+                  controller: c.updatedtitleController,
                   hintText: 'enter_title'.tr(),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -58,15 +78,37 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   },
                 ),
                 10.verticalSpace,
-                const SelectServiceWidget(),
+                CustomTextField(
+                  title: 'service_type'.tr(),
+                  enabled: false,
+                  controller: c.updatedserviceTypeController,
+                  // hintText: ''.tr(),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'enter_title'.tr();
+                    }
+                    return null;
+                  },
+                ),
                 10.verticalSpace,
-                const SelectCategoryWidget(),
-                if (c.selectedService?.needPrice == 1) ...[
+                CustomTextField(
+                  title: 'service_type'.tr(),
+                  enabled: false,
+                  controller: c.updatedcategoryController,
+                  // hintText: ''.tr(),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'enter_title'.tr();
+                    }
+                    return null;
+                  },
+                ),
+                if (widget.serviceDataModel?.price != null) ...[
                   10.verticalSpace,
                   CustomTextField(
                     title: 'price'.tr(),
                     isOptional: true,
-                    controller: c.priceController,
+                    controller: c.updatedpriceController,
                     hintText: 'enter_price'.tr(),
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -76,7 +118,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 CustomTextField(
                   title: 'description'.tr(),
                   isMessage: true,
-                  controller: c.descriptionController,
+                  controller: c.updateddescriptionController,
                   hintText: 'enter_description'.tr(),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -86,7 +128,9 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   },
                 ),
                 10.verticalSpace,
-                const PositionMap(),
+                const PositionMap(
+                  isUpdate: true,
+                ),
                 10.verticalSpace,
                 CustomPhoneCheckBox(),
                 30.verticalSpace,
@@ -94,20 +138,17 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   title: "add".tr(),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      if (c.uploadedImages.isEmpty) {
-                        errorGetBar('add_images'.tr());
-                        return;
-                      } else if (c.selectedService == null) {
-                        errorGetBar('select_service'.tr());
-                      } else if (c.selectedCategory == null) {
-                        errorGetBar('select_category'.tr());
-                      } else if (context
-                              .read<LocationCubit>()
-                              .selectedLocation ==
+                      // if (c.uploadedImages.isEmpty) {
+                      //   errorGetBar('add_images'.tr());
+                      //   return;
+                      // } else
+                      if (context.read<LocationCubit>().selectedLocation ==
                           null) {
                         errorGetBar('select_location'.tr());
                       } else {
-                        c.addOffer(context,
+                        c.updateOffer(context,
+                            offerId:
+                                widget.serviceDataModel?.id.toString() ?? '',
                             isPhoneHide:
                                 context.read<ProfileCubit>().isPhoneHide);
                       }

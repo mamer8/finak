@@ -106,7 +106,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 style: getBoldStyle(),
                 onChanged: widget.onChanged,
                 validator: widget.isOptional ? null : widget.validator,
-                keyboardType: widget.keyboardType,
+                keyboardType: widget.isMessage
+                    ? TextInputType.multiline
+                    : widget.keyboardType,
                 maxLines: widget.isMessage ? 5 : 1,
                 minLines: widget.isMessage ? 5 : 1,
                 onFieldSubmitted: widget.onSubmitted,
@@ -180,8 +182,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         borderRadius: BorderRadius.all(
                             Radius.circular(widget.borderRadius ?? 10.r))),
                     focusedErrorBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.red, width: 1.5),
+                        borderSide: BorderSide(color: AppColors.red, width: 1.5),
                         borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? 10.r))))),
           ),
         ),
@@ -384,8 +385,8 @@ class _CustomPhoneFormFieldState extends State<CustomPhoneFormField> {
         log("country: +${country.phoneCode}");
         setState(() {
           initialCountryCodee = '+${country.phoneCode}';
-           context.read<LoginCubit>().countryCode = initialCountryCodee;
-           context.read<ProfileCubit>().countryCode = initialCountryCodee;
+          context.read<LoginCubit>().countryCode = initialCountryCodee;
+          context.read<ProfileCubit>().countryCode = initialCountryCodee;
           fieldKey = UniqueKey(); // Change key to force rebuild
         });
       }

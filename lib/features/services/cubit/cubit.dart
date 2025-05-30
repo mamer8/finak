@@ -70,12 +70,18 @@ class ServicesCubit extends Cubit<ServicesState> {
     await launchUrl(Uri.parse('tel:$phone'));
   }
 
-  void closeOffer(BuildContext context, {required String offerId}) async {
+  void closeOrOpenOffer(BuildContext context,
+      {required String offerId, required bool isClose}) async {
     AppWidget.createProgressDialog(context);
     emit(CloseOfferLoadingState());
-    var response = await api.closeOffer(
-      offerId: offerId,
-    );
+    var response = isClose
+        ? await api.closeOffer(
+            offerId: offerId,
+          )
+        : await api.openOffer(
+            offerId: offerId,
+          );
+
     response.fold((failure) {
       Navigator.pop(context);
       errorGetBar("error".tr());
@@ -97,7 +103,7 @@ class ServicesCubit extends Cubit<ServicesState> {
   TextEditingController searchController = TextEditingController();
   ServiceTypeModel? selectedServiceType;
   changeSelectedServiceType(ServiceTypeModel? value,
-      {bool isFilter = false, required BuildContext context}) {
+      {bool isGetServices = false, required BuildContext context}) {
     if (value == selectedServiceType) {
       selectedServiceType = null;
       subServiceTypesModel = GetSubServiceTypesModel();
@@ -107,7 +113,8 @@ class ServicesCubit extends Cubit<ServicesState> {
     }
 
     emit(ChangeSelectedServiceTypeState());
-    if (!isFilter) {
+    if (isGetServices) {
+      if (selectedServiceType != null) getSubServiceTypes(value!.id.toString());
       getServices(context);
     } else {
       if (selectedServiceType != null) getSubServiceTypes(value!.id.toString());
@@ -115,12 +122,16 @@ class ServicesCubit extends Cubit<ServicesState> {
   }
 
   SubServiceTypeModel? selectedSubServiceType;
-  void onTapToSelectSubServiceType(SubServiceTypeModel cat) {
+  void onTapToSelectSubServiceType(SubServiceTypeModel cat,
+      {bool isGetServices = false, required BuildContext context}) {
     if (selectedSubServiceType == cat)
       selectedSubServiceType = null;
     else
       selectedSubServiceType = cat;
     emit(ChangeSelectedServiceTypeState());
+    if (isGetServices) {
+      getServices(context);
+    }
   }
 
   /// Get Sub Service Types //////
@@ -167,6 +178,8 @@ class ServicesCubit extends Cubit<ServicesState> {
     emit(GetServicesLoadingState());
     var response = await api.getServices(
       serviceTypeId: selectedServiceType?.id,
+      subServiceTypeId: selectedSubServiceType?.id,
+      country: context.read<LocationCubit>().country,
       search: searchController.text,
       minPrice:
           isPriceRangeEnabled ? currentRange.start.round().toString() : null,

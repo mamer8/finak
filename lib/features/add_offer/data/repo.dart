@@ -36,6 +36,7 @@ class AddOfferRepo {
     required String lat,
     required String long,
     required String locationName,
+    String? country,
     required List<String> media,
     required String price,
     required String description,
@@ -52,6 +53,40 @@ class AddOfferRepo {
         'lat': lat,
         'long': long,
         'location_name': locationName,
+        'country'  : country,
+        'is_phone_hide': isPhoneHide, //0,1==0:no 1:yes
+        for (int i = 0; i < media.length; i++)
+          'media[$i]': await MultipartFile.fromFile(media[i]),
+      } ,
+       formDataIsEnabled: true
+      );
+      return Right(DefaultPostModel.fromJson(response));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  Future<Either<Failure, DefaultPostModel>> updateOffer({
+    required String lat,
+    required String long,
+    required String locationName,
+    String? country,
+    required List<String> media,
+    required String price,
+    required String description,
+    required String title,
+    required String isPhoneHide,
+    required String offerId
+  }) async {
+    try {
+      var response = await api.post(EndPoints.updateOfferUrl+offerId, body: {
+        'title': title,
+        'body': description,
+        if (price.isNotEmpty) 'price': price,
+        'lat': lat,
+        'long': long,
+        'location_name': locationName,
+        'country'  : country,
         'is_phone_hide': isPhoneHide, //0,1==0:no 1:yes
         for (int i = 0; i < media.length; i++)
           'media[$i]': await MultipartFile.fromFile(media[i]),

@@ -36,6 +36,7 @@ class ServicesRepo {
       required String lat,
       required String long,
       String? type,
+      String? country,
       required String search}) async {
     try {
       var response = await api.get(EndPoints.getOffersUrl, queryParameters: {
@@ -48,6 +49,7 @@ class ServicesRepo {
         if (type != null) 'lat': lat,
         if (type != null) 'long': long,
         if (type != null) 'type': type, //asc,desc
+        if (country != null && country != 'Unknown') 'country': country,
       });
       return Right(GetServicesModel.fromJson(response));
     } on ServerException {
@@ -69,6 +71,15 @@ class ServicesRepo {
       {required String offerId}) async {
     try {
       var response = await api.get('${EndPoints.closeOfferUrl}/$offerId');
+      return Right(GetServiceDetailsModel.fromJson(response));
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+  Future<Either<Failure, GetServiceDetailsModel>> openOffer(
+      {required String offerId}) async {
+    try {
+      var response = await api.get('${EndPoints.openOfferUrl}/$offerId');
       return Right(GetServiceDetailsModel.fromJson(response));
     } on ServerException {
       return Left(ServerFailure());

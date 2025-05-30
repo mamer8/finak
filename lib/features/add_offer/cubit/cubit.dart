@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:finak/core/utils/appwidget.dart';
 import 'package:finak/features/location/cubit/location_cubit.dart';
+import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/data/models/service_types_model.dart';
 import 'package:finak/features/services/data/models/sub_service_types_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/exports.dart';
@@ -116,6 +118,34 @@ class AddOfferCubit extends Cubit<AddOfferState> {
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController updatedtitleController = TextEditingController();
+  TextEditingController updatedpriceController = TextEditingController();
+  TextEditingController updateddescriptionController = TextEditingController();
+  TextEditingController updatedserviceTypeController = TextEditingController();
+  TextEditingController updatedcategoryController = TextEditingController();
+  void addUpdateController(
+    String title,
+    String price,
+    String description,
+    String serviceType,
+    String category,
+  ) {
+    updatedtitleController.text = title;
+    updatedpriceController.text = price;
+    updateddescriptionController.text = description;
+    updatedserviceTypeController.text = serviceType;
+    updatedcategoryController.text = category;
+    emit(UpdateControllerState());
+  }
+
+  /// Clear Update Controllers
+  void clearUpdatedControllers() {
+    updatedtitleController.clear();
+    updatedpriceController.clear();
+    updateddescriptionController.clear();
+    updatedserviceTypeController.clear();
+    updatedcategoryController.clear();
+  }
 
   ServiceTypeModel? selectedService;
   void onTapToSelectService(ServiceTypeModel ser) {
@@ -130,7 +160,6 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     emit(SelectServiceState());
   }
 
- 
   /// Get Service Types //////
   GetServiceTypesModel serviceTypesModel = GetServiceTypesModel();
   void getServiceTypes() async {
@@ -169,12 +198,13 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     );
   }
 
-  addOffer(BuildContext context,{required bool isPhoneHide}) async {
+  addOffer(BuildContext context, {required bool isPhoneHide}) async {
     emit(LoadingAddOfferState());
     AppWidget.createProgressDialog(context);
     final response = await api.addOffer(
       serviceTypeId: selectedService?.id.toString() ?? "",
       subServiceTypeId: selectedCategory?.id.toString() ?? "",
+      country: context.read<LocationCubit>().country,
       lat:
           context.read<LocationCubit>().selectedLocation?.latitude.toString() ??
               "0",
@@ -207,6 +237,54 @@ class AddOfferCubit extends Cubit<AddOfferState> {
         successGetBar(r.msg);
         clearDate();
         Navigator.pushReplacementNamed(context, Routes.myOffersRoute);
+        context.read<LocationCubit>().setSelectedPositionedLocationToDefault();
+      }
+    });
+  }
+
+  updateOffer(BuildContext context,
+      {required bool isPhoneHide, required String offerId}) async {
+    emit(LoadingAddOfferState());
+    AppWidget.createProgressDialog(context);
+    final response = await api.updateOffer(
+      offerId: offerId,
+      country: context.read<LocationCubit>().country,
+      lat:
+          context.read<LocationCubit>().selectedLocation?.latitude.toString() ??
+              "0",
+      long: context
+              .read<LocationCubit>()
+              .selectedLocation
+              ?.longitude
+              .toString() ??
+          "0",
+      locationName: context.read<LocationCubit>().address,
+      media: uploadedImages.map((e) => e.path).toList(),
+      price: updatedpriceController.text,
+      description: updateddescriptionController.text,
+      title: updatedtitleController.text,
+      isPhoneHide: isPhoneHide ? "1" : "0",
+    );
+    response.fold((l) {
+      Navigator.pop(context);
+      errorGetBar("error".tr());
+      emit(FailureAddOfferState());
+    }, (r) async {
+      debugPrint("code: ${r.status.toString()}");
+
+      if (r.status != 200 && r.status != 201) {
+        Navigator.pop(context);
+        errorGetBar(r.msg ?? "error".tr());
+      } else {
+        context.read<ServicesCubit>().getServiceDetails(
+              offerId: offerId,
+            );
+        emit(SuccessAddOfferState());
+        Navigator.pop(context);
+        Navigator.pop(context);
+        successGetBar(r.msg);
+        clearUpdatedControllers();
+        context.read<LocationCubit>().setSelectedPositionedLocationToDefault();
       }
     });
   }
@@ -218,6 +296,5 @@ class AddOfferCubit extends Cubit<AddOfferState> {
     uploadedImages.clear();
     selectedService = null;
     selectedCategory = null;
-   
   }
 }

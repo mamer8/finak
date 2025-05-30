@@ -2,7 +2,7 @@
 
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:finak/core/exports.dart';
-import 'package:finak/features/home/screens/widgets/custom_search_text_field.dart';
+import 'package:finak/features/services/screens/widgets/custom_search_text_field.dart';
 import 'package:finak/features/services/screens/widgets/service_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -57,7 +57,7 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                             cubit.selectedLocation?.latitude ?? 0.0,
                             cubit.selectedLocation?.longitude ?? 0.0,
                           ),
-                          zoom: 12,
+                          zoom: 13.6,
                         ),
                         onMapCreated: (GoogleMapController controller) {
                           cubit.searchMapController = controller;
@@ -94,7 +94,7 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                               value: cubit.currentValue,
                               max: 100,
                               onChangeEnd: (v) {
-                                print("Selected value: ${cubit.currentValue}");
+                                cubit.setMapZoom();
                                 cubit.getServices(context);
                               },
                               activeColor: AppColors.primary,
@@ -102,11 +102,6 @@ class _SearcMapScreenState extends State<SearcMapScreen> {
                               inactiveColor: Colors.grey[300],
                               onChanged: (double newValue) {
                                 cubit.changeValue(newValue);
-                                // EasyDebounce.debounce('search-debouncer',
-                                //     const Duration(seconds: 1), () async {
-                                //   // return await cubit.getHomeFilterData(
-                                //   //   context: context)();
-                                // });
                               },
                             ),
                             // 5.h.verticalSpace,

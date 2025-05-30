@@ -6,13 +6,15 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.title,
     this.onPressed,
-    this.color,
+    this.backgroundColor,
     this.fontColor,
+    this.borderColor,
     this.padding,
     this.isDisabled = false,
   });
   final String title;
-  final Color? color;
+  final Color? backgroundColor;
+  final Color? borderColor;
   final Color? fontColor;
   final double? padding;
   final bool isDisabled;
@@ -31,11 +33,14 @@ class CustomButton extends StatelessWidget {
             padding:
                 EdgeInsets.symmetric(vertical: padding ?? 10.h, horizontal: 5),
             decoration: BoxDecoration(
-                color: color ?? AppColors.primary,
+                color: backgroundColor ?? AppColors.primary,
+                border: Border.all(color: AppColors.primary, width: 1.w),
                 borderRadius: BorderRadius.circular(50.r)),
             child: Center(
-              child: Text(
+              child: AutoSizeText(
                 title.tr(),
+                maxLines: 1,
+                minFontSize: 12,
                 style: getBoldStyle(
                     fontweight: FontWeight.w700,
                     color: fontColor ?? AppColors.white,

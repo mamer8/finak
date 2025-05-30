@@ -20,7 +20,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     context.read<NotificationsCubit>().getNotifications();
-    
+
     super.initState();
   }
 
@@ -30,43 +30,58 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         builder: (context, state) {
       var cubit = context.read<NotificationsCubit>();
 
-      return Scaffold(
-        appBar: customAppBar(context, title: 'notifications'.tr()),
-        body: Padding(
-          padding: EdgeInsets.all(12.w),
-          child: Center(
-            child: state is FailureGetNotificationsState
-                ? CustomNoDataWidget(
-                    message: 'error_happened'.tr(),
-                    onTap: () {
-                      cubit.getNotifications();
-                    },
-                  )
-                : state is LoadingGetNotificationsState ||
-                        cubit.notificationsModel?.data == null
-                    ? const Center(child: CustomLoadingIndicator())
-                    : cubit.notificationsModel!.data!.isEmpty
-                        ? CustomNoDataWidget(
-                            message: 'no_notifications'.tr(),
-                            onTap: () {
-                              cubit.getNotifications();
-                            },
-                          )
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              await cubit.getNotifications();
-                            },
-                        
-                          child: ListView.builder(
-                              itemCount: cubit.notificationsModel!.data!.length,
-                              itemBuilder: (context, index) {
-                                return CustomNotificationCard(
-                                  notificationModel:
-                                      cubit.notificationsModel!.data![index],
-                                );
+      return WillPopScope(
+        onWillPop: () async {
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.mainRoute, (route) => false);
+
+          return false;
+        },
+        child: Scaffold(
+          appBar: customAppBar(
+            context,
+            title: 'notifications'.tr(),
+            onBack: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Routes.mainRoute, (route) => false);
+            },
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(12.w),
+            child: Center(
+              child: state is FailureGetNotificationsState
+                  ? CustomNoDataWidget(
+                      message: 'error_happened'.tr(),
+                      onTap: () {
+                        cubit.getNotifications();
+                      },
+                    )
+                  : state is LoadingGetNotificationsState ||
+                          cubit.notificationsModel?.data == null
+                      ? const Center(child: CustomLoadingIndicator())
+                      : cubit.notificationsModel!.data!.isEmpty
+                          ? CustomNoDataWidget(
+                              message: 'no_notifications'.tr(),
+                              onTap: () {
+                                cubit.getNotifications();
                               },
+                            )
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                await cubit.getNotifications();
+                              },
+                              child: ListView.builder(
+                                itemCount:
+                                    cubit.notificationsModel!.data!.length,
+                                itemBuilder: (context, index) {
+                                  return CustomNotificationCard(
+                                    notificationModel:
+                                        cubit.notificationsModel!.data![index],
+                                  );
+                                },
+                              ),
                             ),
-                        ),
+            ),
           ),
         ),
       );

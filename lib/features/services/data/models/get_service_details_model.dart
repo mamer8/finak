@@ -12,7 +12,7 @@ String getServiceDetailsModelToJson(GetServiceDetailsModel data) =>
 
 class GetServiceDetailsModel {
   String? msg;
-  Data? data;
+  ServiceDataModel? data;
   int? status;
 
   GetServiceDetailsModel({
@@ -24,7 +24,9 @@ class GetServiceDetailsModel {
   factory GetServiceDetailsModel.fromJson(Map<String, dynamic> json) =>
       GetServiceDetailsModel(
         msg: json["msg"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : ServiceDataModel.fromJson(json["data"]),
         status: json["status"],
       );
 
@@ -35,7 +37,7 @@ class GetServiceDetailsModel {
       };
 }
 
-class Data {
+class ServiceDataModel {
   int? id;
   String? title;
   String? body;
@@ -50,8 +52,10 @@ class Data {
   List<Media>? media;
   bool? isMine;
   Provider? provider;
+  String? serviceType;
+  String? subServiceType;
 
-  Data({
+  ServiceDataModel({
     this.id,
     this.title,
     this.body,
@@ -66,9 +70,12 @@ class Data {
     this.media,
     this.isMine,
     this.provider,
+    this.serviceType,
+    this.subServiceType,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory ServiceDataModel.fromJson(Map<String, dynamic> json) =>
+      ServiceDataModel(
         id: json["id"],
         title: json["title"],
         body: json["body"],
@@ -79,6 +86,8 @@ class Data {
         locationName: json["location_name"],
         isFav: json["is_fav"],
         isOpen: json["is_open"],
+        serviceType: json["service_type"],
+        subServiceType: json["sub_service_type"],
         status: json["status"],
         media: json["media"] == null
             ? []
@@ -106,6 +115,8 @@ class Data {
             : List<dynamic>.from(media!.map((x) => x.toJson())),
         "is_mine": isMine,
         "provider": provider?.toJson(),
+        "service_type": serviceType,
+        "sub_service_type": subServiceType
       };
 }
 
@@ -130,7 +141,7 @@ class Media {
 }
 
 class Provider {
-  int ? id;
+  int? id;
   String? name;
   String? image;
   String? postedAt;
@@ -141,7 +152,6 @@ class Provider {
   Provider({
     this.name,
     this.id,
-
     this.image,
     this.postedAt,
     this.phone,

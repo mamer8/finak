@@ -2,17 +2,20 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/no_data_widget.dart';
 import 'package:finak/features/home/screens/widgets/category_widget.dart';
-import 'package:finak/features/home/screens/widgets/custom_search_text_field.dart';
+import 'package:finak/features/services/data/models/sub_service_types_model.dart';
+import 'package:finak/features/services/screens/widgets/custom_search_text_field.dart';
 import 'package:finak/features/services/data/models/service_types_model.dart';
 
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
+import 'widgets/filter_widget.dart';
 import 'widgets/service_widget.dart';
 
 class ServicesScreenArgs {
   final ServiceTypeModel? selected;
+  final SubServiceTypeModel? selectedSubServiceType;
 
-  ServicesScreenArgs({this.selected});
+  ServicesScreenArgs( {this.selected , this.selectedSubServiceType});
 }
 
 class ServicesScreen extends StatefulWidget {
@@ -30,10 +33,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
   void initState() {
     if (widget.args?.selected != null) {
       context.read<ServicesCubit>().selectedServiceType = widget.args?.selected;
+      if (widget.args?.selectedSubServiceType != null) {
+        context.read<ServicesCubit>().selectedSubServiceType =
+            widget.args?.selectedSubServiceType;
+      } else {
+        context.read<ServicesCubit>().selectedSubServiceType = null;
+      }
+      
+      
     } else {
-      // context.read<ServicesCubit>().clearFilters();
       context.read<ServicesCubit>().selectedServiceType = null;
+      context.read<ServicesCubit>().selectedSubServiceType = null;
+      context.read<ServicesCubit>().subServiceTypesModel =
+          GetSubServiceTypesModel();
     }
+
     if (context.read<ServicesCubit>().serviceTypesModel.data == null) {
       context.read<ServicesCubit>().getServiceTypes();
     }
@@ -64,9 +78,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 });
               },
             ),
-
-            20.h.verticalSpace,
-            // categories
             if (state is GetServicesTypeLoadingState ||
                 cubit.serviceTypesModel.data == null)
               Padding(
@@ -80,7 +91,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: SizedBox(
-                  height: getHeightSize(context) * 0.05,
+                  height: getHeightSize(context) * 0.09,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: cubit.serviceTypesModel.data!.length,
@@ -95,6 +106,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         onTap: () {
                           cubit.changeSelectedServiceType(
                             cubit.serviceTypesModel.data![index],
+                            isGetServices: true,
                             context: context,
                           );
                         },
@@ -103,8 +115,66 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   ),
                 ),
               ),
+            if (state is GetSubServiceTypesLoadingState)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: LinearProgressIndicator(
+                  color: AppColors.primary,
+                  backgroundColor: AppColors.white,
+                ),
+              )
+            else
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: SizedBox(
+                  height: getHeightSize(context) * 0.05,
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: cubit.subServiceTypesModel.data?.length ?? 0,
+                      separatorBuilder: (context, index) {
+                        return 10.w.horizontalSpace;
+                      },
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: CustomTypesWidget(
+                            isSelected: cubit.selectedSubServiceType?.id ==
+                                cubit.subServiceTypesModel.data![index].id,
+                            title:
+                                cubit.subServiceTypesModel.data![index].name ??
+                                    '',
+                            onTap: () {
+                              cubit.onTapToSelectSubServiceType(
+                                cubit.subServiceTypesModel.data![index],
+                                isGetServices: true,
+                                context: context,
+                              );
+                            },
+                          ),
+                        );
+                      }),
+                ),
+              ),
 
-            20.h.verticalSpace,
+            // Wrap(
+            //   spacing: 10,
+            //   runSpacing: 10,
+            //   children: (cubit.subServiceTypesModel.data
+            //           ?.map(
+            //             (e) => CustomTypesWidget(
+            //               title: e.name ?? '',
+            //               isSelected:
+            //                   cubit.selectedSubServiceType?.id == e.id,
+            //               onTap: () {
+            //                 cubit.onTapToSelectSubServiceType(
+            //                   e,
+            //                 );
+            //               },
+            //             ),
+            //           )
+            //           .toList()) ??
+            //       [],
+            // ),
+            // 20.h.verticalSpace,
 
             Expanded(
               child: RefreshIndicator(

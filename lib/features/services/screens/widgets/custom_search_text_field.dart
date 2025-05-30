@@ -1,5 +1,5 @@
 import 'package:finak/core/exports.dart';
-import 'package:finak/features/home/screens/widgets/filter_widget.dart';
+import 'package:finak/features/services/screens/widgets/filter_widget.dart';
 import 'package:finak/features/services/cubit/cubit.dart';
 import 'package:finak/features/services/cubit/state.dart';
 import 'package:flutter/cupertino.dart';

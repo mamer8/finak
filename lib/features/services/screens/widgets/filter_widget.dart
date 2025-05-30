@@ -151,7 +151,8 @@ class _MyFiltersWidgetState extends State<MyFiltersWidget> {
                                           cubit.selectedServiceType?.id == e.id,
                                       onTap: () {
                                         cubit.changeSelectedServiceType(e,
-                                            isFilter: true, context: context);
+                                            isGetServices: false,
+                                            context: context);
                                       },
                                     ),
                                   )
@@ -190,6 +191,8 @@ class _MyFiltersWidgetState extends State<MyFiltersWidget> {
                                       onTap: () {
                                         cubit.onTapToSelectSubServiceType(
                                           e,
+                                          isGetServices: false,
+                                          context: context,
                                         );
                                       },
                                     ),
@@ -253,6 +256,8 @@ class _MyFiltersWidgetState extends State<MyFiltersWidget> {
                       if (widget.isHome) {
                         Navigator.pushNamed(context, Routes.servicesRoute,
                             arguments: ServicesScreenArgs(
+                                selectedSubServiceType: cubit
+                                    .selectedSubServiceType,
                                 selected: cubit.selectedServiceType));
                       }
 

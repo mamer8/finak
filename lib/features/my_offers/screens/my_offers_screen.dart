@@ -2,7 +2,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:finak/core/exports.dart';
 import 'package:finak/core/widgets/no_data_widget.dart';
 import 'package:finak/features/home/screens/widgets/category_widget.dart';
-import 'package:finak/features/home/screens/widgets/custom_search_text_field.dart';
+import 'package:finak/features/services/screens/widgets/custom_search_text_field.dart';
 import 'package:finak/features/services/screens/widgets/service_widget.dart';
 
 import '../cubit/cubit.dart';
@@ -53,7 +53,7 @@ class _MyOffersScreenState extends State<MyOffersScreen> {
               },
             ),
 
-            20.h.verticalSpace,
+            // 20.h.verticalSpace,
 
             // categories
             if (state is GetServicesTypeLoadingState ||
@@ -69,7 +69,7 @@ class _MyOffersScreenState extends State<MyOffersScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: SizedBox(
-                  height: getHeightSize(context) * 0.05,
+                                height: getHeightSize(context) * 0.1,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: cubit.serviceTypesModel.data!.length,
@@ -92,7 +92,7 @@ class _MyOffersScreenState extends State<MyOffersScreen> {
                 ),
               ),
 
-            20.h.verticalSpace,
+            // 20.h.verticalSpace,
 
             Expanded(
               child: RefreshIndicator(
